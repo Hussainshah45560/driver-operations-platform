@@ -1,26 +1,26 @@
-# CMC Global
+# Driver Operations Platform
 
-Fleet and driver operations platform for CMC Global. The system covers driver onboarding, recruitment, induction, compliance, customer management, and day-to-day driver self-service.
+Full-stack workforce platform for driver onboarding, recruitment, compliance, and day-to-day self-service.
 
 ## Overview
 
-CMC Global is a full-stack TypeScript application:
+This application is built with TypeScript across web and API layers:
 
-- **Frontend:** Angular 18 with Angular Material, Bootstrap, SSR, JWT auth, and role-based access.
-- **Backend:** Node.js, Express, and TypeScript with MongoDB, JWT authentication, file uploads, Swagger, and third-party integrations (email, SMS, e-sign, and verification services).
+- **Frontend:** Angular 18 with Angular Material, Bootstrap, SSR, JWT authentication, and role-based access.
+- **Backend:** Node.js, Express, and TypeScript with MongoDB, JWT authentication, file uploads, Swagger, and optional email, SMS, e-sign, and verification integrations.
 
 ## Features
 
-- Driver portal for jobs, documents, contracts, payslips, IRP5s, banking details, vehicle inspections, incidents, notices, and queries
+- Driver portal for jobs, documents, contracts, payslips, tax forms, banking details, vehicle inspections, incidents, notices, and queries
 - Admin recruitment pipeline, applications, candidate matching, and induction workflows
-- Customer, checklist, calendar, AOD, disciplinary, and offboarding management
-- Role-based permissions, email templates, and configurable master data (regions, vehicle types, license codes, and more)
+- Customer, checklist, calendar, acknowledgement, disciplinary, and offboarding management
+- Role-based permissions, email templates, and configurable master data
 - Document upload and static file serving
 
 ## Project structure
 
 ```text
-cmc-global/
+.
 ├── backend/     # Express API (TypeScript)
 └── frontend/    # Angular 18 web app
 ```
