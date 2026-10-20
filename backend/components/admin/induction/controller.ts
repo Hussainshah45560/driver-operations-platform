@@ -917,7 +917,7 @@ export default class InductionController extends BaseController {
           const inviteResult = await sign.embedInvite(
             result.id,
             //"u.hussain42@gmail.com",
-            req.user.email ?? "kevin@fluiddevelopment.co.za",
+            req.user.email ?? "manager@example.com",
             application[0]?.profile[0].email,
           );
           const linkResult = await sign.getEmbedInviteLink(

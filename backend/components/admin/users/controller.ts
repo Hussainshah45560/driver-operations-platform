@@ -166,7 +166,7 @@ export default class UserController extends BaseController {
             {
               $match: {
                 profile: {
-                  $not: { $elemMatch: { email: "developer@loopbrackets.com" } },
+                  $not: { $elemMatch: { email: "developer@example.com" } },
                 },
                 _id: { $ne: new ObjectId(req.user._id) },
               },

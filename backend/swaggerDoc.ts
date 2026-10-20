@@ -18,10 +18,10 @@
  *             properties:
  *               email:
  *                 type: string
- *                 example: "03312502777"
+ *                 example: "+15550100000"
  *               password:
  *                 type: string
- *                 example: "Test@123"
+ *                 example: "DemoPass123!"
  *     responses:
  *       200:
  *         description: Successful login with token
@@ -32,7 +32,7 @@
  *               properties:
  *                 token:
  *                   type: string
- *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+ *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.demo.example-token
  *       400:
  *         description: Access is revoked
  *         content:
@@ -216,8 +216,8 @@
  *                     step7: "completed"
  *                     step8: "completed"
  *                     step9: "completed"
- *                   firstName: "Ch"
- *                   lastName: "Shan"
+ *                   firstName: "Jane"
+ *                   lastName: "Doe"
  *                   userId: "691f597e123d03c8fc06949e"
  *                   profileId: "691f59a5123d03c8fc069529"
  *                   appliedDate: "2025-11-25T17:45:20.431Z"

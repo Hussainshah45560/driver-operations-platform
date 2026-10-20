@@ -137,7 +137,7 @@ export class BaseController extends DataBase {
 		});
 		if (allow && req.user && req.user.role) {
 			if (['Developer', 'Admin'].indexOf(req.user.role.name) === -1) {
-				 //data["profile.email"] = { $ne: "developer@loopbrackets.com"};
+				 //data["profile.email"] = { $ne: "developer@example.com"};
 			}
 		}
 		if (req.query["q"]) {

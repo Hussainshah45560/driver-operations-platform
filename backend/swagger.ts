@@ -6,7 +6,7 @@ const options: swaggerJsdoc.Options = {
     definition: {
         openapi: '3.0.0',
         info: {
-            title: 'CMC-Global Api',
+            title: 'Driver Operations API',
             version: '1.0.0',
 
         },
@@ -47,7 +47,7 @@ export function setupSwagger(app: Express): void {
     app.use('/api/documentation', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
         explorer: true,
         customCss: '.swagger-ui .topbar { display: none }',
-        customSiteTitle: 'CMC-Global API',
+        customSiteTitle: 'Driver Operations API',
         customfavIcon: '/files/favicon.png',
         swaggerOptions: {
             docExpansion: 'list',

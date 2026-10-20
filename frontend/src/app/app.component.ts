@@ -44,7 +44,7 @@ export class AppComponent implements OnInit {
     });
   }
   // login(): void {
-  //   const sub = this._auth.login('developer@loopbrackets.com', 'Test@123').subscribe({
+  //   const sub = this._auth.login('developer@example.com', 'DemoPass123!').subscribe({
   //     next: res => {
   //       sub.unsubscribe();
   //     },
