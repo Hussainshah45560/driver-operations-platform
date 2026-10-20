@@ -1,0 +1,23 @@
+:host {
+	display: block;
+	position: relative;
+}
+
+.clearFilter {
+	position: absolute;
+	right: 45px !important;
+	z-index: 50;
+	cursor: pointer;
+	top: 25px !important;
+}
+
+.changedValueClass {
+	float: right;
+	color: #B46700 !important;
+	font-weight: 400;
+	opacity: 1;
+}
+:host ::ng-deep mat-select[ng-reflect-placeholder] {
+  text-transform: capitalize !important;
+  text-align: left !important;
+}

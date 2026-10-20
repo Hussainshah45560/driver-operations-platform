@@ -1,0 +1,20 @@
+.background{
+    background-color: #DDDEEF;
+    background-image: url('/assets/images/accountsBackground.png');
+    background-size: contain;
+    background-position: bottom;
+    background-repeat: no-repeat;
+}
+.custom_820{
+    max-width: 820px;
+}
+@font-face {
+  font-family: 'URWDock';
+  src: url('/assets/fonts/urw-dock/urwdock-bold.ttf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.custom-font {
+  font-family: 'URWDock', sans-serif;
+}

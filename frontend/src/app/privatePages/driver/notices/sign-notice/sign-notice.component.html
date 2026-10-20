@@ -1,0 +1,95 @@
+<div class="row mb-4">
+    <div class="col-12 col-md-12 col-lg-12">
+        <h4 class="fw-medium text-secondary">Sign Template</h4>
+    </div>
+</div>
+<div class="row bg-light rounded-3 mt-3 px-4 pt-4">
+    <div class="col-12 col-md-4 col-lg-4">
+        <div class="bg-silver  border-muted h-100 d-flex flex-column justify-content-end align-items-center"
+            style="border: 1px dashed #73777f">
+            <div class="bg-white p-4 rounded-top-4">
+                <h5 class="text-center">{{templateName}}</h5>
+                <p class="blur-text fs-14">In accordance with the Protection of Personal Information Act (POPIA), I
+                    hereby
+                    consent to the
+                    collection, processing, and storage of my personal information by [Company Name] for the purpose of
+                    assessing my application.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-8 col-lg-8">
+        <div class="pb-4 pt-4 pt-md-0 text-start">
+            <p class="text-secondary fw-semibold">{{templateName}}</p>
+            <div class="d-flex align-items-end justify-content-start mt-3 mt-md-5">
+                <button class="btn btn-primary rounded-pill py-2 px-3 px-md-5 me-2 border" type="button"
+                    (click)="showTemplateContent('sign')">
+                    <i class="fa fa-plus me-2"></i> Sign
+                </button>
+
+
+                <button class="btn btn-info text-secondary rounded-pill py-2 px-5" type="button"
+                    (click)="showTemplateContent('view')">
+                    <i class="fa fa-eye me-2"></i> View
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<form [formGroup]="form" (ngSubmit)="submit()">
+
+    <div class="row mt-5" *ngIf="showTemplate">
+        <div class="col-12">
+            <div class="fw-normal" [innerHtml]="templateData"></div>
+        </div>
+        <div class="col-md-6" *ngIf="isEdit">
+            <div class="row">
+                <div class="col-12">
+                    <h4>Admin Signature</h4>
+                </div>
+                <div class="col-md-10">
+                    <div class="signature-label">Signature</div>
+                    <app-sign #signPadForDeclaration (signature)="patchSign($event , 'admin')"
+                        [viewSign]="data?.signature?.adminSign"
+                        [disabled]="['Driver'].includes(role) || hasAdminSigned"></app-sign>
+                </div>
+                <div class="col-md-10">
+                    <div class="signature-label">Date</div>
+                    <div class="form-group">
+                        <app-date-picker placeholderText="Signature Date" label="Signature Date"
+                            [fControl]="form.controls['adminSignDate']"
+                            [disabled]="['Driver'].includes(role) || hasAdminSigned">
+                        </app-date-picker>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-6" *ngIf="showTemplate &&  isEdit">
+            <div class="row justify-content-end">
+                <div class="col-10">
+                    <h4>User Signature</h4>
+                </div>
+                <div class="col-md-10">
+                    <div class="signature-label">Signature</div>
+                    <app-sign #signPadForDeclaration (signature)="patchSign($event , 'user')"
+                        [viewSign]="data?.signature?.userSign" [disabled]="hasUserSigned"></app-sign>
+                </div>
+                <div class="col-md-10">
+                    <div class="signature-label">Date</div>
+                    <div class="form-group">
+                        <app-date-picker placeholderText="Signature Date" label="Signature Date"
+                            [fControl]="form.controls['userSignDate']">
+                        </app-date-picker>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="float-end" *ngIf="isEdit">
+        <button class="btn btn-secondary rounded-pill py-3 px-5" type="submit">
+            Save
+        </button>
+    </div>
+
+</form>

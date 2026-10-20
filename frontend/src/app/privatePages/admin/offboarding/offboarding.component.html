@@ -1,0 +1,125 @@
+<div class="container-fluid p-0">
+  <div class="row mb-4">
+    <div class="col-12 col-md-12 col-lg-12">
+      <h4 class="fw-medium text-secondary">Offboarding</h4>
+    </div>
+  </div>
+  <div class="listing-card">
+    <div class="card">
+      <div class="card-header">
+        <div class="searchAndAdd">
+          <p class="text-secondary fw-semibold mb-0">To Offboard</p>
+          <div class="d-block d-md-flex align-items-center justify-content-end gap-3">
+            <div class="searchBar float-end">
+              <form [formGroup]="searchForm">
+                <div class="position-relative">
+                  <i class="fa fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"
+                    type="button" (click)="search(searchForm.value.searchTerm)"></i>
+                  <input type="text" class="form-control ps-5" matInput formControlName="searchTerm"
+                    (keydown.enter)="search(searchForm.value.searchTerm)" placeholder="Search Offboarding" />
+                </div>
+              </form>
+            </div>
+            <a class="btn btn-info rounded-button text-secondary fs-14 px-3 py-2 fw-medium" type="button"
+              (click)="chooseEmployee()" Permission="offBoarding:add">
+              <i class="fa fa-plus me-2"></i>New
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="table-container">
+          <table class="table dataTable">
+            <thead>
+              <tr>
+                <th>
+                  Customer
+                  <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('profile.customer', -1)"></i>
+                  <i class="fa fa-arrow-up ms-1" (click)="sort('profile.customer', 1)" type="button"></i>
+                </th>
+
+                <th>
+                  First Name
+                  <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('profile.firstName', -1)"></i>
+                  <i class="fa fa-arrow-up ms-1" (click)="sort('profile.firstName', 1)" type="button"></i>
+                </th>
+                <th>
+                  Surname
+                  <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('profile.lastName', -1)"></i>
+                  <i class="fa fa-arrow-up ms-1" (click)="sort('profile.lastName', 1)" type="button"></i>
+                </th>
+                <th>
+                  Offboarding Date
+                  <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('application.applicationDate', -1)"></i>
+                  <i class="fa fa-arrow-up ms-1" (click)="sort('application.applicationDate', 1)" type="button"></i>
+                </th>
+                <th>
+                  Status
+                  <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('application.status', -1)"></i>
+                  <i class="fa fa-arrow-up ms-1" (click)="sort('application.status', 1)" type="button"></i>
+                </th>
+                <th>
+                  Payroll Reason
+                  <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('profile.payrollReason', -1)"></i>
+                  <i class="fa fa-arrow-up ms-1" (click)="sort('profile.payrollReason', 1)" type="button"></i>
+                </th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let item of dataSource">
+                <tr>
+                  <td>{{item?.customerName}}</td>
+                  <td>{{item?.firstName}}</td>
+                  <td>{{item?.lastName}}</td>
+                  <td> {{
+                    item?.offboardingDate
+                    ? moment(item?.offboardingDate).format("DD-MM-YYYY")
+                    : "-"
+                    }}</td>
+                  <td>
+                    <span class="badge rounded-pill fw-medium text-capitalize" [style.background]="getColors(item?.approved == true ? 'approved' : item?.approved === false ? 'rejected' :
+                      'item?.status').background" [style.border]="getColors(item?.approved == true ? 'approved' : item?.approved === false ? 'rejected' :
+                      'item?.status').border" [style.color]="getColors(item?.approved == true ? 'approved' : item?.approved === false ? 'rejected' :
+                      'item?.status').color">
+                      {{item?.approved == true ? 'approved' : item?.approved === false ? 'rejected' :
+                      item?.status}}</span>
+                  </td>
+                  <td>{{item?.payrollReason}}</td>
+
+                  <td>
+                    <!-- <a class="btn btn-info fw-medium rounded-pill text-secondary border-0" type="button"
+                      routerLink="new">
+                      <i class="fa fa-check me-1"></i>
+                      Approved
+                    </a>
+                    <a class="btn btn-alert fw-medium rounded-pill text-danger border-0 mx-2" type="button"
+                      (click)="newDialog()">
+                      <i class="fa fa-xmark me-1"></i>
+                      Reject
+                    </a> -->
+                    <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill me-2"
+                      routerLink="view/{{item?._id}}" [queryParams]="{profileId:item?.profileId}"
+                      Permission="offBoarding:view">
+                      View
+                    </a>
+                    <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill"
+                      routerLink="edit/{{item?._id}}" [queryParams]="{profileId:item?.profileId}"
+                      Permission="offBoarding:update">
+                      Edit
+                    </a>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div>
+          <pagination [pager]="pager" [params]="queryParams"></pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

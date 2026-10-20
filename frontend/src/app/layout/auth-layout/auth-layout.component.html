@@ -1,0 +1,9 @@
+<div>
+  <app-left-side-bar></app-left-side-bar>
+  <app-top-bar></app-top-bar>
+  <div class="content-page" [class.collapsed]="sidebarCollapsed">
+    <div #scrollBar class="innerScrollBar">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

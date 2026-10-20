@@ -1,0 +1,17 @@
+<div class="container prompt">
+    <h5 class="fw-normal fs-4" innerHTML="{{data.message}}"></h5>
+    <small class="" *ngIf="data.purpose==''">{{data.confirmation}}</small>
+    <pre *ngIf="data.purpose!=''">{{data?.confirmation}}</pre>
+    <div class="mt-5 float-end">
+        <div class="">
+            <button mat-ripple class="btn btn-transparent fs-14" [mat-dialog-close]="false">{{
+                (data.noBtn)? data.noBtn: 'Cancel' }}</button>
+            <button mat-ripple class="btn btn-transparent fs-14 text-secondary rounded-2" [mat-dialog-close]="true"
+                [ngClass]="{
+                    'text-danger' : data.acceptBtnText=='Delete',
+                    'bg-info' : data.acceptBtnText!='Delete'
+            }">{{
+                (data.acceptBtnText)? data.acceptBtnText: 'Delete' }} </button>
+        </div>
+    </div>
+</div>

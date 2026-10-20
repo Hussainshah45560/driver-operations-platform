@@ -1,0 +1,88 @@
+<div class="container-fluid p-0 mb-3">
+
+    <div class="d-flex align-items-center justify-content-between pb-3">
+        <div>
+            <h4 class="fw-bold text-secondary text-capitalize">New Query</h4>
+        </div>
+
+        <div class="float-end">
+            <button class="btn btn-grey bg-transparent text-muted rounded-pill py-2 px-4 me-2" routerLink="queries">
+                Cancel
+            </button>
+            <button class="btn btn-primary rounded-pill py-2 px-4" type="button" (click)="submit()">
+                <i class="fa fa-check me-2"></i>Save
+            </button>
+        </div>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+        <div class="row mt-3">
+            <div class="col-12 col-md-12">
+                <div class="bg-light rounded p-4">
+                    <div class="row">
+                        <p class="fw-medium mb-2 text-dark">Select what you would like to query</p>
+                        <div class="col-12 col-md-6 col-lg-6" *ngFor="let item of selectRequirements">
+                            <div class="d-flex justify-content-start align-items-center py-2 px-0 px-md-3 fw-normal">
+                                <mat-checkbox [value]="item.value" (change)="onChange(item, $event.checked)"
+                                    [disabled]="shouldDisable(item)"
+                                    [checked]="form.value?.requirements?.includes(item.value)" labelPosition="before">
+                                </mat-checkbox>
+                                <p class="mb-0">{{item?.name}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-5" *ngIf="showFields">
+            <div class="col-12 col-md-6">
+                <p class="text-secondary fw-semibold">Want to query something else?</p>
+                <div class="form-group">
+                    <app-date-picker placeholderText="Date" label="Date" [fControl]="form.controls['queryDate']">
+                    </app-date-picker>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="form-group">
+                    <p class="mb-2 fs-12 text-muted">Make this annyonmous?</p>
+                    <div class="mb-4">
+                        <button class="btn px-4 px-lg-5 py-3 rounded-start-pill" type="button" [ngClass]="
+                      form.value.isAnonymous === false
+                        ? 'btn-info text-dark'
+                        : 'btn-light text-dark'
+                    " (click)="
+                      setBooleanValue('isAnonymous', false)
+                    ">
+                            <i class="fa fa-check me-3" *ngIf="
+                        form.value.isAnonymous === false
+                      "></i>No
+                        </button>
+                        <button class="btn px-4 px-lg-5 py-3 rounded-end-pill" type="button" [ngClass]="
+                      form.value.isAnonymous === true
+                        ? 'btn-info text-dark'
+                        : 'btn-light text-dark'
+                    " (click)="
+                      setBooleanValue('isAnonymous', true)
+                    ">
+                            <i class="fa fa-check me-3" *ngIf="form.value.isAnonymous === true"></i>Yes
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group">
+                    <mat-form-field class="w-100" appearance="outline">
+                        <mat-label>Query</mat-label>
+                        <textarea matInput formControlName="notes" rows="5" cols="5" placeholder="Write out your query"
+                            type="text"></textarea>
+                        <mat-error>
+                            <vmessage field="notes" [control]="form.controls['notes']">
+                            </vmessage>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>

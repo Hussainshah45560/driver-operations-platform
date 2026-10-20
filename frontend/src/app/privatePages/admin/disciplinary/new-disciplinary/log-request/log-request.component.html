@@ -1,0 +1,183 @@
+<div class="row">
+  <div class="col-12">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="row mt-3">
+        <p class="text-secondary fw-semibold">Existing {{applicationCategory =='employee' ? 'Warnings' :'Breaches' }}
+        </p>
+        <div class="col-12 col-md-12 col-lg-12">
+          <div class="listing-card">
+            <div class="card">
+              <div class="card-body">
+                <div class="table-container">
+                  <table class="table dataTable">
+                    <thead>
+                      <tr>
+
+                        <th>
+                          Type
+                          <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('profile.type', -1)"></i>
+                          <i class="fa fa-arrow-up ms-1" (click)="sort('profile.type', 1)" type="button"></i>
+                        </th>
+                        <th>
+                          Date
+                          <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('profile.date', -1)"></i>
+                          <i class="fa fa-arrow-up ms-1" (click)="sort('profile.date', 1)" type="button"></i>
+                        </th>
+                        <th>
+                          {{applicationCategory =='employee' ? 'Warning' :'Breach' }} #
+                          <i class="fa fa-arrow-down ms-1" type="button"
+                            (click)="sort('application.warningNumber', -1)"></i>
+                          <i class="fa fa-arrow-up ms-1" (click)="sort('application.warningNumber', 1)"
+                            type="button"></i>
+                        </th>
+                        <th>
+                          Customer
+                          <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('profile.type', -1)"></i>
+                          <i class="fa fa-arrow-up ms-1" (click)="sort('profile.type', 1)" type="button"></i>
+                        </th>
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <ng-container *ngFor="let item of warningsList">
+                        <tr>
+
+                          <td> {{item?.requestType}}</td>
+                          <td>
+                            {{
+                            item.date
+                            ? moment(item.date).format("DD-MM-YYYY")
+                            : "-"
+                            }}
+                          </td>
+                          <td> {{item?.warningNumber}}</td>
+                          <td>
+                            {{item?.customerName}}
+                          </td>
+                          <td>
+                            <span class="badge rounded-pill  fw-medium text-capitalize"
+                              [style.background]="getColors(item?.status).background"
+                              [style.border]="getColors(item?.status).border"
+                              [style.color]="getColors(item?.status).color">
+                              {{ item?.status }}</span>
+
+                          </td>
+                          <td>
+                            <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill ms-2"
+                              (click)="downloadFile(item?.warningNumber)" type="button">
+                              <i class="fa fa-download"></i>
+                            </a>
+                          </td>
+                        </tr>
+                      </ng-container>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="card-footer">
+                <div>
+                  <pagination [pager]="pager" [params]="queryParams"></pagination>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr class="my-5" />
+      <div class="row mt-3">
+        <div class="col-12 col-md-6 col-lg-6">
+          <p class="text-secondary fw-semibold">Request Details</p>
+          <div class="form-group">
+            <lb-auto-complete appearance="outline" placeholder="Request Type" label="Request Type" [multiple]="false"
+              [clear]="false" [fControl]="form.controls['requestTypeId']" [options]="selectRequestType">
+            </lb-auto-complete>
+          </div>
+          <div class="form-group">
+            <lb-auto-complete appearance="outline" placeholder="Warning Reasons" label="Warning Reasons"
+              [multiple]="false" [clear]="false" [fControl]="form.controls['warningReasonId']"
+              [options]="selectWarningReasons">
+            </lb-auto-complete>
+          </div>
+          <div class="form-group">
+            <lb-auto-complete appearance="outline" placeholder="Customers" label="Customers" [multiple]="false"
+              [clear]="false" [fControl]="form.controls['customerId']" [options]="selectCustomer">
+            </lb-auto-complete>
+          </div>
+
+          <div class="form-group">
+            <app-date-picker placeholderText="Warning Date" label="Warning Date" [fControl]="form.controls['date']">
+            </app-date-picker>
+          </div>
+
+
+        </div>
+        <div class="col-12 col-md-6 col-lg-6">
+          <!-- <p class="text-secondary fw-semibold">Existing Warnings</p> -->
+          <div class="form-group">
+            <p class="mb-2 fs-12 text-muted">Is this the Final Warning?</p>
+            <div class="mb-4">
+              <button class="btn px-5 py-3 rounded-start-pill" type="button" [ngClass]="
+                  form.value.isFinalWarning === true
+                    ? 'btn-info text-dark'
+                    : 'btn-light text-dark'
+                " (click)="setBooleanValue('isFinalWarning', true)">
+                <i class="fa fa-check me-3"></i>Yes
+              </button>
+              <button class="btn px-5 py-3 rounded-end-pill" type="button" [ngClass]="
+                  form.value.isFinalWarning === false
+                    ? 'btn-info text-dark'
+                    : 'btn-light text-dark'
+                " (click)="setBooleanValue('isFinalWarning', false)">
+                <i class="fa fa-xmark me-3"></i>No
+              </button>
+            </div>
+          </div>
+          <div class="form-group mt-5" *ngIf="form.value.isFinalWarning">
+            <p class="mb-2 fs-12 text-muted">Has the Client Authorised this?</p>
+            <div class="mb-4">
+              <button class="btn px-5 py-3 rounded-start-pill" type="button" [ngClass]="
+                  form.value.isAuthorized === true
+                    ? 'btn-info text-dark'
+                    : 'btn-light text-dark'
+                "
+                (click)="setBooleanValue('isAuthorized', true) ;customRequired(true , ['isAuthorized' , 'authorisedBy'])">
+                <i class="fa fa-check me-3"></i>Yes
+              </button>
+              <button class="btn px-5 py-3 rounded-end-pill" type="button" [ngClass]="
+                  form.value.isAuthorized === false
+                    ? 'btn-info text-dark'
+                    : 'btn-light text-dark'
+                "
+                (click)="setBooleanValue('isAuthorized', false);customRequired(false , ['isAuthorized' , 'authorisedBy'])">
+                <i class="fa fa-xmark me-3"></i>No
+              </button>
+            </div>
+          </div>
+          <div class="row" *ngIf="form.value.isAuthorized">
+            <div class="col-12 col-md-6 col-lg-6">
+              <div class="form-group">
+                <app-date-picker placeholderText="Date Authorised" label="Date Authorised"
+                  [fControl]="form.controls['authorizedDate']">
+                </app-date-picker>
+              </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-6">
+              <div class="form-group">
+                <lb-auto-complete appearance="outline" placeholder="Authorised By" label="Authorised By"
+                  [multiple]="false" [clear]="false" [fControl]="form.controls['authorizedBy']"
+                  [options]="selectAuthorisedBy">
+                </lb-auto-complete>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="float-end mt-5">
+        <button class="btn btn-primary rounded-pill py-3 px-5" type="submit">
+          Next
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,20 @@
+.background {
+    background: url('/assets/images/signupBackground.png') no-repeat center center;
+    background-size: cover;
+}
+
+.custom-width{
+    max-width: 1082px;
+}
+.logo-holder {
+  width: 130px;
+  height: 50px;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+}
+

@@ -1,0 +1,314 @@
+<div class="row align-items-center">
+  <div class="col-6 col-md-6 col-lg-6">
+    <h4 class="text-secondary fw-medium">Recruitment Request</h4>
+  </div>
+
+  <div class="col-6 col-md-6 col-lg-6">
+    <div class="d-flex align-items-center float-end gap-2" *ngIf="!recruitmentId">
+      <div>
+        <a class="btn btn-info bg-transparent text-dark rounded-pill px-3 py-2 fw-medium w-100 fs-14" type="button"
+          routerLink="/recruitment">
+          Cancel
+        </a>
+      </div>
+      <div>
+        <button class="btn btn-primary rounded-pill px-3 py-2 fw-medium w-100 fs-14" type="submit" (click)="submit()">
+          <i class="fa fa-check me-2"></i>Save
+        </button>
+      </div>
+    </div>
+    <a *ngIf="recruitmentId"
+      class="btn btn-info bg-transparent text-dark rounded-pill px-3 py-2 fw-medium float-end fs-14" type="button"
+      (click)="sendBackToParent()">
+      Cancel
+    </a>
+  </div>
+</div>
+<form [formGroup]="form" (ngSubmit)="submit()" class="mt-4">
+  <div class="row">
+    <div class="col-12 col-md-6 col-lg-6">
+      <p class="text-secondary fw-semibold">Customer Details</p>
+      <div class="form-group mt-4">
+        <lb-auto-complete appearance="outline" placeholder="Customer" label="Customer" [multiple]="false"
+          [clear]="false" [fControl]="form.controls['customerId']" [options]="selectCustomer"
+          (selectionChange)="getCustomerCostCenters($event); getAllDocuments()" [searchFunction]="null"
+          (search)="getCustomersLookup($event)">
+        </lb-auto-complete>
+      </div>
+      <div class="form-group">
+        <lb-auto-complete appearance="outline" placeholder="Cost Center" label="Cost Center" [multiple]="true"
+          [clear]="false" [fControl]="form.controls['costCenterIds']" [options]="selectCostCenter">
+        </lb-auto-complete>
+      </div>
+      <div class="form-group">
+        <lb-auto-complete appearance="outline" placeholder="Region" label="Region" [multiple]="false" [clear]="false"
+          [fControl]="form.controls['regionId']" [options]="selectRegion" (selectionChange)="getAreaLookup($event)">
+        </lb-auto-complete>
+      </div>
+      <div class="form-group">
+        <lb-auto-complete appearance="outline" placeholder="Area" label="Area" [multiple]="true" [clear]="false"
+          [fControl]="form.controls['areaIds']" [options]="selectArea">
+        </lb-auto-complete>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-6">
+      <p class="text-secondary fw-semibold invisible">Contact Information</p>
+      <div class="form-group mt-4">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Site / Store</mat-label>
+          <input matInput formControlName="site" placeholder="Site / Store" type="text" />
+          <mat-error>
+            <vmessage field="site" [control]="form.controls['site']">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-group">
+        <lb-auto-complete appearance="outline" placeholder="Recruitment Type" label="Recruitment Type"
+          [multiple]="false" [clear]="false" [fControl]="form.controls['recruitmentTypeId']"
+          [options]="selectRecruitmentTypes">
+        </lb-auto-complete>
+      </div>
+
+      <div class="form-group">
+        <lb-auto-complete appearance="outline" placeholder="Recruitment Model" label="Recruitment Model"
+          [multiple]="false" [clear]="false" [fControl]="form.controls['recruitmentModelId']"
+          [options]="selectRecruitmentModels">
+        </lb-auto-complete>
+      </div>
+      <div class="form-group">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>No of Positions to fill</mat-label>
+          <input matInput formControlName="availablePositions" placeholder="No of Positions to fill" min="0"
+            type="number" />
+          <mat-error>
+            <vmessage field="availablePositions" [control]="form.controls['availablePositions']">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <hr class="my-4" />
+  <div class="row">
+    <div class="col-12 col-md-6 col-lg-6">
+      <p class="text-secondary fw-semibold">Work Details</p>
+      <div class="my-4">
+        <button class="btn px-5 py-3 rounded-start-pill" type="button" [ngClass]="
+            form.value.jobType === 'driver'
+              ? 'btn-info text-dark'
+              : 'btn-light text-dark'
+          " (click)="setBooleanValue('jobType', 'driver')">
+          <i class="fa fa-check me-3" *ngIf="form.value.jobType === 'driver'"></i>Driver
+        </button>
+        <button class="btn px-5 py-3 rounded-end-pill" type="button" [ngClass]="
+            form.value.jobType === 'other'
+              ? 'btn-info text-dark'
+              : 'btn-light text-dark'
+          " (click)="setBooleanValue('jobType', 'other')">
+          <i class="fa fa-check me-3" *ngIf="form.value.jobType === 'other'"></i>Other
+        </button>
+      </div>
+
+      <div class="form-group">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Work Title</mat-label>
+          <input matInput formControlName="jobTitle" placeholder="Work Title" type="text" />
+          <mat-error>
+            <vmessage field="jobTitle" [control]="form.controls['jobTitle']">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-group">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Work Description</mat-label>
+          <textarea matInput formControlName="jobDescription" placeholder="Work Description" type="text"></textarea>
+          <mat-error>
+            <vmessage field="jobDescription" [control]="form.controls['jobTitle']">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-group">
+        <app-date-picker placeholderText="Start Date" label="Start Date" [fControl]="form.controls['startDate']">
+        </app-date-picker>
+      </div>
+      <div class="my-4">
+        <p class="text-secondary fw-semibold">
+          Is there an end-date for this job?
+        </p>
+        <button class="btn px-5 py-3 rounded-start-pill" type="button" [ngClass]="
+            form.value.isEndDate === true
+              ? 'btn-info text-dark'
+              : 'btn-light text-dark'
+          " (click)="
+            setBooleanValue('isEndDate', true);
+            customRequired(true, ['endDate'])
+          ">
+          <i class="fa fa-check me-3" *ngIf="form.value.isEndDate === true"></i>Yes
+        </button>
+        <button class="btn px-5 py-3 rounded-end-pill" type="button" [ngClass]="
+            form.value.isEndDate === false
+              ? 'btn-info text-dark'
+              : 'btn-light text-dark'
+          " (click)="
+            setBooleanValue('isEndDate', false);
+            customRequired(false, ['endDate'])
+          ">
+          <i class="fa fa-check me-3" *ngIf="form.value.isEndDate === false"></i>No
+        </button>
+      </div>
+      <div class="form-group" *ngIf="form.value.isEndDate">
+        <app-date-picker placeholderText="End Date" label="End Date" [fControl]="form.controls['endDate']">
+        </app-date-picker>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-6">
+      <div class="mt-5">
+        <p class="text-secondary fw-semibold invisible">Postal Address</p>
+        <p class="fs-6 text-primary fw-semibold">Skills</p>
+        <div class="d-flex gap-4 align-items-center">
+          <div class="form-group flex-grow-1">
+            <lb-auto-complete appearance="outline" placeholder="Choose skills" label="Choose skills" [multiple]="true"
+              [clear]="false" [fControl]="form.controls['skillIds']" [options]="selectSkills"
+              (selectionChange)="showSelectedValues($event)">
+            </lb-auto-complete>
+          </div>
+        </div>
+        <div class="mt-4" *ngIf="selectedSkills?.length">
+          <p class="fs-12 text-muted">Added Skills</p>
+          <div class="">
+            <div class="bg-light rounded-3">
+              <ng-container *ngFor="let item of selectedSkills">
+                <div class="d-flex justify-content-between align-items-center py-2 px-3 fw-normal">
+                  <p class="mb-0 text-capitalize">
+                    {{ getNameByValue(item, selectSkills) }}
+                  </p>
+                  <mat-checkbox [value]="item" (change)="onChange(item, $event.checked)"
+                    (click)="$event.preventDefault()" [checked]="form.value.skillIds.includes(item)"
+                    labelPosition="before">
+                  </mat-checkbox>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+        <p class="text-secondary fw-semibold mt-4">Is Induction Required?</p>
+        <div class="my-4">
+          <button class="btn px-5 py-3 rounded-start-pill" type="button" [ngClass]="
+              form.value.isInductionRequired === true
+                ? 'btn-info text-dark'
+                : 'btn-light text-dark'
+            " (click)="setInductionValue('isInductionRequired', true)">
+            <i class="fa fa-check me-3" *ngIf="form.value.isInductionRequired == true"></i>Yes
+          </button>
+          <button class="btn px-5 py-3 rounded-end-pill" type="button" [ngClass]="
+              form.value.isInductionRequired === false
+                ? 'btn-info text-dark'
+                : 'btn-light text-dark'
+            " (click)="setInductionValue('isInductionRequired', false)">
+            <i class="fa fa-xmark me-3" *ngIf="form.value.isInductionRequired == false"></i>No
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr class="my-4" />
+
+  <div class="row">
+    <div class="col-12 col-md-12 col-lg-12">
+      <p class="text-secondary fw-semibold">Upload documents</p>
+    </div>
+    <div class="col-md-6 col-12">
+      <div class="form-group">
+        <lb-auto-complete appearance="outline" placeholder="Document Type" label="Document Type" [multiple]="false"
+          [clear]="false" [fControl]="form.controls['type']" [options]="selectDocumentType"
+          (selectionChange)="saveDocument()">
+        </lb-auto-complete>
+      </div>
+    </div>
+    <div class="col-12 col-md-6">
+      <div>
+        <div>
+          <app-drag (fileDropped)="selectImage($event, 'documents')"></app-drag>
+        </div>
+        <div>
+          <div class="d-flex align-items-center gap-6 my-4" *ngIf="uploads['documents']?.loading">
+            <div>
+              <i class="fa-solid fa-file-arrow-up text-secondary fs-4"></i>
+            </div>
+            <div class="flex-grow-1 mx-4">
+              <p class="fw-normal mb-0">{{ uploads["documents"]?.name }}</p>
+              <span class="fs-14 text-grey">{{ uploads["documents"]?.size }}MB -
+                {{ uploads["documents"]?.loadingText }}</span>
+              <div class="progress" style="height: 4px">
+                <div class="progress-bar progress-bar-striped progress-bar-animated bg-secondary" role="progressbar"
+                  [style.width.%]="uploads['documents']?.progress"></div>
+              </div>
+            </div>
+            <div class="flex-grow-1">
+              <i class="fa fa-trash-can text-secondary fs-5 float-end" type="button"
+                (click)="removeUpload('documents', uploadDocuments)"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row my-4">
+    <div class="col-12">
+      <div class="listing-card">
+        <div class="card">
+          <div class="card-header">
+            <div class="searchAndAdd">
+              <h6 class="mb-0 fw-semibold text-secondary">Documents</h6>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="table-container">
+              <table class="table dataTable">
+                <thead>
+                  <tr>
+                    <th>Document Type</th>
+                    <th>Document Name</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody class="noFooter">
+                  <tr *ngFor="let item of dataSource">
+                    <td class="text-capitalize">{{ item?.type }}</td>
+                    <td class="text-capitalize">{{ item?.name }}</td>
+                    <td>
+                      <span class="badge fw-medium rounded-pill text-capitalize uploadBadge">{{ item?.status }}
+                      </span>
+                    </td>
+                    <td>
+                      <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill" type="button"
+                        (click)="viewDocument(item.url)">
+                        View
+                      </a>
+                      <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill mx-2" type="button"
+                        (click)="downloadFile(item.url, item.name)">
+                        <i class="fa fa-download"></i>
+                      </a>
+                      <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill" type="button"
+                        (click)="deleteDocument(item._id)" *ngIf="canDelete(item.deleteAllowedUntil)">
+                        <i class="fa fa-trash-can"></i>
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

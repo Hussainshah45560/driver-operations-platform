@@ -1,0 +1,234 @@
+<div class="container-fluid p-0">
+  <div class="row mb-4">
+    <div class="col-12 col-md-12 col-lg-12">
+      <h4 class="fw-medium text-secondary">Induction</h4>
+    </div>
+  </div>
+  <div class="listing-card">
+    <div class="card">
+      <div class="card-header">
+        <div class="searchAndAdd">
+          <div class="searchBar">
+            <form [formGroup]="searchForm">
+              <div class="position-relative">
+                <i
+                  class="fa fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"
+                  type="button"
+                  (click)="search(searchForm.value.searchTerm)"
+                ></i>
+                <input
+                  type="text"
+                  class="form-control ps-5"
+                  matInput
+                  formControlName="searchTerm"
+                  (keydown.enter)="search(searchForm.value.searchTerm)"
+                  placeholder="Search Induction"
+                />
+              </div>
+            </form>
+          </div>
+          <div class="form-group m-0">
+            <lb-auto-complete
+              appearance="fill"
+              placeholder="Status"
+              label="Status"
+              [multiple]="false"
+              [clear]="false"
+              [fControl]="searchForm.controls['status']"
+              [options]="selectStatus"
+              (selectionChange)="onStatusChange($event)"
+            >
+            </lb-auto-complete>
+          </div>
+          <div *ngIf="isObjectEmpty(queryParams)">
+            <a
+              class="btn btn-transparent border"
+              type="button"
+              (click)="clearFilters()"
+              >Clear</a
+            >
+          </div>
+          <div>
+            <!-- <a class="btn btn-info rounded-button text-secondary fs-14 px-3 py-2 fw-medium" routerLink="new"
+                            Permission="induction:add">
+                            <i class="fa fa-plus me-2"></i> New Induction
+                        </a> -->
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="table-container">
+          <table class="table dataTable">
+            <thead>
+              <tr>
+                <th></th>
+                <th>
+                  Nick Name
+                  <i
+                    class="fa fa-arrow-down ms-1"
+                    type="button"
+                    (click)="sort('profile.userName', -1)"
+                  ></i>
+                  <i
+                    class="fa fa-arrow-up ms-1"
+                    (click)="sort('profile.userName', 1)"
+                    type="button"
+                  ></i>
+                </th>
+                <th>
+                  Legal First Name
+                  <i
+                    class="fa fa-arrow-down ms-1"
+                    type="button"
+                    (click)="sort('profile.firstName', -1)"
+                  ></i>
+                  <i
+                    class="fa fa-arrow-up ms-1"
+                    (click)="sort('profile.firstName', 1)"
+                    type="button"
+                  ></i>
+                </th>
+                <th>
+                  Legal Surname
+                  <i
+                    class="fa fa-arrow-down ms-1"
+                    type="button"
+                    (click)="sort('profile.lastName', -1)"
+                  ></i>
+                  <i
+                    class="fa fa-arrow-up ms-1"
+                    (click)="sort('profile.lastName', 1)"
+                    type="button"
+                  ></i>
+                </th>
+                <th>
+                  Applicant Number
+                  <i
+                    class="fa fa-arrow-down ms-1"
+                    type="button"
+                    (click)="sort('application.applicantNumber', -1)"
+                  ></i>
+                  <i
+                    class="fa fa-arrow-up ms-1"
+                    (click)="sort('application.applicantNumber', 1)"
+                    type="button"
+                  ></i>
+                </th>
+                <th>
+                  Date Scheduled
+                  <i
+                    class="fa fa-arrow-down ms-1"
+                    type="button"
+                    (click)="sort('date', -1)"
+                  ></i>
+                  <i
+                    class="fa fa-arrow-up ms-1"
+                    (click)="sort('date', 1)"
+                    type="button"
+                  ></i>
+                </th>
+                <th>
+                  Contact No.
+                  <i
+                    class="fa fa-arrow-down ms-1"
+                    type="button"
+                    (click)="sort('phoneNumber', -1)"
+                  ></i>
+                  <i
+                    class="fa fa-arrow-up ms-1"
+                    (click)="sort('phoneNumber', 1)"
+                    type="button"
+                  ></i>
+                </th>
+                <th>
+                  Status
+                  <i
+                    class="fa fa-arrow-down ms-1"
+                    type="button"
+                    (click)="sort('application.status', -1)"
+                  ></i>
+                  <i
+                    class="fa fa-arrow-up ms-1"
+                    (click)="sort('application.status', 1)"
+                    type="button"
+                  ></i>
+                </th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let item of dataSource">
+                <tr>
+                  <td>
+                    <a
+                      class="btn btn-secondary rounded-pill py-2 px-3 fw-medium fs-14"
+                      routerLink="{{ item?.applicationId }}"
+                      [queryParams]="
+                        item?.inductionId
+                          ? {
+                              inductionId: item?.inductionId,
+                              recruitmentId: item?._id,
+                            }
+                          : { recruitmentId: item?._id }
+                      "
+                    >
+                      <i class="fa-solid fa-list-ul me-2"></i> View Induction
+                    </a>
+                  </td>
+                  <td>{{ item?.userName }}</td>
+                  <td>{{ item?.firstName }}</td>
+                  <td>{{ item.lastName }}</td>
+                  <td>{{ item?.applicationNumber }}</td>
+                  <td>
+                    {{
+                      item.trainingDate
+                        ? moment(item.trainingDate).format("DD-MM-YYYY")
+                        : "-"
+                    }}
+                  </td>
+                  <td>
+                    <a
+                      class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill"
+                      href="tel : {{ item?.phoneNumber }}"
+                      type="button"
+                    >
+                      <i class="fa fa-phone me-2"></i> {{ item?.phoneNumber }}
+                    </a>
+                  </td>
+                  <td>
+                    <span
+                      *ngIf="item?.inductionStatus"
+                      class="badge rounded-pill fw-medium text-capitalize"
+                      [style.background]="
+                        getColors(item?.inductionStatus).background
+                      "
+                      [style.border]="getColors(item?.inductionStatus).border"
+                      [style.color]="getColors(item?.inductionStatus).color"
+                    >
+                      {{ item?.inductionStatus }}</span
+                    >
+                  </td>
+                  <td>
+                    <a
+                      class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill"
+                      type="button"
+                      (click)="deleteinduction(item._id)"
+                      Permission="induction:delete"
+                    >
+                      <i class="fa fa-trash-can me-1"></i> Remove
+                    </a>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div>
+          <pagination [pager]="pager" [params]="queryParams"></pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

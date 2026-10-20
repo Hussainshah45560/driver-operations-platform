@@ -1,0 +1,74 @@
+<div class="container-fluid p-0">
+  <div>
+    <!-- sidebar -->
+    <div class="componentsSideBar d-none d-lg-block">
+      <div class="sidebarHeader d-block">
+        <h4 class="fw-bold text-secondary">
+          {{ tradingAs ? tradingAs : "Create" }}
+        </h4>
+        <p class="fw-medium">{{ name ? name : "New Customer" }}</p>
+      </div>
+      <div id="componentSteps">
+        <ul class="p-0">
+          <ng-container *ngFor="let item of customerSteps">
+            <li>
+              <a
+                class="border-0"
+                [routerLink]="getRouterLink(item.url)"
+                [ngClass]="{ 'active-step': currentStep === item.url }"
+                [class.disabled]="isStepDisabled(item.url)"
+              >
+                <img
+                  class="me-2"
+                  src="{{ item.icon }}.png"
+                  alt="{{ item.icon }}"
+                  *ngIf="item.icon"
+                />
+                <span>{{ item.title }}</span>
+              </a>
+            </li>
+          </ng-container>
+        </ul>
+      </div>
+    </div>
+    <!-- forms -->
+    <div class="form-content">
+      <!-- Mobile Step Dropdown -->
+      <div class="d-lg-none mb-3 bg-light py-2 px-3">
+        <div
+          class="w-100"
+          (click)="expandDropdown()"
+          style="cursor: pointer"
+          [ngClass]="{ 'expanded-row': expandedApp === true }"
+        >
+          <p
+            class="text-secondary text-capitalize fw-semibold m-0 align-items-center justify-content-between d-flex"
+          >
+            {{currentStepTitle}} <i class="fa fa-chevron-down float-end"></i>
+          </p>
+        </div>
+        <div id="componentSteps" class="" *ngIf="expandedApp === true">
+          <ul class="w-100 p-0">
+            <ng-container *ngIf="expandedApp === true">
+              <ng-container *ngFor="let item of customerSteps; let i = index">
+                <li>
+                  <a
+                    [routerLink]="getRouterLink(item.url)"
+                    [class.active-step]="currentStep === item.url"
+                    (click)="expandedApp = null"
+                  >
+                    <span>{{ item.title }} </span>
+                  </a>
+                </li>
+              </ng-container>
+            </ng-container>
+          </ul>
+        </div>
+      </div>
+
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+
+<td></td>

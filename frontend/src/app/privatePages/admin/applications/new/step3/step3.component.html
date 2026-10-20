@@ -1,0 +1,264 @@
+<div class="row align-items-center pb-5">
+    <div class="col-12 col-md-4">
+        <h4 class="text-secondary fw-medium">Step 3: Education <span *ngIf="stepData?.stepStatus?.step3"
+                class="badge  rounded-pill px-3 py-2  fw-medium ms-3 fs-14 text-capitalize"
+                [style.background]="getColors(stepData?.stepStatus?.step3).background"
+                [style.border]="getColors(stepData?.stepStatus?.step3).border"
+                [style.color]="getColors(stepData?.stepStatus?.step3).color">
+                {{stepData?.stepStatus?.step3}}</span></h4>
+    </div>
+    <div class="col-12 col-md-8">
+        <div class="d-flex align-items-center gap-2">
+            <!-- confirmer -->
+            <div class="d-flex align-items-center flex-grow-1 justify-content-end" Permission="applications:confirmer"
+                *ngIf="isView && statusCheckService.isStepValid('confirmer' , stepData?.stepStatus?.step3 , stepData?.applicationStatus)">
+                <small class=" me-2 text-brown fw-semibold">Confirm this step?</small>
+                <div class="me-2">
+                    <button class="btn btn-warning text-brown rounded-pill p-2 px-4 fw-medium" type="button"
+                        (click)="approveStep('confirmed')">
+                        <i class="fa fa-check me-2"></i> <small>Confirmed</small>
+                    </button>
+                </div>
+                <div>
+                    <button class="btn btn-warning text-brown rounded-pill p-2 fw-medium px-4" type="button"
+                        (click)="rejected = true">
+                        <i class="fa fa-xmark me-2"></i> <small>Not Confirmed</small>
+                    </button>
+                </div>
+            </div>
+            <!-- for approver -->
+            <div class="d-flex align-items-center flex-grow-1 justify-content-end" Permission="applications:approver"
+                *ngIf="isView && statusCheckService.isStepValid('approver' , stepData?.stepStatus?.step3 , stepData?.applicationStatus)">
+                <small class=" me-2 text-brown fw-semibold">Approve this step?</small>
+                <div class="me-2">
+                    <button class="btn btn-warning text-brown rounded-pill p-2 px-4 fw-medium" type="button"
+                        (click)="approveStep('approved')">
+                        <i class="fa fa-check me-2"></i> <small>Approved</small>
+                    </button>
+                </div>
+                <div>
+                    <button class="btn btn-warning text-brown rounded-pill p-2 fw-medium px-4" type="button"
+                        (click)="rejected = true">
+                        <i class="fa fa-xmark me-2"></i> <small>Rejected</small>
+                    </button>
+                </div>
+            </div>
+            <div class="ms-auto" *ngIf="isView && statusCheckService.isStepValid('editable' , stepData?.stepStatus?.step3 , stepData?.applicationStatus)">
+                <a class="btn btn-grey bg-transparent text-muted fw-medium rounded-pill me-2"
+                    [routerLink]="'/applications/edit/' + id + '/step3'">
+                    <i class="fa fa-pencil me-2"></i><small>Edit</small>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <!-- status banner -->
+    <div *ngIf="['rejected' , 'not confirmed'].includes(stepData?.stepStatus?.step3)"
+        class="bg-danger p-2 text-white rounded">
+        <p class="m-0"><i class="fa fa-triangle-exclamation me-2"></i>{{stepData?.stepReject?.step3Reason}}</p>
+    </div>
+    <!-- approval form -->
+    <div *ngIf="rejected">
+        <form [formGroup]="approvalForm" autocomplete="off">
+            <div class="row">
+                <div class="col-md-6 col-12 offset-md-6">
+                    <div class="d-flex align-items-baseline gap-2">
+                        <div class="form-group flex-grow-1">
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-label>Reason</mat-label>
+                                <input matInput formControlName="reason" placeholder="Reason" type="text" />
+                                <mat-error>
+                                    <vmessage field="reason" [control]="approvalForm.controls['reason']">
+                                    </vmessage>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div>
+                            <a type="button" class="btn btn-secondary px-4 py-2 rounded-pill"
+                                (click)="approveStep(stepData?.applicationStatus == 'confirmed' || stepData?.applicationStatus == 'in contract' || stepData?.applicationStatus == 'rejected' ? 'rejected' : 'not confirmed');">Submit</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <form [formGroup]="step3" (ngSubmit)="submit()">
+        <div class="row mt-3">
+            <div class="col-12 col-md-6 col-lg-6">
+                <p class="fs-6 text-primary fw-semibold">Educational Details</p>
+                <div class="form-group">
+                    <mat-form-field class="w-100" appearance="outline"
+                        [class.field-changed]="step3Changes?.educationDetails?.lastSchool">
+                        <mat-label>Name of last school attended</mat-label>
+                        <input matInput formControlName="lastSchool" placeholder="Name of last school attended"
+                            type="text" />
+                        <span matSuffix>
+                            {{ step3Changes?.educationDetails?.lastSchool }}
+                        </span>
+                        <mat-error>
+                            <vmessage field="lastSchool" [control]="step3.controls['lastSchool']"> </vmessage>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="form-group">
+                    <mat-form-field class="w-100" appearance="outline"
+                        [class.field-changed]="step3Changes?.educationDetails?.highestGrade">
+                        <mat-label>Highest standard / Grade passed</mat-label>
+                        <input matInput formControlName="highestGrade" placeholder="Highest standard / Grade passed"
+                            type="text" />
+                        <span matSuffix>
+                            {{ step3Changes?.educationDetails?.highestGrade }}
+                        </span>
+                        <mat-error>
+                            <vmessage field="highestGrade" [control]="step3.controls['highestGrade']"> </vmessage>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="form-group">
+                    <mat-form-field class="w-100" appearance="outline"
+                        [class.field-changed]="step3Changes?.educationDetails?.yearCompleted">
+                        <mat-label>Year of completion</mat-label>
+                        <input matInput formControlName="yearCompleted" placeholder="Year of completion"
+                            type="number" />
+                        <span matSuffix>
+                            {{ step3Changes?.educationDetails?.yearCompleted }}
+                        </span>
+                        <mat-error>
+                            <vmessage field="yearCompleted" [control]="step3.controls['yearCompleted']"> </vmessage>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-6">
+                <p class="fs-6 text-primary fw-semibold">Tertiary Education</p>
+                <p class="fs-12 text-muted">
+                    Do you have any tertiary qualifications?
+                </p>
+                <div class="mb-4">
+                    <button class="btn px-5 py-3 rounded-start-pill" type="button"
+                        [disabled]="isView || stepStatus =='changed'" [ngClass]="
+                     step3.value.tertiaryQualification === true
+                      ? 'btn-info text-dark'
+                      : 'btn-light text-dark'
+                  " (click)="setBooleanValue('tertiaryQualification', true);customRequired(true , ['institutionName' , 'qualification','tertiaryyearCompleted'])">
+                        <i class="fa fa-check me-3"></i>Yes
+                    </button>
+                    <button class="btn px-5 py-3 rounded-end-pill" type="button" [disabled]="isView"
+                        [disabled]="isView || stepStatus =='changed'" [ngClass]="
+                     step3.value.tertiaryQualification === false
+                      ? 'btn-info text-dark'
+                      : 'btn-light text-dark'
+                  " (click)="setBooleanValue('tertiaryQualification', false);customRequired(false , ['institutionName' , 'qualification','tertiaryyearCompleted'])">
+                        <i class="fa fa-xmark me-3"></i>No
+                    </button>
+                </div>
+                <div *ngIf="step3Changes && step3Changes?.tertiaryQualification !== undefined && step3Changes?.tertiaryQualification != step3.value.tertiaryQualification"
+                    class="field-changed p-2 mb-3">
+                    Changed to : <b>{{ step3Changes?.tertiaryQualification}}</b>
+                </div>
+                <ng-container
+                    *ngIf="step3.value.tertiaryQualification || (step3Changes && step3Changes?.tertiaryQualification)">
+                    <div class="form-group">
+                        <mat-form-field class="w-100" appearance="outline"
+                            [class.field-changed]="step3Changes?.tertiaryEducation?.institutionName">
+                            <mat-label>Name of institution</mat-label>
+                            <input matInput formControlName="institutionName" placeholder="Name of institution"
+                                type="text" />
+                            <span matSuffix>
+                                {{ step3Changes?.tertiaryEducation?.institutionName }}
+                            </span>
+                            <mat-error>
+                                <vmessage field="institutionName" [control]="step3.controls['institutionName']">
+                                </vmessage>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group">
+                        <mat-form-field class="w-100" appearance="outline"
+                            [class.field-changed]="step3Changes?.tertiaryEducation?.qualification">
+                            <mat-label>Qualification obtained</mat-label>
+                            <input matInput formControlName="qualification" placeholder="Qualification obtained"
+                                type="text" />
+                            <span matSuffix>
+                                {{ step3Changes?.tertiaryEducation?.qualification }}
+                            </span>
+                            <mat-error>
+                                <vmessage field="qualification" [control]="step3.controls['qualification']"> </vmessage>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group">
+                        <mat-form-field class="w-100" appearance="outline"
+                            [class.field-changed]="step3Changes?.tertiaryEducation?.tertiaryyearCompleted">
+                            <mat-label>Year of completion</mat-label>
+                            <input matInput formControlName="tertiaryyearCompleted" placeholder="Year of completion"
+                                type="number" />
+                            <span matSuffix>
+                                {{ step3Changes?.tertiaryEducation?.tertiaryyearCompleted }}
+                            </span>
+                            <mat-error>
+                                <vmessage field="tertiaryyearCompleted"
+                                    [control]="step3.controls['tertiaryyearCompleted']"> </vmessage>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </ng-container>
+
+                <div>
+                    <p class="fs-12 text-muted">
+                        Do you have any plans regarding further studies?
+                    </p>
+                    <div class="mb-4">
+                        <button class="btn px-5 py-3 rounded-start-pill" type="button"
+                            [disabled]="isView || stepStatus =='changed'" [ngClass]="
+                     step3.value.futureEducationPlans === true
+                      ? 'btn-info text-dark'
+                      : 'btn-light text-dark'
+                  " (click)="setBooleanValue('futureEducationPlans', true);customRequired(true , ['studyPlanDetail'])">
+                            <i class="fa fa-check me-3"></i>Yes
+                        </button>
+                        <button class="btn px-5 py-3 rounded-end-pill" type="button" [disabled]="isView"
+                            [disabled]="isView || stepStatus =='changed'" [ngClass]="
+                     step3.value.futureEducationPlans === false
+                      ? 'btn-info text-dark'
+                      : 'btn-light text-dark'
+                  " (click)="setBooleanValue('futureEducationPlans', false);customRequired(false , ['studyPlanDetail'])">
+                            <i class="fa fa-xmark me-3"></i>No
+                        </button>
+                    </div>
+                    <div *ngIf="step3Changes && step3Changes?.futureEducationPlans !== undefined && step3Changes?.futureEducationPlans != step3.value.futureEducationPlans"
+                        class="field-changed p-2 mb-3">
+                        Changed to : <b>{{ step3Changes?.futureEducationPlans}}</b>
+                    </div>
+                    <div class="form-group"
+                        *ngIf="step3.value.futureEducationPlans || (step3Changes && step3Changes?.futureEducationPlans)">
+                        <mat-form-field class="w-100" appearance="outline"
+                            [class.field-changed]="step3Changes?.studyPlanDetail">
+                            <mat-label>What do you plan on studying?</mat-label>
+                            <input matInput formControlName="studyPlanDetail"
+                                placeholder="What do you plan on studying?" type="text" />
+                            <span matSuffix>
+                                {{ step3Changes?.studyPlanDetail }}
+                            </span>
+                            <mat-error>
+                                <vmessage field="studyPlanDetail" [control]="step3.controls['studyPlanDetail']">
+                                </vmessage>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-end mt-5">
+                        <button class="btn btn-transparent rounded-pill py-3 px-5 mx-2 border" type="button"
+                            (click)="goBack()">
+                            Back
+                        </button>
+                        <button class="btn btn-primary rounded-pill py-3 px-5" type="submit"
+                            [disabled]="stepStatus == 'changed' || isView">
+                            Next
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

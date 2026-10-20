@@ -1,0 +1,205 @@
+<div class="row">
+  <div class="col-12">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="row mt-3">
+        <p class="text-secondary fw-semibold">Driver Inspection</p>
+        <p class="mb-2 fs-12 text-muted">Driving Test Complete?</p>
+        <div class="col-12 col-md-4 col-lg-4">
+          <div class="form-group">
+            <div class="mb-4">
+              <button class="btn px-5 px-md-4 px-lg-5 py-3 rounded-start-pill" type="button" [ngClass]="
+                  form.value.isTestCompleted === true
+                    ? 'btn-info text-dark'
+                    : 'btn-light text-dark'
+                "
+                (click)="setBooleanValue('isTestCompleted', true);customRequired(true , ['testDate' , 'testResult'])">
+                <i class="fa fa-check me-3"></i>Yes
+              </button>
+              <button class="btn px-5 px-md-4 px-lg-5 py-3 rounded-end-pill" type="button" [ngClass]="
+                  form.value.isTestCompleted === false
+                    ? 'btn-info text-dark'
+                    : 'btn-light text-dark'
+                "
+                (click)="setBooleanValue('isTestCompleted', false);customRequired(false, ['testDate' , 'testResult'])">
+                <i class="fa fa-xmark me-3"></i>No
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-4 col-lg-4">
+          <div class="form-group" *ngIf="form.value.isTestCompleted === true">
+            <app-date-picker placeholderText="Date Completed" label="Date Completed"
+              [fControl]="form.controls['testDate']">
+            </app-date-picker>
+          </div>
+        </div>
+        <div class="col-12 col-md-4 col-lg-4">
+          <div class="form-group" *ngIf="form.value.isTestCompleted === true">
+            <lb-auto-complete appearance="outline" placeholder="Result" label="Result" [multiple]="false"
+              [clear]="false" [fControl]="form.controls['testResult']" [options]="selectResult">
+            </lb-auto-complete>
+          </div>
+        </div>
+      </div>
+      <div class="bg-light rounded-3 p-4">
+        <div class="row">
+          <div class="col-12 col-md-4 col-lg-4" *ngFor="let item of driverCheckList">
+
+            <div class="form-group">
+              <p class="text-center fw-medium">{{item?.name}}</p>
+
+              <div class="row align-items-center">
+                <div class="col-3 col-md-3 col-lg-3">
+
+                </div>
+                <div class="col-9 col-md-9 col-lg-9">
+                  <div class="row align-items-center">
+                    <div class="col-4 col-md-3 col-lg-3 ps-0">
+                      <div>
+                        <span class="fs-14 fw-medium text-secondary text-center">Good</span>
+                      </div>
+                    </div>
+                    <div class="col-4 col-md-3 col-lg-3 ps-1">
+                      <div>
+                        <span class="fs-14 fw-medium text-secondary text-center">Fair</span>
+                      </div>
+                    </div>
+                    <div class="col-4 col-md-3 col-lg-3 ps-1">
+                      <div>
+                        <span class="fs-14 fw-medium text-secondary text-center">Poor</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <ng-container *ngFor="let subItem of item?.groups">
+                <div class="row align-items-center">
+                  <div class="col-3 col-md-3 col-lg-3">
+                    <span class="fw-medium fs-14 text-secondary text-capitalize">{{subItem?.name}}</span>
+                  </div>
+                  <div class="col-9 col-md-9 col-lg-9">
+                    <mat-radio-group [value]="subItem.selectedValue">
+                      <div class="row">
+                        <div class="col-4 col-md-3 col-lg-3 p-0" *ngFor="let opt of subItem?.options">
+                          <mat-radio-button [value]="opt.name" (change)="onSubItemChange(item._id, subItem, opt.name)">
+                          </mat-radio-button>
+                        </div>
+
+                      </div>
+                    </mat-radio-group>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <hr class="my-5" />
+      <div class="row mt-3">
+        <div class="col-12 col-md-6 col-lg-6">
+          <p class="fs-6 text-primary fw-semibold text-capitalize">
+            Upload documents
+          </p>
+          <div class="form-group flex-grow-1 mt-4">
+            <lb-auto-complete appearance="outline" placeholder="Document Type" label="Document Type" [multiple]="false"
+              [clear]="false" [fControl]="form.controls['type']" [options]="selectDocumentType"
+              (selectionChange)="saveDocument()">
+            </lb-auto-complete>
+          </div>
+
+          <div>
+            <div class="d-flex align-items-center gap-6 my-4" *ngIf="uploads['document']?.loading">
+              <div>
+                <i class="fa-solid fa-file-arrow-up text-secondary fs-4"></i>
+              </div>
+              <div class="flex-grow-1 mx-4">
+                <p class="fw-normal mb-0">{{ uploads["document"]?.name }}</p>
+                <span class="fs-14 text-grey">{{ uploads["document"]?.size }}MB -
+                  {{ uploads["document"]?.loadingText }}</span>
+                <div class="progress" style="height: 4px">
+                  <div class="progress-bar progress-bar-striped progress-bar-animated bg-secondary" role="progressbar"
+                    [style.width.%]="uploads['document']?.progress"></div>
+                </div>
+              </div>
+              <div class="flex-grow-1">
+                <i class="fa fa-trash-can text-secondary fs-5 float-end" type="button"
+                  (click)="removeUpload('document', uploadDocument)"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-6">
+          <div class="mt-4">
+            <app-drag (fileDropped)="selectImage($event, 'document')"
+              [extensions]="'WORD, EXCEL, JPEG, PNG, PDF (max. 10MB)'"></app-drag>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="listing-card">
+            <div class="card">
+              <div class="card-header">
+                <div class="searchAndAdd">
+                  <h6 class="mb-0 fw-semibold text-secondary">Documents</h6>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="table-container">
+                  <table class="table dataTable">
+                    <thead>
+                      <tr>
+                        <th>Document Type</th>
+                        <th>Document Name</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody class="noFooter">
+                      <tr *ngFor="let item of dataSource">
+                        <td class="text-capitalize">{{ item?.type }}</td>
+                        <td class="text-capitalize">{{ item?.name }}</td>
+                        <td>
+                          <span class="badge rounded-pill  fw-medium text-capitalize"
+                            [style.background]="getColors(item?.status).background"
+                            [style.border]="getColors(item?.status).border"
+                            [style.color]="getColors(item?.status).color">
+                            {{ item?.status }}</span>
+
+                        </td>
+                        <td>
+                          <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill" type="button"
+                            (click)="viewDocument(item.url)">
+                            View
+                          </a>
+                          <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill mx-2" type="button"
+                            (click)="downloadFile(item.url, item.name)">
+                            <i class="fa fa-download"></i>
+                          </a>
+                          <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill" type="button"
+                            (click)="deleteDocument(item._id)" *ngIf="canDelete(item.deleteAllowedUntil)">
+                            <i class="fa fa-trash-can"></i>
+                          </a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex align-items-center justify-content-end mt-5">
+        <button class="btn btn-transparent rounded-pill py-3 px-5 mx-2 border" type="button" (click)="goBack()">
+          Back
+        </button>
+        <button class="btn btn-primary rounded-pill py-3 px-5" type="submit">
+          Next
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

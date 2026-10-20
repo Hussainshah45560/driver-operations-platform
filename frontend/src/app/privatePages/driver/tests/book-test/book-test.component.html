@@ -1,0 +1,119 @@
+<div class="container-fluid">
+  <div class="d-flex align-items-center justify-content-between">
+    <div>
+      <h4 class="fs-4 text-secondary fw-medium">Book a Test</h4>
+    </div>
+    <div class="float-end">
+      <a routerLink="/tests" class="btn btn-transparent border-grey rounded-pill py-2 px-5 me-2">
+        Cancel
+      </a>
+
+    </div>
+  </div>
+</div>
+<form [formGroup]="form">
+  <div class="row mt-5">
+    <div class="col-12 col-md-6 col-lg-6">
+      <p class="fs-6 text-primary fw-semibold">Choose a test type</p>
+      <div class="form-group">
+        <lb-auto-complete appearance="outline" placeholder="Test Type" label="Test Type" [multiple]="false"
+          [clear]="false" [fControl]="form.controls['testTypeId']" [options]="selectTestType">
+        </lb-auto-complete>
+      </div>
+    </div>
+    <div class="col-12 col-md-3 col-lg-6">
+      <p class="fs-6 text-primary fw-semibold">Month and Year</p>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <lb-auto-complete appearance="outline" placeholder="Year" label="Year" [multiple]="false" [clear]="false"
+              [fControl]="form.controls['year']" [options]="selectYears" (selectionChange)="getMonthsByYear($event)">
+            </lb-auto-complete>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <lb-auto-complete appearance="outline" placeholder="Month" label="Month" [multiple]="false" [clear]="false"
+              [fControl]="form.controls['month']" [options]="selectMonths"
+              (selectionChange)="getDaysOfMonth(form.value.year,$event)">
+            </lb-auto-complete>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-md-6 col-12" *ngIf="isEdit">
+      <div class="col-md-6">
+        <div class="form-group">
+          <lb-auto-complete appearance="outline" placeholder="Status" label="Status" [multiple]="false" [clear]="false"
+            [fControl]="form.controls['status']" [options]="selectStatus" (selectionChange)="updateStatus($event)">
+          </lb-auto-complete>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-5" *ngIf="selectDays.length>0">
+    <div class="col-12 col-md-12 col-lg-12">
+      <p class="fs-6 text-primary fw-semibold">Choose a Day</p>
+    </div>
+
+    <div class="d-flex flex-wrap gap-3">
+      <div class="card justify-content-center align-items-center p-3 rounded-4 border-0 bg-silver"
+        [ngClass]="{ 'disabled-day': item.disabled , 'selected-day': selectedDay === item.value}"
+        *ngFor="let item of selectDays" (click)="!item.disabled && onDaySelect(item.value)"
+        style="width: 80px; cursor: pointer;">
+        <p class="text-dark fw-semibold mb-1">{{ item?.name }}</p>
+        <p class="text-dark fw-medium mb-0">{{ item?.label }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-5" *ngIf="isDaySelected">
+    <div class="col-12 col-md-12 col-lg-12">
+      <p class="fs-6 text-primary fw-semibold">Choose a Time</p>
+    </div>
+    <div class="col-12 col-md-12 col-lg-12">
+      <div class="d-flex justify-content-between align-items-center p-3 border bg-light gap-4">
+        <div class="form-group">
+          <lb-auto-complete appearance="outline" placeholder="Time" label="Time" [multiple]="false" [clear]="false"
+            [fControl]="form.controls['time']" [options]="selectTime">
+          </lb-auto-complete>
+        </div>
+        <div>
+          <button class="btn btn-primary bg-info py-2 px-5 text-secondary fw-medium rounded-pill border-0"
+            (click)="bookTest()" [disabled]="isView">
+            Save
+          </button>
+        </div>
+      </div>
+
+      <!-- <div class="col-12 col-md-12 col-lg-12" *ngFor="let item of timeSlots">
+      <div class=" d-flex justify-content-between align-items-center p-3 border bg-light"
+        [ngClass]="{ 'disabled-day': item?.isBooked}">
+        <div>
+          <p class="mb-0 fw-semibold">{{item?.startTime ? moment(item?.startTime).format('hh:mm A') : '-'}}</p>
+        </div>
+        <div>
+          <button class="btn btn-primary bg-info text-secondary fw-medium rounded-pill border-0"
+            [disabled]="item?.isBooked" (click)="bookTest(item?.startTime,item?._id)">
+            {{item?.isBooked ? 'Occupied':'Book'}}
+          </button>
+        </div>
+      </div> -->
+    </div>
+  </div>
+  <ng-container *ngIf="isView && data">
+    <div class="card mt-3">
+      <div class="card-body">
+        <p class="mb-0">Your test appointment has been booked.</p>
+        <p class="mb-0">Test: <strong>{{data?.testTypeName}}</strong></p>
+        <p class="mb-0">Date: <strong>{{data?.date ? moment(data?.date).format('dddd, D MMM YYYY'):
+            '-'}}</strong></p>
+        <p class="mb-0">Time: <strong>{{data?.time ? moment(data.time, 'HH:mm').format('hh:mm A'): '-'}}</strong>
+        </p>
+        <p class="mb-0">Please ensure you arrive at least 15 minutes before the scheduled time with all necessary
+          documents.</p>
+      </div>
+    </div>
+  </ng-container>
+
+</form>

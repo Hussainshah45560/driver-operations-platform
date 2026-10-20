@@ -1,0 +1,240 @@
+<div class="container-fluid p-0 mb-3">
+  <div>
+    <div class="d-flex align-items-center justify-content-between pb-3">
+      <div>
+        <h4 class="fw-bold text-secondary text-capitalize">Offboarding Case</h4>
+      </div>
+      <div class="float-end" *ngIf="view =='view'">
+        <a class="btn btn-grey bg-transparent text-muted rounded-pill py-2 px-4"
+          routerLink="/offBoarding/edit/{{offBoardingId}}" [queryParams]="{profileId : profileId}">
+          <i class="fa fa-pencil me-2"></i>Edit
+        </a>
+      </div>
+      <div class="float-end" *ngIf="view !='view'">
+        <button class="btn btn-grey bg-transparent text-muted rounded-pill py-2 px-4 me-2" type="button"
+          (click)="goBack()">
+          Cancel
+        </button>
+        <button class="btn btn-primary rounded-pill py-2 px-4" type="button" (click)="submit()">
+          <i class="fa fa-check me-2"></i>Save
+        </button>
+      </div>
+    </div>
+    <div class="row mt-4">
+      <div class="col-12">
+        <div class="bg-silver py-3 px-4 rounded-4 mb-4">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center gap-4">
+              <!-- Profile Image -->
+              <img  src="data:image/jpeg;base64,{{candidateInfo?.selfie}}" onError="this.src='/assets/images/selfie.jpeg'" class="rounded-circle"
+                width="50" height="50" alt="profile">
+
+              <div>
+                <p class="mb-0 fw-medium text-secondary text-capitalize">{{candidateInfo?.firstName}} {{candidateInfo?.lastName}}</p>
+                <p class="text-muted mb-0 fs-12 fw-normal">{{candidateInfo?.applicationNumber}}
+                </p>
+              </div>
+              <span class="badge fw-medium px-4 py-2 fs-14 rounded-pill text-capitalize"
+                [style.background]="getColors(candidateInfo?.applicationStatus).background"
+                [style.border]="getColors(candidateInfo?.applicationStatus).border"
+                [style.color]="getColors(candidateInfo?.applicationStatus).color">
+                {{candidateInfo?.applicationStatus}}</span>
+            </div>
+          </div>
+
+          <hr class="my-3">
+          <div class="row text-start text-lg-center text-md-start gy-3 text-capitalize">
+
+            <div class="col-12 col-md-12 col-lg-2">
+              <p class="text-muted fs-12 fw-normal mb-0">Customer</p>
+              <p class="fw-normal mb-0">{{candidateInfo?.customerName}}</p>
+            </div>
+            <div class="col-12 col-md-12 col-lg-7">
+              <div class="row">
+                <div class="col-md-4">
+                  <p class="text-muted fs-12 fw-normal mb-0">Request Title</p>
+                  <p class="fw-normal mb-0">{{candidateInfo?.jobTitle}}</p>
+                </div>
+
+                <div class="col-md-3">
+                  <p class="text-muted fs-12 fw-normal mb-0">Employment Type</p>
+                  <p class="fw-normal mb-0">{{candidateInfo?.jobType}}</p>
+                </div>
+                <div class="col-md-3">
+                  <p class="text-muted fs-12 fw-normal mb-0">Province</p>
+                  <p class="fw-normal mb-0">{{candidateInfo?.region}}</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-12 col-lg-3">
+              <div class="d-flex justify-content-end gap-3">
+
+                <!-- Phone -->
+                <a href="tel : {{candidateInfo?.phoneNumber}}" type="button"
+                  class="btn btn-outline-grey d-flex align-items-center gap-2 rounded-pill text-secondary fs-14 px-4 py-2 fw-medium">
+                  <i class="fa fa-phone"></i>
+                  {{candidateInfo?.phoneNumber}}
+                </a>
+                <a href="mailto:{{candidateInfo?.email}}"
+                  class="btn btn-outline-grey d-flex align-items-center gap-2 rounded-pill text-secondary fs-14 px-4 py-2 fw-medium">
+                  <i class="fa fa-envelope"></i>
+                </a>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <form [formGroup]="form" (ngSubmit)="submit()">
+          <div class="row mt-3">
+            <div class="col-12 col-md-6">
+              <p class="text-secondary fw-semibold">Reason</p>
+              <div class="form-group">
+                <p class="mb-2 fs-12 text-muted">Reason for Offboarding</p>
+                <div class="mb-4">
+                  <button class="btn px-4 px-lg-5 py-3 rounded-start-pill" type="button" [ngClass]="
+                      form.value.offboardingReason === 'contractEnded'
+                        ? 'btn-info text-dark'
+                        : 'btn-light text-dark'
+                    " (click)="
+                      setBooleanValue('offboardingReason', 'contractEnded')
+                    ">
+                    <i class="fa fa-check me-3" *ngIf="
+                        form.value.offboardingReason === 'contractEnded'
+                      "></i>Contract Ended
+                  </button>
+                  <button class="btn px-4 px-lg-5 py-3 rounded-end-pill" type="button" [ngClass]="
+                      form.value.offboardingReason === 'termination'
+                        ? 'btn-info text-dark'
+                        : 'btn-light text-dark'
+                    " (click)="
+                      setBooleanValue('offboardingReason', 'termination')
+                    ">
+                    <i class="fa fa-check me-3" *ngIf="form.value.offboardingReason === 'termination'"></i>Termination
+                  </button>
+                </div>
+              </div>
+              <div class="form-group">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Payroll Reason for Offboarding</mat-label>
+                  <textarea matInput formControlName="payrollReason" rows="5" cols="5"
+                    placeholder="Payroll Reason for Offboarding" type="text"></textarea>
+                  <mat-error>
+                    <vmessage field="payrollReason" [control]="form.controls['payrollReason']">
+                    </vmessage>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="form-group">
+                <lb-auto-complete appearance="outline" placeholder="Reason" label="Reason" [multiple]="false"
+                  [clear]="false" [fControl]="form.controls['reason']" [options]="selectReason">
+                </lb-auto-complete>
+              </div>
+              <div class="form-group">
+                <lb-auto-complete appearance="outline" placeholder="Status" label="Status" [multiple]="false"
+                  [clear]="false" [fControl]="form.controls['status']" [options]="selectStatus">
+                </lb-auto-complete>
+              </div>
+
+            </div>
+            <div class="col-12 col-md-6">
+              <p class="text-secondary fw-semibold">Customer Details</p>
+              <div class="form-group">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Customer Name</mat-label>
+                  <input matInput formControlName="customer" placeholder="Customer Name" type="text" readonly />
+                  <mat-error>
+                    <vmessage field="customer" [control]="form.controls['customer']">readonly
+                    </vmessage>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="form-group">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Site</mat-label>
+                  <input matInput formControlName="site" placeholder="Site" type="text" readonly />
+                  <mat-error>
+                    <vmessage field="site" [control]="form.controls['site']">
+                    </vmessage>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="form-group">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Job Title</mat-label>
+                  <input matInput formControlName="jobTitle" placeholder="Job Title" type="text" readonly />
+                  <mat-error>
+                    <vmessage field="jobTitle" [control]="form.controls['jobTitle']">
+                    </vmessage>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="form-group">
+                <app-date-picker placeholderText="Start Date" label="Start Date"
+                  [fControl]="form.controls['startDate']">
+                </app-date-picker>
+              </div>
+              <div class="form-group">
+                <app-date-picker placeholderText="End Date" label="End Date" [fControl]="form.controls['endDate']">
+                </app-date-picker>
+              </div>
+              <div Permission="offBoarding:Can Approve/Reject">
+                <button class="btn px-4 px-lg-5 py-3 rounded-start-pill" type="button" [ngClass]="
+                      form.value.approved === true
+                        ? 'btn-info text-dark'
+                        : 'btn-light text-dark'
+                    " (click)="
+                      setBooleanValue('approved', true)
+                    ">
+                  <i class="fa fa-check me-3" *ngIf="
+                        form.value.approved === true
+                      "></i>Approved
+                </button>
+                <button class="btn px-4 px-lg-5 py-3 rounded-end-pill" type="button" [ngClass]="
+                      form.value.approved === false
+                        ? 'btn-info text-dark'
+                        : 'btn-light text-dark'
+                    " (click)="
+                      setBooleanValue('approved', false)
+                    ">
+                  <i class="fa fa-check me-3" *ngIf="form.value.approved === false"></i>Rejected
+                </button>
+              </div>
+            </div>
+          </div>
+          <hr class="my-5" />
+          <div class="row mt-3">
+            <div class="col-12 col-md-6">
+              <p class="text-secondary fw-semibold">Offboarding Date</p>
+              <div class="form-group">
+                <app-date-picker placeholderText="Date" label="Date" [fControl]="form.controls['offboardingDate']">
+                </app-date-picker>
+              </div>
+            </div>
+
+
+
+            <div class="col-12 col-md-12">
+              <div class="bg-light rounded p-4">
+                <div class="row">
+                  <p class="fw-medium mb-2 text-dark">Requirements</p>
+                  <div class="col-12 col-md-6 col-lg-6" *ngFor="let item of selectRequirements">
+                    <div class="d-flex justify-content-start align-items-center py-2 px-0 px-md-3 fw-normal">
+                      <mat-checkbox [value]="item.value" (change)="onChange(item.value, $event.checked)"
+                        [checked]="form.value.requirements.includes(item.value)" labelPosition="before">
+                      </mat-checkbox>
+                      <p class="mb-0">{{item?.name}}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

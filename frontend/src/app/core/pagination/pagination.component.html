@@ -1,0 +1,25 @@
+<pagination-template #p="paginationApi" *ngIf="pager" (pageChange)="changePage($event)">
+        <div class="">
+            <div class="">
+                <div class="float-end">
+                    <a class="text-dark" [class.disabled]="p.isFirstPage()" (click)="changePage(1)">
+                        <i class="fa-solid fa-angles-left"></i>
+
+                    </a>
+                    <a class="text-dark" [class.disabled]="pager.start == pager.page" (click)="changePage(pager.page,-1)">
+                        <i class="fa-solid fa-angle-left"></i>
+                    </a>
+                    <span *ngIf="pager" class="mx-1">Page {{pager.page}} of {{lastPage()}}</span>
+                    <a class="text-dark" [class.disabled]="pager.end == pager.page" (click)="changePage(pager.page,1)">
+                        <i class="fa-solid fa-angle-right"></i>
+                    </a>
+                    <a class="text-dark" [class.disabled]="p.isLastPage()" (click)="changePage(lastPage())">
+                        <i class="fa-solid fa-angles-right"></i>
+                    </a>
+                    <span *ngIf="pager" class="mx-1">{{pager.start}} to {{pager.end}} of
+                        {{pager.total}}
+                    </span>
+                </div>
+            </div>
+        </div>
+</pagination-template>

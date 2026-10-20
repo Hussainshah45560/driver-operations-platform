@@ -1,0 +1,231 @@
+<div class="container p-4 bg-silver">
+  <div class="row align-items-baseline">
+    <div class="col-12 col-md-6 col-lg-6">
+      <h4 class="fw-normal fs-4">Candidate Details</h4>
+    </div>
+    <div class="col-12 col-md-6 col-lg-6">
+      <div class="float-end">
+        <button
+          *ngIf="purpose == 'view'"
+          class="btn text-secondary bg-transparent border-grey fs-14 fw-medium px-3 py-2 rounded-pill float-end"
+          type="button"
+          (click)="setFormToEdit()"
+        >
+          Edit
+        </button>
+        <button
+          class="btn btn-transparent border-grey fs-14 fw-medium px-3 py-2 me-2 rounded-pill"
+          (click)="close()"
+          type="button"
+        >
+          Cancel
+        </button>
+        <button
+          class="btn btn-secondary text-white fs-14 fw-medium px-3 py-2 rounded-pill"
+          *ngIf="purpose == 'update'"
+          [disabled]="purpose == 'view'"
+          type="button"
+          (click)="submit()"
+        >
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+  <mat-dialog-content class="mat-typography">
+    <form [formGroup]="form" class="mt-4" (ngSubmit)="submit()">
+      <div class="row">
+        <div class="col-12 col-md-6 col-lg-6">
+          <p class="text-secondary fw-semibold">Basic Details</p>
+          <div class="form-group">
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Nick Name (Optional)</mat-label>
+              <input
+                matInput
+                formControlName="nickName"
+                placeholder="Nick Name (Optional)"
+                readonly
+                type="text"
+              />
+              <mat-error>
+                <vmessage
+                  field="nickName"
+                  [control]="form.controls['nickName']"
+                >
+                </vmessage>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-group">
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Legal First Name</mat-label>
+              <input
+                matInput
+                formControlName="firstName"
+                placeholder="Legal First Name"
+                readonly
+                type="text"
+              />
+              <mat-error>
+                <vmessage
+                  field="firstName"
+                  [control]="form.controls['firstName']"
+                >
+                </vmessage>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-group">
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Last Name</mat-label>
+              <input
+                matInput
+                formControlName="lastName"
+                placeholder="Last Name"
+                readonly
+                type="text"
+              />
+              <mat-error>
+                <vmessage
+                  field="lastName"
+                  [control]="form.controls['lastName']"
+                >
+                </vmessage>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-group">
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Residential Area</mat-label>
+              <input
+                matInput
+                formControlName="residentialArea"
+                placeholder="Residential Area"
+                readonly
+                type="text"
+              />
+              <mat-error>
+                <vmessage
+                  field="residentialArea"
+                  [control]="form.controls['residentialArea']"
+                >
+                </vmessage>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-group">
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>{{ dataSource?.documentType }} Numnber</mat-label>
+              <input
+                matInput
+                formControlName="idNumber"
+                placeholder="{{ dataSource?.documentType }} Numnber"
+                readonly
+                type="number"
+              />
+              <mat-error>
+                <vmessage
+                  field="idNumber"
+                  [control]="form.controls['idNumber']"
+                >
+                </vmessage>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-6">
+          <p class="text-secondary fw-semibold">Customer</p>
+
+          <div class="form-group">
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Cellphone Number</mat-label>
+              <input
+                matInput
+                formControlName="phoneNumber"
+                placeholder="Cellphone Number"
+                readonly
+                type="tel"
+              />
+              <mat-error>
+                <vmessage
+                  field="phoneNumber"
+                  [control]="form.controls['phoneNumber']"
+                >
+                </vmessage>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-group">
+            <app-date-picker
+              placeholderText="Date Contacted"
+              label="Date Contacted"
+              [fControl]="form.controls['contactedDate']"
+            >
+            </app-date-picker>
+          </div>
+        </div>
+      </div>
+
+      <hr class="my-4" />
+
+      <div class="row">
+        <div class="col-12 col-md-6 col-lg-6">
+          <p class="text-secondary fw-semibold">Booking Dates</p>
+          <div class="form-group">
+            <app-date-picker
+              placeholderText="Training Date"
+              label="Training Date"
+              [fControl]="form.controls['trainingDate']"
+            >
+            </app-date-picker>
+          </div>
+          <div class="form-group">
+            <app-date-picker
+              placeholderText="Date of Training Completion"
+              label="Date of Training Completion"
+              [fControl]="form.controls['trainingCompletionDate']"
+            >
+            </app-date-picker>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-6">
+          <p class="text-secondary fw-semibold">Application Type</p>
+          <div class="my-4">
+            <button
+              class="btn px-5 py-3 rounded-start-pill"
+              type="button"
+              [ngClass]="
+                form.value.applicationCategory === 'employee'
+                  ? 'btn-info text-dark'
+                  : 'btn-light text-dark'
+              "
+              (click)="setBooleanValue('applicationCategory', 'employee')"
+            >
+              <i
+                class="fa fa-check me-3"
+                *ngIf="form.value.applicationCategory === 'employee'"
+              ></i
+              >Employee
+            </button>
+            <button
+              class="btn px-5 py-3 rounded-end-pill"
+              type="button"
+              [ngClass]="
+                form.value.applicationCategory === 'contractor'
+                  ? 'btn-info text-dark'
+                  : 'btn-light text-dark'
+              "
+              (click)="setBooleanValue('applicationCategory', 'contractor')"
+            >
+              <i
+                class="fa fa-check me-3"
+                *ngIf="form.value.applicationCategory === 'contractor'"
+              ></i
+              >Contractor
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </mat-dialog-content>
+</div>

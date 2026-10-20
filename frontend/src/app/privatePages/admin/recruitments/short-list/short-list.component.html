@@ -1,0 +1,148 @@
+<div class="listing-card">
+    <div class="card" style="border-top-left-radius: 0px; border-top-right-radius: 0px;">
+        <div class="card-header">
+            <div class="searchAndAdd" style="border-top-left-radius: 0px; border-top-right-radius: 0px;">
+                <div class="flex-grow-1">
+                    <h4 class="fw-medium text-secondary">Shortlist</h4>
+                </div>
+                <div class="searchBar">
+                    <form [formGroup]="searchForm">
+                        <div class="position-relative">
+                            <i class="fa fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"
+                                type="button" (click)="search(searchForm.value.searchTerm)"></i>
+                            <input type="text" class="form-control ps-5" matInput formControlName="searchTerm"
+                                (keydown.enter)="search(searchForm.value.searchTerm)" placeholder="Search Shortlist" />
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-container">
+                <table class="table dataTable">
+                    <thead class="w-100">
+                        <tr>
+                            <th>
+                                Name<i class="fa fa-arrow-down ms-1" type="button" (click)="sort('name', -1)"></i>
+                                <i class="fa fa-arrow-up ms-1" (click)="sort('name', 1)" type="button"></i>
+                            </th>
+                            <th>Applicant No.
+                                <i class="fa fa-arrow-down ms-1" type="button"
+                                    (click)="sort('vehicleTypes.name', -1)"></i>
+                                <i class="fa fa-arrow-up ms-1" (click)="sort('vehicleTypes.name', 1)" type="button"></i>
+                            </th>
+                            <th>Contact No.
+                                <i class="fa fa-arrow-down ms-1" type="button"
+                                    (click)="sort('vehicleTypes.name', -1)"></i>
+                                <i class="fa fa-arrow-up ms-1" (click)="sort('vehicleTypes.name', 1)" type="button"></i>
+                            </th>
+                            <th>Home Affairs
+                                <i class="fa fa-arrow-down ms-1" type="button"
+                                    (click)="sort('vehicleTypes.name', -1)"></i>
+                                <i class="fa fa-arrow-up ms-1" (click)="sort('vehicleTypes.name', 1)" type="button"></i>
+                            </th>
+                            <th>Criminal Record
+                                <i class="fa fa-arrow-down ms-1" type="button"
+                                    (click)="sort('vehicleTypes.name', -1)"></i>
+                                <i class="fa fa-arrow-up ms-1" (click)="sort('vehicleTypes.name', 1)" type="button"></i>
+                            </th>
+                            <!-- <th>License
+                                <i class="fa fa-arrow-down ms-1" type="button"
+                                    (click)="sort('vehicleTypes.name', -1)"></i>
+                                <i class="fa fa-arrow-up ms-1" (click)="sort('vehicleTypes.name', 1)" type="button"></i>
+                            </th> -->
+                            <th>Biometric
+                                <i class="fa fa-arrow-down ms-1" type="button"
+                                    (click)="sort('vehicleTypes.name', -1)"></i>
+                                <i class="fa fa-arrow-up ms-1" (click)="sort('vehicleTypes.name', 1)" type="button"></i>
+                            </th>
+                            <th>Date Contacted
+                                <i class="fa fa-arrow-down ms-1" type="button"
+                                    (click)="sort('vehicleTypes.name', -1)"></i>
+                                <i class="fa fa-arrow-up ms-1" (click)="sort('vehicleTypes.name', 1)" type="button"></i>
+                            </th>
+                            <th>Reference</th>
+                            <th>Application</th>
+                            <th>CV</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of dataSource; let i = index">
+                            <td>{{ item?.name }}</td>
+                            <td>{{ item?.applicationNumber }}</td>
+                            <td><a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill"
+                                    href="tel:{{item?.phoneNumber}}" type="button">
+                                    <i class="fa fa-phone me-2"></i> {{item?.phoneNumber}}
+                                </a></td>
+                            <td> <span class="badge rounded-pill  fw-medium text-capitalize"
+                                    [style.background]="getColors('approved').background"
+                                    [style.border]="getColors('approved').border"
+                                    [style.color]="getColors('approved').color">
+                                    Approved</span></td>
+                            <td> <span class="badge rounded-pill  fw-medium text-capitalize"
+                                    [style.background]="getColors('approved').background"
+                                    [style.border]="getColors('approved').border"
+                                    [style.color]="getColors('approved').color">
+                                    Approved</span></td>
+                            <!-- <td> <span class="badge rounded-pill  fw-medium text-capitalize"
+                                    [style.background]="getColors('approved').background"
+                                    [style.border]="getColors('approved').border"
+                                    [style.color]="getColors('approved').color">
+                                    Approved</span></td> -->
+                            <td> <span class="badge rounded-pill  fw-medium text-capitalize" *ngIf="item?.bioStatus"
+                                    [style.background]="getColors(item?.bioStatus).background"
+                                    [style.border]="getColors(item?.bioStatus).border"
+                                    [style.color]="getColors(item?.bioStatus).color">
+                                    {{item?.bioStatus}}</span></td>
+                            <td class="text-left">{{
+                                item.contactedDate
+                                ? moment(item.contactedDate).format("DD - MM - YYYY")
+                                : "--"
+                                }}
+                            </td>
+                            <td>
+                                <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill me-2"
+                                    type="button" (click)="referencePopup(item?.reference)"
+                                    [ngClass]="{'disabled-link': !item?.reference?.length || !item?.reference[0]?.referenceName?.trim()}">
+                                    View References
+                                </a>
+                            </td>
+                            <td>
+                                <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill mx-2"
+                                    Permission="recruitment:view"><i class="fa fa-download"></i>
+                                </a>
+                            </td>
+                            <td>
+                                <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill mx-2"
+                                    Permission="recruitment:view"><i class="fa fa-download"></i>
+                                </a>
+                            </td>
+                            <td>
+                                <a class="btn btn-info text-secondary fw-medium rounded-pill mx-2" type="button"
+                                    (click)="finaliseCandidate(item?._id)" Permission="recruitment:update">
+                                    <i class="fa fa-check me-1"></i>Approve
+                                </a>
+                                <a class="btn btn-primary bg-alert text-danger fw-medium rounded-pill" type="button"
+                                    (click)="removeShortListedCandidate(item._id)" Permission="recruitment:view">
+                                    <i class="fa fa-trash-can me-1"></i> Remove
+                                </a>
+                                <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill mx-2"
+                                    (click)="candidateDetails(item._id , 'update')" type="button"
+                                    Permission="recruitment:update">
+                                    Edit
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div>
+                <pagination [pager]="pager" [params]="queryParams"></pagination>
+            </div>
+        </div>
+    </div>
+</div>

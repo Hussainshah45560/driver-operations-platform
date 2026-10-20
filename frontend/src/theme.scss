@@ -1,0 +1,324 @@
+@import "../node_modules/bootstrap/scss/functions";
+@import "../node_modules/bootstrap/scss/variables";
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+$blue: #36618e;
+$indigo: #174974;
+$purple: #6f42c1;
+$pink: #d63384;
+$red: #93000a;
+$orange: #fd7e14;
+$yellow: #f8c788;
+$green: #38d6ab;
+$teal: #20c997;
+$cyan: #d0e4ff;
+$grey-color: #c3c6cf;
+$dark-red: #ba1a1a;
+$brown: #814900;
+$silver: #f2f3fa;
+$alert: #ffdad6;
+
+$primary: $blue;
+$secondary: $indigo;
+$success: $green;
+$info: $cyan;
+$warning: $yellow;
+$danger: $red;
+$light: $gray-100;
+$dark: $gray-900;
+$grey: $grey-color;
+$brown: $brown;
+$silver: $silver;
+$alert: $alert;
+$theme-colors: (
+  "primary": $primary,
+  "secondary": $indigo,
+  "success": $success,
+  "info": $info,
+  "warning": $warning,
+  "danger": $danger,
+  "light": $light,
+  "dark": $dark,
+  "grey": $grey,
+  "brown": $brown,
+  "silver": $silver,
+  "alert": $alert,
+  "dark-red": $dark-red,
+);
+$theme-colors-text: (
+  "primary": $primary,
+  "secondary": $indigo,
+  "success": $success,
+  "info": $info,
+  "warning": $warning,
+  "danger": $danger,
+  "light": $light,
+  "dark": $dark,
+  "grey": $grey,
+  "brown": $brown,
+  "silver": $silver,
+  "dark-red": $dark-red,
+);
+
+// $h1-font-size: 2.75rem;
+$h2-font-size: 57px;
+// $h3-font-size: 1.75rem;
+$h4-font-size: 22px;
+// $h5-font-size: 1.25rem;
+// $h6-font-size: 1rem;
+
+// Heading Style
+$headings-font-weight: 600;
+
+//card-style
+// $card-spacer-y: 20px;
+// $card-spacer-x: 20px;
+
+//font-family
+$font-family-base: Roboto, "Poppins", system-ui, -apple-system, "Segoe UI",
+  "Helvetica Neue";
+
+@import "../node_modules/bootstrap/scss/bootstrap.scss";
+
+html {
+  --mdc-outlined-text-field-container-shape: #{$border-radius} !important;
+  --mdc-outlined-text-field-outline-width: 2px !important;
+  --mdc-outlined-text-field-outline-color: rgba(98, 98, 98, 0.16) !important;
+  --mdc-outlined-text-field-hover-outline-color: rgba(
+    98,
+    98,
+    98,
+    0.16
+  ) !important;
+  --mdc-outlined-text-field-focus-outline-color: rgba(
+    98,
+    98,
+    98,
+    0.16
+  ) !important;
+}
+
+.mat-mdc-menu-content {
+  background-color: #fff !important;
+}
+
+.profile-image {
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  border-radius: 999px;
+  display: flex;
+
+  img {
+    width: 100%;
+    object-fit: cover;
+    object-position: top;
+    display: block;
+  }
+
+  .no-image {
+    width: 100%;
+    height: 100%;
+    border: 1px dotted grey;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+  }
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1030;
+}
+
+$table-border-c: solid 1px #cccccc;
+
+.table.data-header {
+  border-spacing: 0;
+}
+
+.table.data-table {
+  border-collapse: separate;
+  border-spacing: 0 1rem;
+
+  thead {
+    display: none;
+
+    @include media-breakpoint-up(sm) {
+      display: table-header-group;
+    }
+
+    th {
+      font-weight: 600;
+    }
+  }
+
+  tbody {
+    tr {
+      vertical-align: middle;
+      border: #{$table-border-c};
+      display: block;
+      position: relative;
+
+      @include media-breakpoint-up(md) {
+        display: table-row;
+        border: none;
+
+        .action-button {
+          // width: auto ;
+          position: relative !important;
+          right: 0px !important;
+          top: 0px !important;
+        }
+      }
+
+      border-radius: #{$border-radius};
+      margin-bottom: 1rem;
+      padding: 0.5rem;
+
+      .action-button {
+        width: auto;
+        position: absolute;
+        right: 2px;
+        top: 4px;
+      }
+
+      td {
+        .label {
+          color: #999;
+          display: block;
+          font-size: 80%;
+
+          &::after {
+            content: " :";
+          }
+        }
+
+        display: inline-block;
+        width: 50%;
+        border: none;
+        border-radius: #{$border-radius};
+
+        &.c-100 {
+          width: 100%;
+        }
+
+        .image {
+          width: 50px;
+          height: 50px;
+          overflow: hidden;
+          border-radius: 999px;
+          border: 1px solid #cccccc;
+
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top;
+            display: block;
+          }
+        }
+
+        @include media-breakpoint-up(md) {
+          .fs-14 {
+            font-size: 0.85rem !important;
+          }
+
+          border-radius: 0px;
+          display: table-cell;
+
+          .label {
+            display: none;
+          }
+
+          &.c-100 {
+            width: auto;
+          }
+
+          width: auto;
+          border: #{$table-border-c};
+          padding: 0.8rem 1rem;
+          border-left: none;
+          border-right: none;
+
+          &:first-child {
+            border-top-left-radius: 1rem;
+            border-bottom-left-radius: 1rem;
+            border-left: #{$table-border-c};
+          }
+
+          &:last-child {
+            border-top-right-radius: 1rem;
+            border-bottom-right-radius: 1rem;
+            border-right: #{$table-border-c};
+          }
+        }
+      }
+    }
+  }
+}
+
+.scroll-wrapper {
+  position: relative;
+  padding-bottom: 75px;
+
+  .scroll-container {
+    margin-top: 10px;
+    border: #{$table-border-c};
+    border-radius: #{$border-radius};
+    padding: 1rem 0px;
+    box-shadow: 0px 0px 10px 0px #ccc;
+    background-color: #fff;
+
+    .scrollable {
+      overflow: hidden;
+      overflow-y: auto;
+      height: calc(100vh - 340px);
+
+      @include media-breakpoint-up(md) {
+        height: calc(100vh - 226px);
+      }
+
+      padding: 0px 1rem;
+
+      thead {
+        position: sticky;
+        top: 0px;
+        z-index: 1;
+      }
+    }
+  }
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  border-radius: 5px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 5px;
+  margin: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+.mat-mdc-form-field-icon-suffix {
+  margin-right: 10px;
+}
+
+.mat-mdc-form-field-icon-prefix {
+  margin-left: 10px;
+}

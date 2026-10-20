@@ -1,0 +1,21 @@
+.disabled-day {
+    background-color: #e9ecef;
+    cursor: not-allowed;
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.selected-day {
+    background-color: #d0e4ff !important;
+    /* blue */
+    transform: scale(1.05);
+    transition: 0.2s ease-in-out;
+
+    p {
+        color: #174974 !important;
+    }
+}
+
+:host ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+    display: none !important;
+}

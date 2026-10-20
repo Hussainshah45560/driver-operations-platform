@@ -1,0 +1,230 @@
+<div class="container-fluid p-0">
+  <div class="row mb-4">
+    <div class="col-12 col-md-12 col-lg-12">
+      <h4 class="fw-medium text-secondary">Applications</h4>
+    </div>
+  </div>
+  <div class="listing-card">
+    <div class="card">
+      <div class="card-header">
+        <div class="searchAndAdd">
+          <div class="searchBar">
+            <form [formGroup]="searchForm">
+              <div class="position-relative">
+                <i class="fa fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"
+                  type="button" (click)="search(searchForm.value.searchTerm)"></i>
+                <input type="text" class="form-control ps-5" matInput formControlName="searchTerm"
+                  (keydown.enter)="search(searchForm.value.searchTerm)" placeholder="Name, Number, Reference..." />
+              </div>
+            </form>
+          </div>
+          <div>
+            <a class="btn btn-info rounded-button text-secondary px-3 py-2 fw-medium" routerLink="/applications/new"
+              Permission="applications:add">
+              <small> <i class="fa fa-plus me-2"></i> New Application</small>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="table-container">
+          <table class="table dataTable">
+            <thead>
+              <tr>
+                <th>
+                  First Name
+                  <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('profile.firstName', -1)"></i>
+                  <i class="fa fa-arrow-up ms-1" (click)="sort('profile.firstName', 1)" type="button"></i>
+                </th>
+                <th>
+                  Last Name
+                  <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('profile.lastName', -1)"></i>
+                  <i class="fa fa-arrow-up ms-1" (click)="sort('profile.lastName', 1)" type="button"></i>
+                </th>
+                <th>
+                  Applicant No.
+                  <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('applicationNumber', -1)"></i>
+                  <i class="fa fa-arrow-up ms-1" (click)="sort('applicationNumber', 1)" type="button"></i>
+                </th>
+                <th>
+                  Customer Name
+                  <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('customerName', -1)"></i>
+                  <i class="fa fa-arrow-up ms-1" (click)="sort('customerName', 1)" type="button"></i>
+                </th>
+                <th>
+                  Date of App.
+                  <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('appliedDate', -1)"></i>
+                  <i class="fa fa-arrow-up ms-1" (click)="sort('appliedDate', 1)" type="button"></i>
+                </th>
+                <th>
+                  Status
+                  <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('applicationStatus', -1)"></i>
+                  <i class="fa fa-arrow-up ms-1" (click)="sort('applicationStatus', 1)" type="button"></i>
+                </th>
+                <th>
+                  Test Date
+                  <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('testDate', -1)"></i>
+                  <i class="fa fa-arrow-up ms-1" (click)="sort('testDate', 1)" type="button"></i>
+                </th>
+                <th>
+                  Bio Date
+                  <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('bioDate', -1)"></i>
+                  <i class="fa fa-arrow-up ms-1" (click)="sort('bioDate', 1)" type="button"></i>
+                </th>
+                <th>Book Test</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody class="outerTable">
+              <ng-container *ngFor="let item of dataSource">
+                <tr (click)="expandTableRow(item)" style="cursor: pointer"
+                  [ngClass]="{ 'expanded-row': expandedApp === item }">
+                  <td>
+                    <i [ngClass]="{ rotated: expandedApp === item }" class="fa fa-chevron-up me-3"></i>{{ item.firstName
+                    }}
+                  </td>
+                  <td>{{ item.lastName }}</td>
+                  <td>{{ item.applicationNumber }}</td>
+                  <td>{{ item.customerName }}</td>
+                  <td>
+                    {{
+                    item.appliedDate
+                    ? moment(item.appliedDate).format("DD-MM-YYYY")
+                    : "-"
+                    }}
+                  </td>
+                  <td>
+                    <span class="badge rounded-pill  fw-medium text-capitalize"
+                      [style.background]="getColors(item.applicationStatus).background"
+                      [style.border]="getColors(item.applicationStatus).border"
+                      [style.color]="getColors(item.applicationStatus).color">
+                      {{ item.applicationStatus }}</span>
+
+                  </td>
+                  <td>
+                    {{
+                    item.testDate
+                    ? moment(item?.testDate).format("DD-MM-YYYY") + ' / '
+                    : "-"
+                    }}<span *ngIf="item.testStatus" class="badge rounded-pill  fw-medium text-capitalize"
+                      [style.background]="getColors(item.testStatus).background"
+                      [style.border]="getColors(item.testStatus).border"
+                      [style.color]="getColors(item.testStatus).color">
+                      {{ item.testStatus }}</span>
+                  </td>
+                  <td>
+                    {{
+                    item.bioDate
+                    ? moment(item?.bioDate).format("DD-MM-YYYY") + ' / '
+                    : "-"
+                    }}<span *ngIf="item.bioStatus" class="badge rounded-pill  fw-medium text-capitalize"
+                      [style.background]="getColors(item.bioStatus).background"
+                      [style.border]="getColors(item.bioStatus).border" [style.color]="getColors(item.bioStatus).color">
+                      {{ item.bioStatus }}</span>
+                  </td>
+                  <td>
+                    <a class="btn btn-primary bg-info text-secondary fw-medium rounded-pill border-0"
+                      routerLink="/tests/new" [queryParams]="{profileId : item?.userId}">
+                      Book
+                    </a>
+                  </td>
+                  <td>
+                    <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill"
+                      Permission="applications:view" routerLink="/applications/view/{{item?._id}}">
+                      View
+                    </a>
+                    <!-- <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill ms-2"
+                      Permission="applications:update" routerLink="/applications/edit/{{item?._id}}"
+                      *ngIf="!['completed','confirmed'].includes(item?.applicationStatus)">
+                      Edit
+                    </a> -->
+                    <span class="border-start" style="height: 24px"></span>
+                    <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill ms-2" type="button"
+                      Permission="applications:delete">
+                      <i class="fa fa-print"></i>
+                    </a>
+                    <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill ms-2" type="button">
+                      <i class="fa fa-download"></i>
+                    </a>
+                  </td>
+                </tr>
+                <tr *ngIf="expandedApp === item">
+                  <td colspan="10" class="bg-light p-0">
+                    <div class="">
+                      <table class="table mb-0 small">
+                        <thead class="head-row">
+                          <tr>
+                            <th width="5%"></th>
+                            <th width="10%">Step</th>
+                            <th width="15%">Step Title</th>
+                            <th width="10%">Status</th>
+                            <th width="65%">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody class="step-row">
+                          <tr *ngFor="
+                              let step of [
+                                { num: 1, title: 'Personal Details' },
+                                { num: 2, title: 'Contacts' },
+                                { num: 3, title: 'Education' },
+                                { num: 4, title: 'Work' },
+                                { num: 5, title: 'Work Details' },
+                                { num: 6, title: 'Vehicle Information' },
+                                { num: 7, title: 'Security' },
+                                { num: 8, title: 'Upload Documents' },
+                                { num: 9, title: 'POPIA & Consent' }
+                              ];
+                              let i = index
+                            ">
+                            <ng-container *ngIf="item.stepStatus['step' + step.num] !== 'skipped'">
+                              <td width="5%"></td>
+                              <td>Step {{ step.num }}</td>
+                              <td>{{ step.title }}</td>
+                              <td>
+                                <span class="badge rounded-pill  fw-medium text-capitalize"
+                                  [style.background]="getColors(item.stepStatus['step' + step.num]).background"
+                                  [style.border]="getColors(item.stepStatus['step' + step.num]).border"
+                                  [style.color]="getColors(item.stepStatus['step' + step.num]).color">
+                                  {{ item.stepStatus["step" + step.num] }}</span>
+
+                              </td>
+                              <td>
+                                <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill me-2"
+                                  [class.disabled]="['in progress'].includes(item?.stepStatus['step' + step.num])"
+                                  Permission="applications:view" type="button"
+                                  [routerLink]="'/applications/view/' + item._id + '/step' + step.num">
+                                  View
+                                </a>
+                                <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill"
+                                  [class.disabled]="['in progress'].includes(item?.stepStatus?.['step' + step.num])"
+                                  *ngIf="statusCheckService.isStepValid('editable' , item.stepStatus['step' + step.num] , item.applicationStatus)"
+                                  Permission="applications:update"
+                                  [routerLink]="'/applications/edit/' + item._id + '/step' + step.num" type="button">
+                                  Edit
+                                </a>
+                              </td>
+                            </ng-container>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div>
+          <pagination [pager]="pager" [params]="queryParams"></pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="mt-4 text-center d-md-none">
+    <a class="btn btn-secondary rounded-pill px-4 py-2"
+      [routerLink]="ps.havePerm('dashboard', 'view') ? '/dashboard' : '/home'">{{ps.havePerm('dashboard', 'view') ?
+      'Dashboard' : 'Home'}}</a>
+  </div>
+</div>

@@ -1,0 +1,93 @@
+const config = {
+  secret: "CHANGE_ME_JWT_SECRET",
+  refreshTokenSecret: "CHANGE_ME_REFRESH_TOKEN_SECRET",
+  port: 3000,
+  host: "0.0.0.0",
+  allowedDomains: ["http://localhost:3100", "http://localhost:4200"],
+  liveDomain: "http://localhost:4200",
+  tokenLife: 9999999,
+  refreshTokenLife: 9999999,
+  db: {
+    username: "",
+    password: "",
+    database: "cmcglobal",
+    host: "127.0.0.1",
+  },
+  pagination: {
+    page_size: 25,
+    offset: 0,
+    maxLimit: 100,
+  },
+  uploads: {
+    path: "/files/",
+  },
+  image_space: {
+    bucketName: "",
+    spaceAccessKey: "",
+    spaceSecretAccessKey: "",
+  },
+  commonRules: {
+    email: "required|email|max:150",
+    name: "required|max:200",
+    url: [
+      "required",
+      "regex:/^(www\\.)[a-z0-9-]+\\.[a-z]{2,}(\\.[a-z]{2,3})?/",
+    ],
+    address: "required|max:250",
+    dob: "date",
+    date: "required|date",
+    gender: "required|max:60",
+    phone: "required|max:18",
+    subject: "required|max:100",
+    message: "required|max:500",
+    id: "required|max:24",
+    password: [
+      "required",
+      "min:8",
+      "max:24",
+      "regex:/^(?=(.*[a-z]){1,})(?=(.*[\\d]){1,})(?=(.*[\\W]){1,})(?!.*\\s)/",
+    ],
+    username: [
+      "required",
+      "min:4",
+      "max:24",
+      "regex:/^(?!.*\\.\\.)(?!.*\\.$)[^\\W][\\w.].*$/",
+    ],
+  },
+  sendEmails: false,
+  SENDGRID_API_KEY: "",
+  MAILGUN_API_KEY: "",
+  MAILGUN_DOMAIN: "",
+  smtp: {
+    email: "",
+    password: "",
+  },
+  sms: {
+    username: "",
+    password: "",
+  },
+  licenseDisc: {
+    url: "",
+    apiKey: "",
+  },
+  selfie: {
+    url: "",
+    apiKey: "",
+  },
+  signNow: {
+    url: "https://api.signnow.com",
+    apiKey: "",
+    senderEmail: "",
+    callBackURL: "http://localhost:3000/api/webhook/signNow",
+  },
+  dot360: {
+    url: "",
+    client_id: "",
+    client_secret: "",
+    callBack: "",
+  },
+  sendSMS: false,
+  production: false,
+  syncDb: false,
+};
+export default config;

@@ -1,0 +1,86 @@
+<div class="row">
+  <div class="col-12">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="row">
+        <div class="col-12 col-md-6 col-lg-6">
+          <p class="text-secondary fw-semibold">
+            Acknowledgement of Debt Details
+          </p>
+          <div class="form-group mt-4">
+            <lb-auto-complete appearance="outline" placeholder="Template" label="Template" [multiple]="false"
+              [clear]="false" [fControl]="form.controls['templateId']" [options]="selectTemplate"
+              (selectionChange)="getTemplateData($event)">
+            </lb-auto-complete>
+          </div>
+          <div class="form-group">
+            <lb-auto-complete appearance="outline" placeholder="Reason" label="Reason" [multiple]="false"
+              [clear]="false" [fControl]="form.controls['aodReasonId']" [options]="selectReason">
+            </lb-auto-complete>
+          </div>
+          <div class="form-group">
+            <app-date-picker placeholderText="Date" label="Date" [fControl]="form.controls['date']">
+            </app-date-picker>
+          </div>
+          <div class="form-group">
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Amount</mat-label>
+              <span matPrefix class="fw-bold">R&nbsp;&nbsp;</span>
+              <input matInput formControlName="amount" placeholder="Amount" type="text" />
+              <mat-error>
+                <vmessage field="amount" [control]="form.controls['amount']">
+                </vmessage>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-6">
+          <p class="text-secondary fw-semibold invisible">Personal Information</p>
+          <div class="form-group mt-4">
+            <lb-auto-complete appearance="outline" placeholder="Payment Terms" label="Payment Terms" [multiple]="false"
+              [clear]="false" [fControl]="form.controls['paymentTermId']" [options]="selectPaymentTerms">
+            </lb-auto-complete>
+          </div>
+          <div class="form-group">
+            <lb-auto-complete appearance="outline" placeholder="Type" label="Type" [multiple]="false" [clear]="false"
+              [fControl]="form.controls['aodTypeId']" [options]="selectAodType">
+            </lb-auto-complete>
+          </div>
+          <div class="form-group">
+            <p class="mb-2 fs-12 text-muted">Payment Duration</p>
+            <div class="mb-4">
+              <button class="btn px-5 py-3 rounded-start-pill" type="button" [ngClass]="
+                form.value.paymentDuration === 'weekly' ? 'btn-info text-dark' : 'btn-light text-dark'
+              " (click)="setBooleanValue('paymentDuration', 'weekly')">
+                <i class="fa fa-check me-3" *ngIf="form.value.paymentDuration === 'weekly'"></i>Weekly
+              </button>
+              <button class="btn px-5 py-3 rounded-end-pill" type="button" [ngClass]="
+                form.value.paymentDuration === 'monthly'
+                  ? 'btn-info text-dark'
+                  : 'btn-light text-dark'
+              " (click)="setBooleanValue('paymentDuration', 'monthly')">
+                <i class="fa fa-check me-3" *ngIf="form.value.paymentDuration === 'monthly'"></i>Monthly
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <lb-auto-complete appearance="outline" placeholder="Day of Week/Month" label="Day of Week/Month"
+              [multiple]="false" [clear]="false" [fControl]="form.controls['weekOrMonth']" [options]="
+              form.value.paymentDuration == 'weekly'
+                ? selectWeekDays
+                : selectMonths
+            ">
+            </lb-auto-complete>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex align-items-center justify-content-end mt-5">
+        <button class="btn btn-transparent rounded-pill py-3 px-5 mx-2 border" type="button" (click)="goBack()">
+          Back
+        </button>
+        <button class="btn btn-primary rounded-pill py-3 px-5" type="submit">
+          Next
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

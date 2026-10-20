@@ -1,0 +1,11 @@
+a.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .componentsSideBar {
+    display: none !important;
+  }
+}

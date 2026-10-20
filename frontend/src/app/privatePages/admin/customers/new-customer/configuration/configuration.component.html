@@ -1,0 +1,102 @@
+<div class="row align-items-center pb-5">
+  <div class="col-12 col-md-4 col-lg-4">
+    <h4 class="text-secondary fw-medium">Configuration</h4>
+  </div>
+  <div class="col-12 col-md-8 col-lg-8">
+    <div class="d-flex align-items-center float-md-end">
+      <div class="border rounded-pill d-flex align-items-center justify-content-between py-2 px-2 me-1 px-md-3">
+        <small class="me-2 me-md-3">Customer Active</small>
+        <mat-slide-toggle class="" (change)="updateStatus()" [checked]="stepData?.isActive" [disabled]="!id"
+          color=""></mat-slide-toggle>
+      </div>
+      <span class="border-start mx-2 d-none d-md-block" style="height: 24px"></span>
+      <div class="me-2">
+        <a class="btn btn-info bg-transparent border-grey text-dark rounded-pill px-3 py-2 fw-medium w-100 fs-14 my-3 my-md-0" type="button"
+          routerLink="/customers">
+          Cancel
+      </a>
+      </div>
+      <div>
+        <button class="btn btn-primary rounded-pill px-3 py-2 fw-medium w-100 fs-14" type="button" (click)="submit()">
+          <i class="fa fa-check me-2"></i>Save
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div class="row mt-3">
+    <div class="col-12 col-md-6 col-lg-6">
+      <p class="text-secondary fw-semibold">Induction Configuration</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-12">
+      <div class="form-group">
+        <mat-checkbox formControlName="checklistRequired" (change)="onToggle('checklistRequired')">
+          Checklist Required
+        </mat-checkbox>
+      </div>
+    </div>
+    <div class="col-md-6 col-12">
+      <div class="form-group" *ngIf="form.value.checklistRequired">
+        <lb-auto-complete appearance="outline" placeholder="Select Checklist" label="Select Checklist" [multiple]="true"
+          (selectionChange)="onToggle('checklistRequired')" [clear]="false" [fControl]="form.controls['checklistIds']"
+          [options]="selectCheckList">
+        </lb-auto-complete>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-12">
+      <div class="form-group">
+        <mat-checkbox formControlName="supportingDocs" (change)="onToggle('supportingDocs')">
+          Supporting Docs
+        </mat-checkbox>
+      </div>
+    </div>
+    <div class="col-md-6 col-12">
+      <div class="form-group" *ngIf="form.value.supportingDocs">
+        <lb-auto-complete appearance="outline" placeholder="Supporting Docs" label="Supporting Docs" [multiple]="true"
+          (selectionChange)="onToggle('supportingDocs')" [clear]="false" [fControl]="form.controls['supportingDocIds']"
+          [options]="selectDocuments">
+        </lb-auto-complete>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-12">
+      <div class="form-group">
+        <mat-checkbox formControlName="vehicleCheck" (change)="onToggle('vehicleCheck')">
+          Vehicle Check
+        </mat-checkbox>
+      </div>
+
+    </div>
+    <div class="col-md-6 col-12">
+      <div class="form-group" *ngIf="form.value.vehicleCheck">
+        <lb-auto-complete appearance="outline" placeholder="Vehicle Checklist" label="Vehicle Checklist"
+          [multiple]="true" (selectionChange)="onToggle('vehicleCheck')" [clear]="false"
+          [fControl]="form.controls['vehicleCheckIds']" [options]="selectVehicle">
+        </lb-auto-complete>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-12">
+      <div class="form-group">
+        <mat-checkbox formControlName="driverCheck" (change)="onToggle('driverCheck')">
+          Driver Check
+        </mat-checkbox>
+      </div>
+    </div>
+    <div class="col-md-6 col-12">
+      <div class="form-group" *ngIf="form.value.driverCheck">
+        <lb-auto-complete appearance="outline" placeholder="Driver Checklist" label="Driver Checklist" [multiple]="true"
+          (selectionChange)="onToggle('driverCheck')" [clear]="false" [fControl]="form.controls['driverCheckIds']"
+          [options]="selectDriver">
+        </lb-auto-complete>
+      </div>
+    </div>
+  </div>
+</form>

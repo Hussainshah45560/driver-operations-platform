@@ -1,0 +1,197 @@
+<div class="row">
+  <div class="col-12">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <!-- <div class="row mt-3">
+        <p class="text-secondary fw-semibold">Existing Warnings</p>
+        <div class="col-12 col-md-12 col-lg-12">
+          <div class="listing-card">
+            <div class="card">
+              <div class="card-body">
+                <div class="table-container">
+                  <table class="table dataTable">
+                    <thead>
+                      <tr>
+                        <th>Dispute</th>
+                        <th>Outcome</th>
+                        <th>Date Scheduled</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <ng-container *ngFor="let item of [1, 2, 3, 4]">
+                        <tr>
+                          <td>Warnings</td>
+                          <td>12/12/2025</td>
+                          <td>1092304123</td>
+                          <td>
+                            <a
+                              class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill"
+                              type="button"
+                            >
+                              View
+                            </a>
+                            <a
+                              class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill mx-2"
+                              type="button"
+                            >
+                              <i class="fa fa-download"></i>
+                            </a>
+                            <a
+                              class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill"
+                              type="button"
+                            >
+                              <i class="fa fa-trash-can"></i>
+                            </a>
+                          </td>
+                        </tr>
+                      </ng-container>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="card-footer">
+                <div>
+                  <pagination
+                    [pager]="pager"
+                    [params]="queryParams"
+                  ></pagination>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> -->
+      <div class="row mt-3">
+        <div class="col-12 col-md-6">
+          <div class="form-group">
+            <lb-auto-complete appearance="outline" placeholder="Dispute" label="Dispute" [multiple]="false"
+              [clear]="false" [fControl]="form.controls['disputeTypeId']" [options]="selectDisputeType">
+            </lb-auto-complete>
+          </div>
+          <div class="form-group">
+            <app-date-picker placeholderText="Date Scheduled" label="Date Scheduled"
+              [fControl]="form.controls['scheduledDate']">
+            </app-date-picker>
+          </div>
+        </div>
+        <div class="col-12 col-md-6">
+          <div class="form-group">
+            <lb-auto-complete appearance="outline" placeholder="Outcome" label="Outcome" [multiple]="false"
+              [clear]="false" [fControl]="form.controls['disputeOutcome']" [options]="selectOutcome">
+            </lb-auto-complete>
+          </div>
+          <div class="form-group">
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Notes</mat-label>
+              <textarea matInput formControlName="notes" placeholder="Notes" type="text"></textarea>
+              <mat-error>
+                <vmessage field="notes" [control]="form.controls['notes']">
+                </vmessage>
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+        </div>
+      </div>
+      <hr class="my-5" />
+      <div class="row mt-3">
+        <div class="col-12 col-md-6 col-lg-6">
+          <p class="fs-6 text-secondary fw-semibold text-capitalize">
+            Documents
+          </p>
+          <div class="form-group">
+            <lb-auto-complete appearance="outline" placeholder="Document Type" label="Document Type" [multiple]="false"
+              [clear]="false" [fControl]="form.controls['type']" [options]="selectDocumentType"
+              (selectionChange)="saveDocument()">
+            </lb-auto-complete>
+          </div>
+          <div>
+            <div class="d-flex align-items-center gap-6 my-4" *ngIf="uploads['document']?.loading">
+              <div>
+                <i class="fa-solid fa-file-arrow-up text-secondary fs-4"></i>
+              </div>
+              <div class="flex-grow-1 mx-4">
+                <p class="fw-normal mb-0">{{ uploads["document"]?.name }}</p>
+                <span class="fs-14 text-grey">{{ uploads["document"]?.size }}MB -
+                  {{ uploads["document"]?.loadingText }}</span>
+                <div class="progress" style="height: 4px">
+                  <div class="progress-bar progress-bar-striped progress-bar-animated bg-secondary" role="progressbar"
+                    [style.width.%]="uploads['document']?.progress"></div>
+                </div>
+              </div>
+              <div class="flex-grow-1">
+                <i class="fa fa-trash-can text-secondary fs-5 float-end" type="button"
+                  (click)="removeUpload('document', uploadDocument)"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-6">
+          <div class="mt-4">
+            <app-drag (fileDropped)="selectImage($event, 'document')"
+              [extensions]="'WORD, EXCEL, JPEG, PNG, PDF (max. 10MB)'"></app-drag>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="listing-card">
+            <div class="card">
+              <div class="card-header">
+                <div class="searchAndAdd">
+                  <h6 class="mb-0 fw-semibold text-secondary">Documents</h6>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="table-container">
+                  <table class="table dataTable">
+                    <thead>
+                      <tr>
+                        <th>Document Type</th>
+                        <th>Document Name</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody class="noFooter">
+                      <tr *ngFor="let item of dataSource">
+                        <td class="text-capitalize">{{ item?.type }}</td>
+                        <td class="text-capitalize">{{ item?.name }}</td>
+                        <td>
+                          <span class="badge fw-medium rounded-pill text-capitalize uploadBadge">{{ item?.status }}
+                          </span>
+                        </td>
+                        <td>
+                          <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill" type="button"
+                            (click)="viewDocument(item.url)">
+                            View
+                          </a>
+                          <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill mx-2" type="button"
+                            (click)="downloadFile(item.url, item.name)">
+                            <i class="fa fa-download"></i>
+                          </a>
+                          <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill" type="button"
+                            (click)="deleteDocument(item._id)" *ngIf="canDelete(item.deleteAllowedUntil)">
+                            <i class="fa fa-trash-can"></i>
+                          </a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex align-items-center justify-content-end mt-5">
+        <button class="btn btn-transparent rounded-pill py-3 px-5 mx-2 border" type="button" (click)="goBack()">
+          Back
+        </button>
+        <button class="btn btn-primary rounded-pill py-3 px-5" type="submit">
+          Next
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

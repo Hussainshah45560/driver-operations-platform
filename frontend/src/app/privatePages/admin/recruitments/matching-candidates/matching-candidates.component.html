@@ -1,0 +1,82 @@
+<div class="container-fluid p-0">
+    <div class="row mb-4">
+        <div class="col-12 col-md-12 col-lg-12">
+            <h4 class="fw-medium text-secondary">Recruitment Request</h4>
+        </div>
+    </div>
+
+    <div class="bg-silver py-3 px-4 rounded-4 mb-4">
+        <div class="row  text-start align-items-center text-md-start gy-3">
+            <div class="col-12 col-md-12 col-lg-2 border-end border-2 border-grey">
+                <p class="text-muted fs-12 fw-normal mb-0">Customer</p>
+                <p class="fw-normal mb-0">{{customerInfo?.customerName}}</p>
+            </div>
+            <div class="col-12 col-md-12 col-lg-6">
+                <div class="d-block d-md-flex align-items-center gap-0 gap-lg-4 text-capitalize">
+                    <div class="px-2 pe-md-5">
+                        <p class="text-muted fs-12 fw-normal mb-0">Request Title</p>
+                        <p class="fw-normal mb-0">{{customerInfo?.jobTitle}}</p>
+                    </div>
+                    <div class="px-2 pe-md-5">
+                        <p class="text-muted fs-12 fw-normal mb-0">Employment Type</p>
+                        <p class="fw-normal mb-0">{{customerInfo?.jobType}}</p>
+                    </div>
+                    <div class="px-2 pe-md-5">
+                        <p class="text-muted fs-12 fw-normal mb-0">Region</p>
+                        <p class="fw-normal mb-0">{{customerInfo?.region}}</p>
+                    </div>
+                    <div class="ps-lg-0 ps-2">
+                        <p class="text-muted fs-12 fw-normal mb-0">Site/Store</p>
+                        <p class="fw-normal mb-0">{{customerInfo?.site}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-12 col-lg-4">
+                <div class="d-flex  justify-content-end gap-2">
+
+                    <!-- Phone -->
+                    <a href="tel:{{customerInfo?.defaultContact}}"
+                        class="btn btn-outline-grey d-flex align-items-center gap-2 rounded-pill text-secondary fs-14 px-3 py-2 fw-medium">
+                        <i class="fa fa-phone"></i> Contact Client
+                    </a>
+
+                    <button
+                        class="btn btn-info d-flex align-items-center gap-2 rounded-pill text-secondary fs-14 px-4 py-2 fw-medium" type="button"
+                        (click)="viewRequest()">
+                        View Full Request
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="tabs-wrapper">
+            <mat-tab-group (selectedTabChange)="onTabChange($event)">
+                <mat-tab label="Candidates">
+                    <ng-container *ngIf="activeTabIndex === 0">
+                        <app-candidates></app-candidates>
+                    </ng-container>
+                </mat-tab>
+                <mat-tab label="Shortlist">
+                    <ng-container *ngIf="activeTabIndex === 1">
+                        <app-short-list></app-short-list>
+                    </ng-container>
+
+                </mat-tab>
+                <mat-tab label="Finalisation">
+                    <ng-container *ngIf="activeTabIndex === 2">
+                        <app-finalisation></app-finalisation>
+                    </ng-container>
+
+                </mat-tab>
+                <mat-tab label="Equipment">
+                    <ng-container *ngIf="activeTabIndex === 3">
+                        <app-equipment></app-equipment>
+                    </ng-container>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+
+    </div>

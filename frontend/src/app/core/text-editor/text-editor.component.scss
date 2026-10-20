@@ -1,0 +1,29 @@
+:host ::ng-deep .angular-editor {
+  padding: 16px !important;
+  border-radius: 24px !important;
+  border: 1px solid #c3c6cf !important;
+}
+:host ::ng-deep .angular-editor-toolbar {
+  border: none !important;
+  padding: 0px !important;
+}
+:host ::ng-deep .angular-editor-toolbar-set {
+  background-color: #f2f3fa !important;
+  border-radius: 100px !important;
+  padding: 6px 12px !important;
+  vertical-align: bottom !important;
+  margin-right: 8px !important;
+  margin-bottom: 16px !important;
+}
+:host ::ng-deep .angular-editor-toolbar button {
+  border: none !important;
+  margin: 0 2px !important;
+  background: transparent !important;
+  font-size: 12px !important;
+  color: #43474E !important;
+}
+
+:host ::ng-deep .angular-editor-textarea {
+  border-radius: 12px !important;
+  border: 1px solid #c3c6cf !important;
+}

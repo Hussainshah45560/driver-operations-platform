@@ -1,0 +1,107 @@
+# Dependencies
+node_modules/
+jspm_packages/
+.pnp
+.pnp.js
+
+# Environment, secrets, and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+id_rsa
+id_rsa.pub
+id_ed25519
+id_ed25519.pub
+*.asc
+*.keystore
+*.jks
+google-services.json
+GoogleService-Info.plist
+credentials.json
+service-account*.json
+secrets/
+**/config.ts
+**/config-backup.ts
+!**/config.example.ts
+
+# Backend uploads and temp files
+backend/files/**
+!backend/files/.gitignore
+backend/temp/
+backend/temp/**
+
+# Build and cache
+dist/
+build/
+www/
+out/
+tmp/
+.angular/
+.ionic/
+.nx/
+.sass-cache/
+.cache/
+coverage/
+.nyc_output/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# IDE and OS
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Android / Capacitor
+android/local.properties
+android/.gradle/
+android/build/
+android/app/build/
+android/app/release/
+android/.idea/
+android/captures/
+android/*.apk
+android/*.aab
+android/app/src/main/assets/public/
+*.apk
+*.aab
+*.ap_
+
+# iOS / Xcode
+ios/App/Pods/
+ios/DerivedData/
+ios/**/xcuserdata/
+*.xcuserstate
+*.xccheckout
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# TypeScript
+*.tsbuildinfo
+
+# Optional local tooling
+.hintrc

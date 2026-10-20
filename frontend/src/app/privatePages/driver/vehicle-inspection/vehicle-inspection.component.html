@@ -1,0 +1,171 @@
+<div class="container-fluid p-0">
+  <div class="row mb-4">
+    <div class="col-12 col-md-12 col-lg-12">
+      <h4 class="fw-medium text-secondary">Vehicle Inspection</h4>
+    </div>
+  </div>
+  <div class="listing-card">
+    <div class="card">
+      <div class="card-header">
+        <div class="searchAndAdd">
+          <div class="searchBar">
+            <form [formGroup]="searchForm">
+              <div class="position-relative">
+                <i
+                  class="fa fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"
+                  type="button"
+                  (click)="search(searchForm.value.searchTerm)"
+                ></i>
+                <input
+                  type="text"
+                  class="form-control ps-5"
+                  matInput
+                  formControlName="searchTerm"
+                  (keydown.enter)="search(searchForm.value.searchTerm)"
+                  placeholder="Search Vehicle Inspection"
+                />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="table-container">
+          <table class="table dataTable">
+            <thead>
+              <tr>
+                <th>
+                  Make
+                  <i
+                    class="fa fa-arrow-down ms-1"
+                    type="button"
+                    (click)="sort('make', -1)"
+                  ></i>
+                  <i
+                    class="fa fa-arrow-up ms-1"
+                    (click)="sort('make', 1)"
+                    type="button"
+                  ></i>
+                </th>
+                <th>
+                  Model
+                  <i
+                    class="fa fa-arrow-down ms-1"
+                    type="button"
+                    (click)="sort('model', -1)"
+                  ></i>
+                  <i
+                    class="fa fa-arrow-up ms-1"
+                    (click)="sort('model', 1)"
+                    type="button"
+                  ></i>
+                </th>
+                <th>
+                  Inspection Date
+                  <i
+                    class="fa fa-arrow-down ms-1"
+                    type="button"
+                    (click)="sort('engineNumber', -1)"
+                  ></i>
+                  <i
+                    class="fa fa-arrow-up ms-1"
+                    (click)="sort('engineNumber', 1)"
+                    type="button"
+                  ></i>
+                </th>
+                <th>
+                  Reg No.
+                  <i
+                    class="fa fa-arrow-down ms-1"
+                    type="button"
+                    (click)="sort('registrationNumber', -1)"
+                  ></i>
+                  <i
+                    class="fa fa-arrow-up ms-1"
+                    (click)="sort('registrationNumber', 1)"
+                    type="button"
+                  ></i>
+                </th>
+                <th>
+                  Vin #
+                  <i
+                    class="fa fa-arrow-down ms-1"
+                    type="button"
+                    (click)="sort('vin', -1)"
+                  ></i>
+                  <i
+                    class="fa fa-arrow-up ms-1"
+                    (click)="sort('vin', 1)"
+                    type="button"
+                  ></i>
+                </th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let item of dataSource">
+                <tr>
+                  <td>{{ item?.make }}</td>
+                  <td>{{ item?.model }}</td>
+                   <td>{{item?.inspectionDate ? moment(item.inspectionDate).format('DD-MM-YYYY'): "-" }}</td>
+                  <td>
+                    <span
+                      class="badge bg-transparent border border-secondary border-2 text-secondary"
+                    >
+                      {{ item?.registrationNumber }}
+                    </span>
+                  </td>
+                  <td>{{ item?.chassisNumber }}</td>
+                  <td>
+                    <span
+                      class="badge rounded-pill fw-medium text-capitalize"
+                      [style.background]="
+                        getColors(item.status).background
+                      "
+                      [style.border]="
+                        getColors(item.status).border
+                      "
+                      [style.color]="
+                        getColors(item.status).color
+                      "
+                    >
+                      {{ item.status }}</span
+                    >
+                  </td>
+                  <td>
+                    <a
+                      class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill"
+                      Permission="assets:view"
+                      routerLink="view/{{ item?._id }}"
+                    >
+                      View
+                    </a>
+                    <a
+                      class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill ms-2"
+                      type="button"
+                    >
+                      <i class="fa fa-download"></i>
+                    </a>
+                    <a
+                      class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill ms-2"
+                      (click)="deleteAsset(item?._id)"
+                      type="button"
+                    >
+                      <i class="fa fa-trash-can"></i>
+                    </a>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div>
+          <pagination [pager]="pager" [params]="queryParams"></pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

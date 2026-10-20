@@ -1,0 +1,93 @@
+<div class="container-fluid p-0">
+  <div class="row mb-4">
+    <div class="col-12 col-md-12 col-lg-12">
+      <h4 class="fw-medium text-secondary">Disciplinary</h4>
+    </div>
+  </div>
+  <div class="listing-card">
+    <div class="card">
+      <div class="card-header">
+        <div class="searchAndAdd">
+          <div class="searchBar">
+            <form [formGroup]="searchForm">
+              <div class="position-relative">
+                <i class="fa fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"
+                  type="button" (click)="search(searchForm.value.searchTerm)"></i>
+                <input type="text" class="form-control ps-5" matInput formControlName="searchTerm"
+                  (keydown.enter)="search(searchForm.value.searchTerm)" placeholder="Search Disciplinary" />
+              </div>
+            </form>
+          </div>
+          <div>
+            <a class="btn btn-info rounded-button text-secondary fs-14 px-3 py-2 fw-medium" (click)="chooseEmployee()"
+              type="button" Permission="disciplinary:add">
+              <i class="fa fa-plus me-2"></i> Create Disciplinary Request
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="table-container">
+          <table class="table dataTable">
+            <thead>
+              <tr>
+                <th>
+                  First Name
+                  <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('profile.firstName', -1)"></i>
+                  <i class="fa fa-arrow-up ms-1" (click)="sort('profile.firstName', 1)" type="button"></i>
+                </th>
+                <th>
+                  Surname
+                  <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('profile.lastName', -1)"></i>
+                  <i class="fa fa-arrow-up ms-1" (click)="sort('profile.lastName', 1)" type="button"></i>
+                </th>
+                <th>
+                  Applicant Number
+                  <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('application.applicationNumber', -1)"></i>
+                  <i class="fa fa-arrow-up ms-1" (click)="sort('application.applicationNumber', 1)" type="button"></i>
+                </th>
+                <th>
+                  Warning Type
+                  <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('warningType', -1)"></i>
+                  <i class="fa fa-arrow-up ms-1" (click)="sort('warningType', 1)" type="button"></i>
+                </th>
+                <th>
+                  Warning Reason
+                  <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('warningReason', -1)"></i>
+                  <i class="fa fa-arrow-up ms-1" (click)="sort('warningReason', 1)" type="button"></i>
+                </th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let item of dataSource">
+                <tr>
+                  <td>{{ item?.firstName }}</td>
+                  <td>{{ item.lastName }}</td>
+                  <td>{{ item?.applicationNumber }}</td>
+                   <td>
+                    {{item?.disciplinaryType}}
+                  </td>
+                  <td>
+                    {{item?.warningType}}
+                  </td>
+                  <td>
+                    <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill" type="button"
+                      routerLink="{{item?._id}}" [queryParams]="{profileId : item?.profileId}">
+                      View
+                    </a>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div>
+          <pagination [pager]="pager" [params]="queryParams"></pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

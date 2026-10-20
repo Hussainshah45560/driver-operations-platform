@@ -1,0 +1,84 @@
+<div class="container-fluid">
+  <div class="d-flex align-items-center justify-content-between">
+    <div>
+      <h4 class="fs-4 text-secondary fw-medium">Banking Details</h4>
+    </div>
+    <div class="float-end d-flex align-items-center gap-2">
+      <div *ngIf="edit">
+        <button class="btn btn-info bg-transparent text-dark rounded-pill px-3 py-2 fw-medium w-100 fs-14" type="button"
+          (click)="editForm()">
+          Cancel
+        </button>
+      </div>
+
+      <div *ngIf="edit">
+        <button class="btn btn-primary rounded-pill px-3 py-2 fw-medium w-100 fs-14" type="submit" (click)="submit()">
+          <i class="fa fa-check me-2"></i>Save
+        </button>
+      </div>
+      <div *ngIf="!edit">
+        <button class="btn btn-primary rounded-pill px-3 py-2 fw-medium w-100 fs-14" type="button" (click)="editForm()">
+          <i class="fa fa-pencil me-2"></i>Edit
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<form [formGroup]="form">
+  <div class="row py-2 mt-5">
+    <div class="col-12 col-md-6 col-lg-6">
+      <!-- <div class="form-group">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Name of bank</mat-label>
+          <input matInput formControlName="bankName" placeholder="Name of bank" type="text" />
+          <mat-error>
+            <vmessage field="bankName" [control]="form.controls['bankName']">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div> -->
+       <div class="form-group">
+          <lb-auto-complete appearance="outline" placeholder="Bank Name" label="Bank Name" [multiple]="false" [clear]="false"
+            [fControl]="form.controls['bankNameId']" [options]="selectBank" (selectionChange)="patchBranchCode($event)"
+           >
+          </lb-auto-complete>
+        </div>
+      <div class="form-group">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Branch name</mat-label>
+          <input matInput formControlName="branchName" placeholder="Branch name" type="text" />
+          <mat-error>
+            <vmessage field="branchName" [control]="form.controls['branchName']">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="form-group">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Branch code</mat-label>
+          <input matInput formControlName="branchCode" placeholder="Branch code" type="text" />
+          <mat-error>
+            <vmessage field="branchCode" [control]="form.controls['branchCode']">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="form-group">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Bank account number</mat-label>
+          <input matInput formControlName="accountNumber" placeholder="Bank account number" type="number" />
+          <mat-error>
+            <vmessage field="accountNumber" [control]="form.controls['accountNumber']">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-group">
+        <lb-auto-complete appearance="outline" placeholder="Account type" label="Account type" [multiple]="false"
+          [clear]="false" [fControl]="form.controls['accountTypeId']" [options]="selectAccountType">
+        </lb-auto-complete>
+      </div>
+    </div>
+  </div>
+</form>

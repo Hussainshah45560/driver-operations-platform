@@ -1,0 +1,186 @@
+<div class="container-fluid">
+  <div class="d-flex align-items-center">
+    <div>
+      <h4 class="fs-4 text-secondary fw-medium">Home</h4>
+    </div>
+    <div class="flex-grow-1 text-capitalize text-center">
+      <div class="bg-danger text-white d-inline-block rounded py-2 px-3" *ngIf="dataSource?.showLogoutNotice">
+        <h4 class="mb-0">
+          Please login again to get full access to the platform.
+        </h4>
+      </div>
+      <div class="bg-danger text-white d-inline-block rounded py-2 px-3" *ngIf="dataSource?.showSignNotice">
+        <h4 class="mb-0">
+          Your contract is ready. Please sign when you can. Thank you!
+        </h4>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row justify-content-center mt-5">
+  <div class="col-lg-8">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+      <img src="data:image/jpeg;base64,{{ dataSource?.selfie }}" onError="this.src='/assets/images/selfie.jpeg'"
+        class="rounded-circle" width="50" height="50" alt="profile" />
+
+      <span *ngIf="dataSource?.asset" class="badge bg-transparent border border-secondary border-2 text-secondary">
+        {{ dataSource?.asset }}
+      </span>
+    </div>
+    <div>
+      <h4 class="fs-4 text-dark fw-medium text-capitalize">
+        {{ dataSource?.name }}
+      </h4>
+      <p class="small text-muted" *ngIf="dataSource?.applicationNumber">
+        #{{ dataSource?.applicationNumber }}
+      </p>
+
+      <span class="badge rounded-pill fw-medium text-capitalize" *ngIf="dataSource?.applicationStatus"
+        [style.background]="getColors(dataSource?.applicationStatus).background"
+        [style.border]="getColors(dataSource?.applicationStatus).border"
+        [style.color]="getColors(dataSource?.applicationStatus).color">
+        {{ dataSource?.applicationStatus }}</span>
+    </div>
+    <div class="mt-4">
+      <p class="text-secondary fw-medium mb-2">For Your Attention</p>
+      <div class="bg-warning-custom rounded-4">
+        <div class="d-flex justify-content-between align-items-center p-3"
+          [routerLink]="ps.havePerm('notices', 'view') ? '/notices' : null" style="cursor: pointer">
+          <a class="text-decoration-none text-dark fw-medium d-flex align-items-center gap-2 text-muted">
+            <img src="/assets/icons/driver-notices.png" alt="Notices" />
+            Notices
+          </a>
+
+          <span class="badge bg-danger rounded-circle d-flex align-items-center justify-content-center"
+            *ngIf="dataSource?.unreadWarnings && dataSource?.unreadWarnings > 0">
+            {{ dataSource?.unreadWarnings }}
+          </span>
+        </div>
+        <div class="d-flex justify-content-between align-items-center p-3 border-bottom border-top"
+          style="cursor: pointer" [routerLink]="ps.havePerm('queries', 'view') ? '/queries' : null">
+          <a class="text-decoration-none text-dark fw-medium d-flex align-items-center gap-2 text-muted">
+            <img src="/assets/icons/queries.png" alt="Notices" />
+            Queries
+          </a>
+
+          <span class="badge bg-danger rounded-circle d-flex align-items-center justify-content-center"
+            *ngIf="dataSource?.queryCount && dataSource?.queryCount > 0">
+            {{ dataSource?.queryCount }}
+          </span>
+        </div>
+        <div class="d-flex justify-content-between align-items-center p-3"
+          *ngIf="dataSource?.applicationCategory == 'employee'"
+          [routerLink]="ps.havePerm('paySlips', 'view') ? '/payslips' : null" style="cursor: pointer">
+          <a class="text-decoration-none text-dark fw-medium d-flex align-items-center gap-2 text-muted">
+            <img src="/assets/icons/payslips.png" alt="PaySlips" />
+            PaySlips
+          </a>
+
+          <span class="badge bg-danger rounded-circle d-flex align-items-center justify-content-center">
+            3
+          </span>
+        </div>
+        <div class="d-flex justify-content-between align-items-center p-3"
+          *ngIf="dataSource?.applicationCategory == 'contractor'" [routerLink]="
+            ps.havePerm('remittance', 'view') ? '/remittance' : null
+          " style="cursor: pointer">
+          <a class="text-decoration-none text-dark fw-medium d-flex align-items-center gap-2 text-muted">
+            <img src="/assets/icons/payslips.png" alt="remittance" />
+            Remittance
+          </a>
+
+          <span class="badge bg-danger rounded-circle d-flex align-items-center justify-content-center">
+            3
+          </span>
+        </div>
+        <div class="d-flex justify-content-between align-items-center p-3" routerLink="/tests" style="cursor: pointer">
+          <a class="text-decoration-none text-dark fw-medium d-flex align-items-center gap-2 text-muted">
+            <img src="/assets/icons/tests.png" alt="Tests" />
+            Tests
+          </a>
+
+          <span class="badge bg-danger rounded-circle d-flex align-items-center justify-content-center"
+            *ngIf="dataSource?.testCount && dataSource?.testCount > 0">
+            {{ dataSource?.testCount }}
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="mt-5">
+      <div class="bg-light rounded-4">
+        <div class="d-flex justify-content-between align-items-center p-3 border-bottom" style="cursor: pointer"
+          routerLink="/applications">
+          <span class="">
+            <img src="/assets/icons/my-application.png" alt="Notices" /><a
+              class="text-decoration-none text-secondary fw-semibold d-flex align-items-center gap-2">
+              My Applications
+            </a></span>
+
+          <span class="d-flex justify-content-center align-items-center gap-md-4 gap-2">
+            <button *ngIf="!dataSource?.applicationStatus" Permission="applications:add" routerLink="/applications/new"
+              class="btn btn-secondary btn-sm text-light rounded-pill px-md-4 py-md-2 p-2 ">
+              Apply Now
+            </button>
+            <span class="badge rounded-pill fw-medium text-capitalize" *ngIf="dataSource?.applicationStatus"
+              [style.background]="
+                getColors(dataSource?.applicationStatus).background
+              " [style.border]="getColors(dataSource?.applicationStatus).border"
+              [style.color]="getColors(dataSource?.applicationStatus).color">
+              {{
+              dataSource?.applicationStatus &&
+              dataSource?.applicationStatus == "completed"
+              ? "In Progress"
+              : dataSource?.applicationStatus
+              }}</span>
+            <i class="fa fa-chevron-right text-muted"></i>
+          </span>
+        </div>
+        <div class="p-3" *ngFor="let item of dataSource?.rejectedSteps">
+          <p class="text-danger small mb-0 text-capitalize">
+            {{ item.step }}: {{ item.title }}
+          </p>
+          <p class="text-danger fw-medium mb-0">Reason for Rejection</p>
+          <p class="text-danger small mb-0">
+            {{ item.reason }}
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="mt-4">
+      <div class="bg-light rounded-4" style="cursor: pointer"
+        [routerLink]="ps.havePerm('job', 'view') ? '/myJob' : null">
+        <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
+          <span class="">
+            <img src="/assets/icons/my-job.png" alt="my Job" /><a
+              class="text-decoration-none text-secondary fw-semibold d-flex align-items-center gap-2">
+              My Job
+            </a></span>
+
+          <span>
+            <i class="fa fa-chevron-right text-muted"></i>
+          </span>
+        </div>
+        <div class="p-3 d-flex justify-content-between align-items-center">
+          <span class="d-flex">
+            <p class="text-muted small mb-0">
+              Employer:
+              <span class="fw-semibold">{{ dataSource?.customerName }}</span>
+            </p>
+          </span>
+
+          <span class="d-flex align-items-center gap-2">
+            <p class="text-muted small mb-0">Status:</p>
+            <span *ngIf="dataSource?.recruitmentStatus" class="badge rounded-pill fw-medium text-capitalize"
+              [style.background]="
+                getColors(dataSource?.recruitmentStatus).background
+              " [style.border]="getColors(dataSource?.recruitmentStatus).border"
+              [style.color]="getColors(dataSource?.recruitmentStatus).color">
+              {{ dataSource?.recruitmentStatus }}
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

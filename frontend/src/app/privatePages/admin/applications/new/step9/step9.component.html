@@ -1,0 +1,124 @@
+<div class="row align-items-center pb-5">
+  <div class="col-12 col-md-4">
+    <h4 class="text-secondary fw-medium">Step 9: POPIA and Consent <span *ngIf="stepData?.stepStatus?.step9"
+        class="badge  rounded-pill px-3 py-2  fw-medium ms-1 fs-14 text-capitalize"
+        [style.background]="getColors(stepData?.stepStatus?.step9).background"
+        [style.border]="getColors(stepData?.stepStatus?.step9).border"
+        [style.color]="getColors(stepData?.stepStatus?.step9).color">
+        {{stepData?.stepStatus?.step9}}</span></h4>
+  </div>
+  <div class="col-12 col-md-8">
+    <div class="d-flex align-items-center gap-2">
+      <!-- confirmer -->
+      <div class="d-flex align-items-center flex-grow-1 justify-content-end" Permission="applications:confirmer"
+        *ngIf="isView && statusCheckService.isStepValid('confirmer' , stepData?.stepStatus?.step9 , stepData?.applicationStatus)">
+        <small class=" me-2 text-brown fw-semibold">Confirm this step?</small>
+        <div class="me-2">
+          <button class="btn btn-warning text-brown rounded-pill p-2 px-4 fw-medium" type="button"
+            (click)="approveStep('confirmed')">
+            <i class="fa fa-check me-2"></i> <small>Confirmed</small>
+          </button>
+        </div>
+        <div>
+          <button class="btn btn-warning text-brown rounded-pill p-2 fw-medium px-4" type="button"
+            (click)="rejected = true">
+            <i class="fa fa-xmark me-2"></i> <small>Not Confirmed</small>
+          </button>
+        </div>
+      </div>
+      <!-- for approver -->
+      <div class="d-flex align-items-center flex-grow-1 justify-content-end" Permission="applications:approver"
+        *ngIf="isView && statusCheckService.isStepValid('approver' , stepData?.stepStatus?.step9 , stepData?.applicationStatus)">
+        <small class=" me-2 text-brown fw-semibold">Approve this step?</small>
+        <div class="me-2">
+          <button class="btn btn-warning text-brown rounded-pill p-2 px-4 fw-medium" type="button"
+            (click)="approveStep('approved')">
+            <i class="fa fa-check me-2"></i> <small>Approved</small>
+          </button>
+        </div>
+        <div>
+          <button class="btn btn-warning text-brown rounded-pill p-2 fw-medium px-4" type="button"
+            (click)="rejected = true">
+            <i class="fa fa-xmark me-2"></i> <small>Rejected</small>
+          </button>
+        </div>
+      </div>
+      <div class="ms-auto"
+        *ngIf="isView && statusCheckService.isStepValid('editable' , stepData?.stepStatus?.step9 , stepData?.applicationStatus)">
+        <a class="btn btn-grey bg-transparent text-muted fw-medium rounded-pill me-2"
+          [routerLink]="'/applications/edit/' + id + '/step9'">
+          <i class="fa fa-pencil me-2"></i><small>Edit</small>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+<div>
+  <!-- status banner -->
+  <div *ngIf="['rejected' , 'not confirmed'].includes(stepData?.stepStatus?.step9)"
+    class="bg-danger p-2 text-white rounded">
+    <p class="m-0"><i class="fa fa-triangle-exclamation me-2"></i>{{stepData?.stepReject?.step9Reason}}</p>
+  </div>
+  <!-- approval form -->
+  <div *ngIf="rejected">
+    <form [formGroup]="approvalForm">
+      <div class="row">
+        <div class="col-md-6 col-12 offset-md-6">
+          <div class="d-flex align-items-baseline gap-2">
+            <div class="form-group flex-grow-1">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Reason</mat-label>
+                <input matInput formControlName="reason" placeholder="Reason" type="text" />
+                <mat-error>
+                  <vmessage field="reason" [control]="approvalForm.controls['reason']">
+                  </vmessage>
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div>
+              <a type="button" class="btn btn-secondary px-4 py-2 rounded-pill"
+                (click)="approveStep(stepData?.applicationStatus == 'confirmed' || stepData?.applicationStatus == 'in contract' || stepData?.applicationStatus == 'rejected' ? 'rejected' : 'not confirmed');">Submit</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <form [formGroup]="step9">
+    <div class="row mt-3">
+      <div class="col-12 col-md-12 col-lg-12">
+        <div class="container px-md-5 px-0">
+          <h4 class="mb-5 fs-3 fw-bold text-md-start text-center">POPIA and Consent</h4>
+          <div class="fw-normal" [innerHtml]="popiContent"></div>
+
+
+
+          <div class="row mt-4">
+            <div class="col-md-6">
+              <div class="signature-label">Signature</div>
+              <app-sign #signPadForDeclaration (signature)="patchSign($event, 'declaration')"
+                [viewSign]="stepData?.applicationSign" [disabled]="isDisabled"></app-sign>
+            </div>
+            <div class="col-md-6">
+              <div class="signature-label">Date</div>
+              <div class="form-group">
+                <app-date-picker placeholderText="Signature Date" label="Signature Date"
+                  [fControl]="step9.controls['applicationSignDate']">
+                </app-date-picker>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex align-items-center justify-content-end mt-5">
+        <button class="btn btn-transparent rounded-pill py-3 px-5 mx-2 border" type="button" (click)="goBack()">
+          Back
+        </button>
+        <button class="btn btn-primary rounded-pill py-3 px-5 float-end" type="button" (click)="submit()"
+          [disabled]="stepStatus == 'changed' || isView">
+          Save
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

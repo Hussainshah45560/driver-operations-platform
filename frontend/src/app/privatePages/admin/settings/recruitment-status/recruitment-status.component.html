@@ -1,0 +1,63 @@
+<div class="row">
+  <div class="col-12">
+    <h4 class="text-secondary fw-semibold mb-4">List of Recruitment Status</h4>
+  </div>
+</div>
+<div class="listing-card">
+  <div class="card">
+    <div class="card-header">
+      <div class="searchAndAdd">
+        <div class="searchBar">
+          <form [formGroup]="searchForm">
+            <div class="position-relative">
+              <i class="fa fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted" type="button"
+                (click)="search(searchForm.value.searchTerm)"></i>
+              <input type="text" class="form-control ps-5" matInput formControlName="searchTerm"
+                (keydown.enter)="search(searchForm.value.searchTerm)" placeholder="Search Recruitment Status" />
+            </div>
+          </form>
+        </div>
+        <div>
+          <a class="btn btn-info rounded-button text-secondary px-3 py-2 fw-medium" Permission="settings:add" type="button"
+            (click)="newDialog()">
+            <small> <i class="fa fa-plus me-2"></i> Add Recruitment Status</small>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <table class="table dataTable">
+        <thead class="w-100">
+          <tr>
+            <th class="w-50">
+              Name
+              <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('name', -1)"></i>
+              <i class="fa fa-arrow-up ms-1" (click)="sort('name', 1)" type="button"></i>
+            </th>
+            <th class="w-50">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of dataSource; let i = index">
+            <td>{{ item?.name }}</td>
+            <td>
+              <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill me-2"
+                (click)="deleteRecruitmentStatuses(item._id)" Permission="settings:delete" type="button">
+                <i class="fa fa-trash-can me-1"></i>Remove
+              </a>
+              <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill" Permission="settings:update" type="button"
+                (click)="newDialog(item._id)">
+                Edit
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card-footer">
+      <div>
+        <pagination [pager]="pager" [params]="queryParams"></pagination>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,19 @@
+.rating-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.question {
+  width: 180px;
+  font-weight: 500;
+}
+
+.rating-group {
+  display: flex;
+  gap: 20px;
+}
+
+.rating-radio {
+  margin-right: 20px;
+}

@@ -1,0 +1,159 @@
+<div class="row align-items-center pb-5">
+  <div class="col-12 col-md-4 col-lg-4">
+    <h4 class="text-secondary fw-medium">Details</h4>
+  </div>
+  <div class="col-12 col-md-8 col-lg-8">
+    <div class="d-flex align-items-center float-md-end">
+      <div class="border rounded-pill d-flex align-items-center justify-content-between py-2 px-2 me-1 px-md-3">
+        <small class="me-2 me-md-3">Customer Active</small>
+        <mat-slide-toggle class="" (change)="updateStatus()" [checked]="stepData?.isActive" [disabled]="!id"
+          color=""></mat-slide-toggle>
+      </div>
+      <span class="border-start mx-2 d-none d-md-block" style="height: 24px"></span>
+      <div class="me-2">
+        <a class="btn btn-info bg-transparent text-dark rounded-pill px-3 py-2 fw-medium w-100 fs-14 my-3 my-md-0"
+          type="button" routerLink="/customers">
+          Cancel
+        </a>
+      </div>
+      <div>
+        <button class="btn btn-primary rounded-pill px-3 py-2 fw-medium w-100 fs-14" type="button" (click)="submit()">
+          <i class="fa fa-check me-2"></i>Save
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<form [formGroup]="form" (ngSubmit)="submit()" autocomplete="off">
+  <div class="row mt-3">
+    <div class="col-12 col-md-6 col-lg-6">
+      <p class="text-secondary fw-semibold">Customer Details</p>
+      <div class="form-group">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Code</mat-label>
+          <input matInput formControlName="code" placeholder="Code" min="0" type="number" />
+          <mat-error>
+            <vmessage field="code" [control]="form.controls['code']">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="form-group">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name" placeholder="Name" type="text" autocomplete="new-name" />
+          <mat-error>
+            <vmessage field="name" [control]="form.controls['name']">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="form-group">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Trading as</mat-label>
+          <input matInput formControlName="tradingAs" placeholder="Trading as" type="text" autocomplete="tradingAs"  />
+          <mat-error>
+            <vmessage field="tradingAs" [control]="form.controls['tradingAs']">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="form-group">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Company reg no</mat-label>
+          <input matInput formControlName="companyRegNumber" placeholder="Company reg no" type="text" autocomplete="companyRegNumber" />
+          <mat-error>
+            <vmessage field="companyRegNumber" [control]="form.controls['companyRegNumber']">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="form-group">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>VAT no</mat-label>
+          <input matInput formControlName="vatNumber" placeholder="VAT no" type="number" autocomplete="vatNumber"  />
+          <mat-error>
+            <vmessage field="vatNumber" [control]="form.controls['vatNumber']">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="form-group">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>VAT %</mat-label>
+          <input matInput formControlName="vatPercentage" placeholder="VAT %" type="number" autocomplete="vatPercentage" />
+          <mat-error>
+            <vmessage field="vatPercentage" [control]="form.controls['vatPercentage']">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+     
+      <div class="form-group">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Tel no</mat-label>
+          <input matInput formControlName="telNumber" placeholder="Tel no" type="tel" autocomplete="telNumber" />
+          <mat-error>
+            <vmessage field="telNumber" [control]="form.controls['telNumber']">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <!-- <div class="form-group">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Cell no</mat-label>
+          <input matInput formControlName="phoneNumber" placeholder="Cell no" type="tel" />
+          <mat-error>
+            <vmessage field="phoneNumber" [control]="form.controls['phoneNumber']">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="form-group">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Fax no</mat-label>
+          <input matInput formControlName="faxNumber" placeholder="Fax no" type="text" />
+          <mat-error>
+            <vmessage field="faxNumber" [control]="form.controls['faxNumber']">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div> -->
+    </div>
+    <div class="col-12 col-md-6 col-lg-6">
+      <p class="text-secondary fw-semibold invisible">Comapny Details</p>
+ <div class="form-group">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" placeholder="Email" type="email" autocomplete="new-email" />
+          <mat-error>
+            <vmessage field="email" [control]="form.controls['email']">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-group">
+        <lb-auto-complete appearance="outline" placeholder="Region" label="Region" [multiple]="false" [clear]="false"
+          [fControl]="form.controls['regionId']" [options]="selectRegion">
+        </lb-auto-complete>
+      </div>
+
+      <!-- <div class="form-group">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Status code</mat-label>
+          <input matInput formControlName="statusCode" placeholder="Status code" type="text" />
+          <mat-error>
+            <vmessage field="statusCode" [control]="form.controls['statusCode']">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div> -->
+      <div class="form-group">
+        <lb-auto-complete appearance="outline" placeholder="Cost Center" label="Cost Center" [multiple]="true"
+          [clear]="false" [fControl]="form.controls['costCenterIds']" [options]="selectCostCenter">
+        </lb-auto-complete>
+      </div>
+    </div>
+  </div>
+</form>

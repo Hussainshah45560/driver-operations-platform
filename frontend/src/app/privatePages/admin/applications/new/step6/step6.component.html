@@ -1,0 +1,340 @@
+<div class="row align-items-center pb-5">
+    <div class="col-12 col-md-4">
+        <h4 class="text-secondary fw-medium">Step 6: Assets <span *ngIf="stepData?.stepStatus?.step6"
+                class="badge  rounded-pill px-3 py-2  fw-medium ms-1 fs-14 text-capitalize"
+                [style.background]="getColors(stepData?.stepStatus?.step6).background"
+                [style.border]="getColors(stepData?.stepStatus?.step6).border"
+                [style.color]="getColors(stepData?.stepStatus?.step6).color">
+                {{stepData?.stepStatus?.step6}}</span>
+        </h4>
+    </div>
+    <div class="col-12 col-md-8">
+        <div class="d-flex align-items-center gap-2">
+            <!-- confirmer -->
+            <div class="d-flex align-items-center flex-grow-1 justify-content-end" Permission="applications:confirmer"
+                *ngIf="isView && statusCheckService.isStepValid('confirmer' , stepData?.stepStatus?.step6 , stepData?.applicationStatus)">
+                <small class=" me-2 text-brown fw-semibold">Confirm this step?</small>
+                <div class="me-2">
+                    <button class="btn btn-warning text-brown rounded-pill p-2 px-4 fw-medium" type="button"
+                        (click)="approveStep('confirmed')">
+                        <i class="fa fa-check me-2"></i> <small>Confirmed</small>
+                    </button>
+                </div>
+                <div>
+                    <button class="btn btn-warning text-brown rounded-pill p-2 fw-medium px-4" type="button"
+                        (click)="rejected = true">
+                        <i class="fa fa-xmark me-2"></i> <small>Not Confirmed</small>
+                    </button>
+                </div>
+            </div>
+            <!-- for approver -->
+            <div class="d-flex align-items-center flex-grow-1 justify-content-end" Permission="applications:approver"
+                *ngIf="isView && statusCheckService.isStepValid('approver' , stepData?.stepStatus?.step6 , stepData?.applicationStatus)">
+                <small class=" me-2 text-brown fw-semibold">Approve this step?</small>
+                <div class="me-2">
+                    <button class="btn btn-warning text-brown rounded-pill p-2 px-4 fw-medium" type="button"
+                        (click)="approveStep('approved')">
+                        <i class="fa fa-check me-2"></i> <small>Approved</small>
+                    </button>
+                </div>
+                <div>
+                    <button class="btn btn-warning text-brown rounded-pill p-2 fw-medium px-4" type="button"
+                        (click)="rejected = true">
+                        <i class="fa fa-xmark me-2"></i> <small>Rejected</small>
+                    </button>
+                </div>
+            </div>
+            <div class="ms-auto"
+                *ngIf="isView && statusCheckService.isStepValid('editable' , stepData?.stepStatus?.step6 , stepData?.applicationStatus)">
+                <a class="btn btn-grey bg-transparent text-muted fw-medium rounded-pill me-2"
+                    [routerLink]="'/applications/edit/' + id + '/step6'">
+                    <i class="fa fa-pencil me-2"></i><small>Edit</small>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <!-- status banner -->
+    <div *ngIf="['rejected' , 'not confirmed'].includes(stepData?.stepStatus?.step6)"
+        class="bg-danger p-2 text-white rounded">
+        <p class="m-0"><i class="fa fa-triangle-exclamation me-2"></i>{{stepData?.stepReject?.step6Reason}}</p>
+    </div>
+    <!-- approval form -->
+    <div *ngIf="rejected">
+        <form [formGroup]="approvalForm">
+            <div class="row">
+                <div class="col-md-6 col-12 offset-md-6">
+                    <div class="d-flex align-items-baseline gap-2">
+                        <div class="form-group flex-grow-1">
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-label>Reason</mat-label>
+                                <input matInput formControlName="reason" placeholder="Reason" type="text" />
+                                <mat-error>
+                                    <vmessage field="reason" [control]="approvalForm.controls['reason']">
+                                    </vmessage>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div>
+                            <a type="button" class="btn btn-secondary px-4 py-2 rounded-pill"
+                                (click)="approveStep(stepData?.applicationStatus == 'confirmed' || stepData?.applicationStatus == 'in contract' || stepData?.applicationStatus == 'rejected' ? 'rejected' : 'not confirmed');">Submit</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <form [formGroup]="step6" (ngSubmit)="submit()" autocomplete="off">
+        <div class="row mt-3">
+            <div class="col-12 col-md-6 col-lg-6">
+                <p class="fs-6 text-primary fw-semibold">License disk</p>
+                <button class="btn btn-secondary rounded-pill px-3 py-2 fs-14" type="button" [disabled]="isView"
+                    (click)="uploadLicense.click()"><i class="fa fa-camera me-2"></i>Scan license disk</button>
+
+                <!-- <div class="form-group mt-4">
+                    <mat-form-field class="w-100" appearance="outline">
+                        <mat-label>License disk</mat-label>
+                        <input matInput formControlName="licenseDisk" placeholder="License disk" readonly type="text" />
+                        <mat-error>
+                            <vmessage field="licenseDisk" [control]="step6.controls['licenseDisk']"> </vmessage>
+                        </mat-error>
+                    </mat-form-field>
+                </div> -->
+                <div class="d-flex align-items-center mb-4">
+                    <div class="flex-grow-1 border-top"></div>
+                    <span class="mx-3 text-muted fw-semibold">OR</span>
+                    <div class="flex-grow-1 border-top"></div>
+                </div>
+                <div>
+                    <div>
+                        <app-drag (fileDropped)="selectImage($event , 'license')"></app-drag>
+                    </div>
+                    <div class="uploadImage border-grey d-none">
+                        <input #uploadLicense type="file" hidden (change)="selectImage($event , 'license' , true)">
+                    </div>
+                    <div>
+                        <div class="d-flex align-items-center gap-6 my-4" *ngIf="uploads['license']?.loading">
+                            <div>
+                                <i class="fa-solid fa-file-arrow-up text-secondary fs-4"></i>
+                            </div>
+                            <div class="flex-grow-1 mx-4">
+                                <p class="fw-normal mb-0">{{ uploads['license']?.name }}</p>
+                                <span class="fs-14 text-grey">{{ uploads['license']?.size }}MB -
+                                    {{uploads['license']?.loadingText}}</span>
+                                <div class="progress" style="height: 4px;">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-secondary"
+                                        role="progressbar" [style.width.%]="uploads['license']?.progress"></div>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1">
+                                <i class="fa fa-trash-can text-secondary fs-5 float-end" type="button"
+                                    (click)="removeUpload('license' , uploadLicense)"></i>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-6">
+                <p class="fs-6 text-primary fw-semibold mt-md-0 mt-3">Picture of Asset</p>
+                <div class="mt-4">
+                    <div>
+                        <app-drag (fileDropped)="selectImage($event , 'asset')"></app-drag>
+                    </div>
+                    <div>
+                        <div class="d-flex align-items-center gap-6 my-4" *ngIf="uploads['asset']?.loading">
+                            <div>
+                                <i class="fa-solid fa-file-arrow-up text-secondary fs-4"></i>
+                            </div>
+                            <div class="flex-grow-1 mx-4">
+                                <p class="fw-normal mb-0">{{ uploads['asset']?.name }}</p>
+                                <span class="fs-14 text-grey">{{ uploads['asset']?.size }}MB -
+                                    {{uploads['asset']?.loadingText }}</span>
+                                <div class="progress" style="height: 4px;">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-secondary"
+                                        role="progressbar" [style.width.%]="uploads['asset']?.progress "></div>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1">
+                                <i class="fa fa-trash-can text-secondary fs-5 float-end" type="button"
+                                    (click)="removeUpload('asset' , uploadAsset)"></i>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <hr class="my-4" />
+        <div class="row mt-3">
+            <div class="col-12 col-md-6 col-lg-6">
+                <p class="fs-6 text-primary fw-semibold">Asset Details</p>
+                <div class="form-group">
+                    <mat-form-field class="w-100" appearance="outline"
+                        [class.field-changed]="step6Changes?.registrationNumber">
+                        <mat-label>Registration number</mat-label>
+                        <input matInput formControlName="registrationNumber" placeholder="Registration number"
+                            type="text" />
+                        <span matSuffix>
+                            {{ step6Changes?.registrationNumber }}
+                        </span>
+                        <mat-error>
+                            <vmessage field="registrationNumber" [control]="step6.controls['registrationNumber']">
+                            </vmessage>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="form-group">
+                    <mat-form-field class="w-100" appearance="outline" [class.field-changed]="step6Changes?.make">
+                        <mat-label>Make</mat-label>
+                        <input matInput formControlName="make" placeholder="Make" type="text" />
+                        <span matSuffix>
+                            {{ step6Changes?.make }}
+                        </span>
+                        <mat-error>
+                            <vmessage field="make" [control]="step6.controls['make']"> </vmessage>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="form-group">
+                    <mat-form-field class="w-100" appearance="outline" [class.field-changed]="step6Changes?.model">
+                        <mat-label>Model</mat-label>
+                        <input matInput formControlName="model" placeholder="Model" type="text" />
+                        <span matSuffix>
+                            {{ step6Changes?.model }}
+                        </span>
+                        <mat-error>
+                            <vmessage field="model" [control]="step6.controls['model']"> </vmessage>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="form-group">
+                    <mat-form-field class="w-100" appearance="outline"
+                        [class.field-changed]="step6Changes?.engineNumber">
+                        <mat-label>Engine number</mat-label>
+                        <input matInput formControlName="engineNumber" placeholder="Engine number" type="text" />
+                        <span matSuffix>
+                            {{ step6Changes?.engineNumber }}
+                        </span>
+                        <mat-error>
+                            <vmessage field="engineNumber" [control]="step6.controls['engineNumber']"> </vmessage>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="form-group">
+                    <mat-form-field class="w-100" appearance="outline"
+                        [class.field-changed]="step6Changes?.chassisNumber">
+                        <mat-label>VIN number</mat-label>
+                        <input matInput formControlName="chassisNumber" placeholder="Vin number" type="text" />
+                        <span matSuffix>
+                            {{ step6Changes?.chassisNumber }}
+                        </span>
+                        <mat-error>
+                            <vmessage field="chassisNumber" [control]="step6.controls['chassisNumber']"></vmessage>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <!-- <div class="form-group">
+                    <app-date-picker placeholderText="Date of registration" label="Date of registration"
+                        [fControl]="step6.controls['registrationDate']"
+                        changedValue="{{ step6Changes?.registrationDate }}">
+                    </app-date-picker>
+                </div> -->
+                <div class="form-group">
+                    <app-date-picker placeholderText="License expiry" label="License expiry"
+                        [fControl]="step6.controls['licenseExpiryDate']"
+                        changedValue="{{ step6Changes?.licenseExpiryDate }}">
+                    </app-date-picker>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-6">
+                <p class="fs-6 text-primary fw-semibold">Vehicle Details</p>
+                <div class="form-group">
+                    <mat-form-field class="w-100" appearance="outline"
+                        [class.field-changed]="step6Changes?.currentMileage">
+                        <mat-label>How many KM has it done?</mat-label>
+                        <input matInput formControlName="currentMileage" placeholder="How many KM has it done?"
+                            type="number" />
+                        <span matSuffix>
+                            {{ step6Changes?.currentMileage }}
+                        </span>
+                        <mat-error>
+                            <vmessage field="currentMileage" [control]="step6.controls['currentMileage']"> </vmessage>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="form-group">
+                    <mat-form-field class="w-100" appearance="outline" [class.field-changed]="step6Changes?.color">
+                        <mat-label>Colour</mat-label>
+                        <input matInput formControlName="color" placeholder="colour" type="text" />
+                        <span matSuffix>
+                            {{ step6Changes?.color }}
+                        </span>
+                        <mat-error>
+                            <vmessage field="color" [control]="step6.controls['color']"> </vmessage>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="form-group">
+                    <lb-auto-complete appearance="outline" placeholder="Vehicle type" label="Vehicle type"
+                        [multiple]="false" [clear]="false" [fControl]="step6.controls['vehicleTypeId']"
+                        changedValue="{{ step6Changes?.vehicleTypeId }}" [options]="selectVehicleType"
+                        (selectionChange)="getAccessoriesLookup($event) ; getSubDevicesLookup($event)">
+                    </lb-auto-complete>
+                </div>
+                <div class="form-group">
+                    <lb-auto-complete appearance="outline" placeholder="Sub device" label="Sub device" [multiple]="true"
+                        [clear]="false" [fControl]="step6.controls['subDeviceIds']"
+                        changedValue="{{ step6Changes?.subDeviceIds }}" [options]="selectSubDevice">
+                    </lb-auto-complete>
+                </div>
+
+
+
+                <div class="form-group">
+                    <lb-auto-complete appearance="outline" placeholder="Accessories" label="Accessories"
+                        [multiple]="true" [clear]="false" [fControl]="step6.controls['accessoryIds']"
+                        changedValue="{{ step6Changes?.accessoryIds }}" [options]="selectAccessories">
+                    </lb-auto-complete>
+                </div>
+
+
+                <div class="form-group">
+                    <lb-auto-complete appearance="outline" placeholder="Tracking" label="Tracking" [multiple]="false"
+                        [clear]="false" [fControl]="step6.controls['tracking']" [options]="selectTracking"
+                        (selectionChange)="customRequired($event)" changedValue="{{ step6Changes?.tracking }}">
+                    </lb-auto-complete>
+                </div>
+
+                <div class="form-group" *ngIf="step6.value.tracking == 'yes'">
+                    <mat-form-field class="w-100" appearance="outline"
+                        [class.field-changed]="step6Changes?.trackingSupplier">
+                        <mat-label>Tracking suppliers</mat-label>
+                        <input matInput formControlName="trackingSupplier" placeholder="Tracking suppliers"
+                            type="text" />
+                        <span matSuffix>
+                            {{ step6Changes?.trackingSupplier }}
+                        </span>
+                        <mat-error>
+                            <vmessage field="trackingSupplier" [control]="step6.controls['trackingSupplier']">
+                            </vmessage>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+
+            </div>
+        </div>
+        <div class="d-flex align-items-center justify-content-end mt-5">
+            <button class="btn btn-transparent rounded-pill py-3 px-5 mx-2 border" type="button" (click)="goBack()">
+                Back
+            </button>
+            <button class="btn btn-primary rounded-pill py-3 px-5" type="submit"
+                [disabled]="stepStatus == 'changed' || isView">
+                Next
+            </button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,200 @@
+<div class="row align-items-center pb-5">
+  <div class="col-12 col-md-4">
+    <h4 class="text-secondary fw-medium">Step 8: Documents <span *ngIf="stepData?.stepStatus?.step8"
+        class="badge  rounded-pill px-3 py-2  fw-medium ms-1 fs-14 text-capitalize"
+        [style.background]="getColors(stepData?.stepStatus?.step8).background"
+        [style.border]="getColors(stepData?.stepStatus?.step8).border"
+        [style.color]="getColors(stepData?.stepStatus?.step8).color">
+        {{stepData?.stepStatus?.step8}}</span></h4>
+  </div>
+  <div class="col-12 col-md-8">
+    <div class="d-flex align-items-center gap-2">
+      <!-- confirmer -->
+      <div class="d-flex align-items-center flex-grow-1 justify-content-end" Permission="applications:confirmer"
+        *ngIf="isView && statusCheckService.isStepValid('confirmer' , stepData?.stepStatus?.step8 , stepData?.applicationStatus)">
+        <small class=" me-2 text-brown fw-semibold">Confirm this step?</small>
+        <div class="me-2">
+          <button class="btn btn-warning text-brown rounded-pill p-2 px-4 fw-medium" type="button"
+            (click)="approveStep('confirmed')">
+            <i class="fa fa-check me-2"></i> <small>Confirmed</small>
+          </button>
+        </div>
+        <div>
+          <button class="btn btn-warning text-brown rounded-pill p-2 fw-medium px-4" type="button"
+            (click)="rejected = true">
+            <i class="fa fa-xmark me-2"></i> <small>Not Confirmed</small>
+          </button>
+        </div>
+      </div>
+      <!-- for approver -->
+      <div class="d-flex align-items-center flex-grow-1 justify-content-end" Permission="applications:approver"
+        *ngIf="isView && statusCheckService.isStepValid('approver' , stepData?.stepStatus?.step8 , stepData?.applicationStatus)">
+        <small class=" me-2 text-brown fw-semibold">Approve this step?</small>
+        <div class="me-2">
+          <button class="btn btn-warning text-brown rounded-pill p-2 px-4 fw-medium" type="button"
+            (click)="approveStep('approved')">
+            <i class="fa fa-check me-2"></i> <small>Approved</small>
+          </button>
+        </div>
+        <div>
+          <button class="btn btn-warning text-brown rounded-pill p-2 fw-medium px-4" type="button"
+            (click)="rejected = true">
+            <i class="fa fa-xmark me-2"></i> <small>Rejected</small>
+          </button>
+        </div>
+      </div>
+      <div class="ms-auto"
+        *ngIf="isView && statusCheckService.isStepValid('editable' , stepData?.stepStatus?.step8 , stepData?.applicationStatus)">
+        <a class="btn btn-grey bg-transparent text-muted fw-medium rounded-pill me-2"
+          [routerLink]="'/applications/edit/' + id + '/step8'">
+          <i class="fa fa-pencil me-2"></i><small>Edit</small>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+<div>
+  <!-- status banner -->
+  <div *ngIf="['rejected' , 'not confirmed'].includes(stepData?.stepStatus?.step8)"
+    class="bg-danger p-2 text-white rounded">
+    <p class="m-0"><i class="fa fa-triangle-exclamation me-2"></i>{{stepData?.stepReject?.step8Reason}}</p>
+  </div>
+  <!-- approval form -->
+  <div *ngIf="rejected">
+    <form [formGroup]="approvalForm">
+      <div class="row">
+        <div class="col-md-6 col-12 offset-md-6">
+          <div class="d-flex align-items-baseline gap-2">
+            <div class="form-group flex-grow-1">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Reason</mat-label>
+                <input matInput formControlName="reason" placeholder="Reason" type="text" />
+                <mat-error>
+                  <vmessage field="reason" [control]="approvalForm.controls['reason']">
+                  </vmessage>
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div>
+              <a type="button" class="btn btn-secondary px-4 py-2 rounded-pill"
+                (click)="approveStep(stepData?.applicationStatus == 'confirmed' || stepData?.applicationStatus == 'in contract' || stepData?.applicationStatus == 'rejected' ? 'rejected' : 'not confirmed');">Submit</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <form [formGroup]="step8" (ngSubmit)="submit()">
+    <div class="row mt-3">
+      <div class="col-12 col-md-6 col-lg-6">
+        <p class="fs-6 text-primary fw-semibold text-capitalize">
+          Upload documents
+        </p>
+        <div class="form-group flex-grow-1 mt-4">
+          <lb-auto-complete appearance="outline" placeholder="Document Type" label="Document Type" [multiple]="false"
+            [clear]="false" [fControl]="step8.controls['type']" [options]="selectDocumentType"
+            (selectionChange)="saveDocument()">
+          </lb-auto-complete>
+        </div>
+
+        <div>
+          <div class="d-flex align-items-center gap-6 my-4" *ngIf="uploads['document']?.loading">
+            <div>
+              <i class="fa-solid fa-file-arrow-up text-secondary fs-4"></i>
+            </div>
+            <div class="flex-grow-1 mx-4">
+              <p class="fw-normal mb-0">{{ uploads["document"]?.name }}</p>
+              <span class="fs-14 text-grey">{{ uploads["document"]?.size }}MB -
+                {{ uploads["document"]?.loadingText }}</span>
+              <div class="progress" style="height: 4px">
+                <div class="progress-bar progress-bar-striped progress-bar-animated bg-secondary" role="progressbar"
+                  [style.width.%]="uploads['document']?.progress"></div>
+              </div>
+            </div>
+            <div class="flex-grow-1">
+              <i class="fa fa-trash-can text-secondary fs-5 float-end" type="button"
+                (click)="removeUpload('document', uploadDocument)"></i>
+            </div>
+          </div>
+        </div>
+        <div>
+          <ng-container>
+            <h6>Required Documents</h6>
+            <ul>
+              <li *ngFor="let item of remainingDocuments" class="mb-0 text-danger">{{item}}</li>
+            </ul>
+          </ng-container>
+        </div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-6">
+        <div class="mt-4">
+          <app-drag (fileDropped)="selectImage($event, 'document')"
+            [extensions]="'WORD, EXCEL, JPEG, PNG, PDF (max. 10MB)'"></app-drag>
+        </div>
+      </div>
+    </div>
+    <hr class="my-4" />
+    <div class="row mt-3">
+      <div class="col-12 col-md-12 col-lg-12">
+        <p class="fs-6 text-secondary fw-semibold">Your Documents</p>
+        <div class="listing-card">
+          <div class="card">
+            <div class="card-header">
+              <div class="searchAndAdd">
+                <h6 class="mb-0 fw-semibold text-secondary">Documents</h6>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="table-container">
+                <table class="table dataTable">
+                  <thead>
+                    <tr>
+                      <th>Document Type</th>
+                      <th>Document Name</th>
+                      <th>Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody class="noFooter">
+                    <tr *ngFor="let item of dataSource">
+                      <td class="text-capitalize">{{ item?.type }}</td>
+                      <td class="text-capitalize">{{ item?.name }}</td>
+                      <td>
+                        <span class="badge fw-medium rounded-pill text-capitalize uploadBadge">{{ item?.status }}
+                        </span>
+                      </td>
+                      <td>
+                        <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill" type="button"
+                          (click)="viewDocument(item.url , item?.type)">
+                          View
+                        </a>
+                        <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill mx-2" type="button"
+                          (click)="downloadFile(item.url, item.name)">
+                          <i class="fa fa-download"></i>
+                        </a>
+                        <a *ngIf="canDelete(item.deleteAllowedUntil)"
+                          class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill" type="button"
+                          (click)="deleteDocument(item._id)">
+                          <i class="fa fa-trash-can"></i>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex align-items-center justify-content-end mt-5">
+      <button class="btn btn-transparent rounded-pill py-3 px-5 mx-2 border" type="button" (click)="goBack()">
+        Back
+      </button>
+      <button class="btn btn-primary rounded-pill py-3 px-5" type="submit"
+        [disabled]="stepStatus == 'changed' || isView || disable">
+        Next
+      </button>
+    </div>
+  </form>
+</div>

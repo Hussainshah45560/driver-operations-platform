@@ -1,0 +1,340 @@
+<div class="row align-items-center">
+  <div class="col-6 col-md-6 col-lg-6">
+    <h4 class="text-secondary fw-medium">My Job</h4>
+  </div>
+</div>
+<form [formGroup]="form"  class="mt-4">
+  <div class="row">
+    <div class="col-12 col-md-6 col-lg-6">
+      <p class="text-secondary fw-semibold">Customer Details</p>
+      <div class="form-group mt-4">
+        <lb-auto-complete
+          appearance="outline"
+          placeholder="Customer"
+          label="Customer"
+          [multiple]="false"
+          [clear]="false"
+          [fControl]="form.controls['customerId']"
+          [options]="selectCustomer"
+          (selectionChange)="getCustomerCostCenters($event)"
+          [searchFunction]="null"
+          (search)="getCustomersLookup($event)"
+        >
+        </lb-auto-complete>
+      </div>
+      <div class="form-group">
+        <lb-auto-complete
+          appearance="outline"
+          placeholder="Cost Center"
+          label="Cost Center"
+          [multiple]="true"
+          [clear]="false"
+          [fControl]="form.controls['costCenterIds']"
+          [options]="selectCostCenter"
+        >
+        </lb-auto-complete>
+      </div>
+      <div class="form-group">
+        <lb-auto-complete
+          appearance="outline"
+          placeholder="Region"
+          label="Region"
+          [multiple]="false"
+          [clear]="false"
+          [fControl]="form.controls['regionId']"
+          [options]="selectRegion"
+          (selectionChange)="getAreaLookup($event)"
+        >
+        </lb-auto-complete>
+      </div>
+      <div class="form-group">
+        <lb-auto-complete
+          appearance="outline"
+          placeholder="Area"
+          label="Area"
+          [multiple]="true"
+          [clear]="false"
+          [fControl]="form.controls['areaIds']"
+          [options]="selectArea"
+        >
+        </lb-auto-complete>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-6">
+      <p class="text-secondary fw-semibold invisible">Contact Information</p>
+      <div class="form-group mt-4">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Site / Store</mat-label>
+          <input
+            matInput
+            formControlName="site"
+            placeholder="Site / Store"
+            type="text"
+          />
+          <mat-error>
+            <vmessage field="site" [control]="form.controls['site']">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-group">
+        <lb-auto-complete
+          appearance="outline"
+          placeholder="Recruitment Type"
+          label="Recruitment Type"
+          [multiple]="false"
+          [clear]="false"
+          [fControl]="form.controls['recruitmentTypeId']"
+          [options]="selectRecruitmentTypes"
+        >
+        </lb-auto-complete>
+      </div>
+
+      <div class="form-group">
+        <lb-auto-complete
+          appearance="outline"
+          placeholder="Recruitment Model"
+          label="Recruitment Model"
+          [multiple]="false"
+          [clear]="false"
+          [fControl]="form.controls['recruitmentModelId']"
+          [options]="selectRecruitmentModels"
+        >
+        </lb-auto-complete>
+      </div>
+      <div class="form-group">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>No of Positions to fill</mat-label>
+          <input
+            matInput
+            formControlName="availablePositions"
+            placeholder="No of Positions to fill"
+            min="0"
+            type="number"
+          />
+          <mat-error>
+            <vmessage
+              field="availablePositions"
+              [control]="form.controls['availablePositions']"
+            >
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <hr class="my-4" />
+  <div class="row">
+    <div class="col-12 col-md-6 col-lg-6">
+      <p class="text-secondary fw-semibold">Work Details</p>
+      <div class="my-4">
+        <button
+          class="btn px-5 py-3 rounded-start-pill"
+          type="button"
+          disabled="true"
+          [ngClass]="
+            form.value.jobType === 'driver'
+              ? 'btn-info text-dark'
+              : 'btn-light text-dark'
+          "
+          (click)="setBooleanValue('jobType', 'driver')"
+        >
+          <i
+            class="fa fa-check me-3"
+            *ngIf="form.value.jobType === 'driver'"
+          ></i
+          >Driver
+        </button>
+        <button
+          class="btn px-5 py-3 rounded-end-pill"
+          type="button"
+          disabled="true"
+          [ngClass]="
+            form.value.jobType === 'other'
+              ? 'btn-info text-dark'
+              : 'btn-light text-dark'
+          "
+          (click)="setBooleanValue('jobType', 'other')"
+        >
+          <i class="fa fa-check me-3" *ngIf="form.value.jobType === 'other'"></i
+          >Other
+        </button>
+      </div>
+
+      <div class="form-group">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Work Title</mat-label>
+          <input
+            matInput
+            formControlName="jobTitle"
+            placeholder="Work Title"
+            type="text"
+          />
+          <mat-error>
+            <vmessage field="jobTitle" [control]="form.controls['jobTitle']">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-group">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Work Description</mat-label>
+          <textarea
+            matInput
+            formControlName="jobDescription"
+            placeholder="Work Description"
+            type="text"
+          ></textarea>
+          <mat-error>
+            <vmessage
+              field="jobDescription"
+              [control]="form.controls['jobTitle']"
+            >
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-group">
+        <app-date-picker
+          placeholderText="Start Date"
+          label="Start Date"
+          [fControl]="form.controls['startDate']"
+        >
+        </app-date-picker>
+      </div>
+      <div class="my-4">
+        <p class="text-secondary fw-semibold">
+          Is there an end-date for this job?
+        </p>
+        <button
+          class="btn px-5 py-3 rounded-start-pill"
+          type="button"
+           disabled="true"
+          [ngClass]="
+            form.value.isEndDate === true
+              ? 'btn-info text-dark'
+              : 'btn-light text-dark'
+          "
+          (click)="
+            setBooleanValue('isEndDate', true);
+           
+          "
+        >
+          <i class="fa fa-check me-3" *ngIf="form.value.isEndDate === true"></i
+          >Yes
+        </button>
+        <button
+          class="btn px-5 py-3 rounded-end-pill"
+          type="button"
+          disabled="true"
+          [ngClass]="
+            form.value.isEndDate === false
+              ? 'btn-info text-dark'
+              : 'btn-light text-dark'
+          "
+          (click)="
+            setBooleanValue('isEndDate', false);
+          
+          "
+        >
+          <i class="fa fa-check me-3" *ngIf="form.value.isEndDate === false"></i
+          >No
+        </button>
+      </div>
+      <div class="form-group" *ngIf="form.value.isEndDate">
+        <app-date-picker
+          placeholderText="End Date"
+          label="End Date"
+          [fControl]="form.controls['endDate']"
+        >
+        </app-date-picker>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-6">
+      <div class="mt-5">
+        <p class="text-secondary fw-semibold invisible">Postal Address</p>
+        <p class="fs-6 text-primary fw-semibold">Skills</p>
+        <div class="d-flex gap-4 align-items-center">
+          <div class="form-group flex-grow-1">
+            <lb-auto-complete
+              appearance="outline"
+              placeholder="Choose skills"
+              label="Choose skills"
+              [multiple]="true"
+              [clear]="false"
+              [fControl]="form.controls['skillIds']"
+              [options]="selectSkills"
+              (selectionChange)="showSelectedValues($event)"
+            >
+            </lb-auto-complete>
+          </div>
+        </div>
+        <div class="mt-4" *ngIf="selectedSkills?.length">
+          <p class="fs-12 text-muted">Added Skills</p>
+          <div class="">
+            <div class="bg-light rounded-3">
+              <ng-container *ngFor="let item of selectedSkills">
+                <div
+                  class="d-flex justify-content-between align-items-center py-2 px-3 fw-normal"
+                >
+                  <p class="mb-0 text-capitalize">
+                    {{ getNameByValue(item, selectSkills) }}
+                  </p>
+                  <!-- <mat-checkbox
+                    [value]="item"
+                    (change)="onChange(item, $event.checked)"
+                    (click)="$event.preventDefault()"
+                    [checked]="form.value.skillIds.includes(item)"
+                    labelPosition="before"
+                  >
+                  </mat-checkbox> -->
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+<!-- 
+        <p class="text-secondary fw-semibold mt-4">Is Induction Required?</p>
+        <div class="my-4">
+          <button
+            class="btn px-5 py-3 rounded-start-pill"
+            type="button"
+            [ngClass]="
+              form.value.isInductionRequired === true
+                ? 'btn-info text-dark'
+                : 'btn-light text-dark'
+            "
+            (click)="setInductionValue('isInductionRequired', true)"
+          >
+            <i
+              class="fa fa-check me-3"
+              *ngIf="form.value.isInductionRequired == true"
+            ></i
+            >Yes
+          </button>
+          <button
+            class="btn px-5 py-3 rounded-end-pill"
+            type="button"
+            [ngClass]="
+              form.value.isInductionRequired === false
+                ? 'btn-info text-dark'
+                : 'btn-light text-dark'
+            "
+            (click)="setInductionValue('isInductionRequired', false)"
+          >
+            <i
+              class="fa fa-xmark me-3"
+              *ngIf="form.value.isInductionRequired == false"
+            ></i
+            >No
+          </button>
+        </div> -->
+      </div>
+    </div>
+  </div>
+
+ 
+</form>

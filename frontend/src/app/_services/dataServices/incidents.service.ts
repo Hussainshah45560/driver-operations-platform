@@ -1,0 +1,119 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { map } from 'rxjs';
+import { environment } from '../../../environments/environment';
+import { Documents, Incidents } from '../../core/modals';
+import { Pagination } from '../../core/modals/pagination';
+import { Params } from '@angular/router';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class IncidentsService {
+  constructor(private http: HttpClient) { }
+
+  getAllIncidents(params: Params) {
+    return this.http
+      .get<{
+        success: boolean;
+        pagination: Pagination;
+        data: Incidents;
+      }>(environment.api + 'incidents', { params: params })
+      .pipe(
+        map((res) => {
+          return res;
+        }),
+      );
+  }
+
+  getSingleIncident(id: string) {
+    return this.http
+      .get<{
+        success: boolean;
+        data: Incidents;
+      }>(environment.api + 'incidents/' + id)
+      .pipe(
+        map((res) => {
+          return res;
+        }),
+      );
+  }
+
+  getDynamicFields(id: string) {
+    return this.http
+      .get<{
+        success: boolean;
+        data: { name: string, type: string }[];
+      }>(environment.api + 'incidents/' + id + '/fields')
+      .pipe(
+        map((res) => {
+          return res;
+        }),
+      );
+  }
+
+  deleteIncident(id: string) {
+    return this.http.delete(environment.api + 'incidents/' + id).pipe(
+      map((res) => {
+        return res;
+      }),
+    );
+  }
+
+  getAllDocuments(params: Params) {
+    return this.http
+      .get<{
+        success: boolean;
+        pagination: Pagination;
+        data: Documents[];
+      }>(environment.api + 'incidents/fetch/documents', { params: params })
+      .pipe(
+        map((res) => {
+          return res;
+        }),
+      );
+  }
+
+  saveDocument(data: Documents, id?: string) {
+    const uploadData = new FormData();
+    uploadData.append('userId', data['userId'] ? data['userId'] : '');
+    uploadData.append('type', data['type'] ? data['type'] : '');
+    uploadData.append('document', data['file'][0], data['file'][0].name);
+
+    return this.http
+      .post(environment.api + 'incidents/documents', uploadData)
+      .pipe(
+        map((res) => {
+          return res;
+        }),
+      );
+  }
+
+  deleteDocument(id: string) {
+    return this.http
+      .delete(environment.api + 'incidents/documents/' + id)
+      .pipe(
+        map((res) => {
+          return res;
+        }),
+      );
+  }
+
+  createOrUpdateincident(data: object, id?: string) {
+    if (id != '' && id != undefined) {
+      return this.http.put(environment.api + 'incidents/' + id, data).pipe(
+        map((res) => {
+          return res;
+        })
+      );
+    } else {
+      return this.http
+        .post(environment.api + 'incidents', data)
+        .pipe(
+          map((res) => {
+            return res;
+          }),
+        );
+    }
+  }
+}

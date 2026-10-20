@@ -1,0 +1,137 @@
+<div class="container p-4 bg-silver">
+  <div class="row align-items-baseline mb-4">
+    <div class="col-12">
+      <div class="d-block d-md-flex align-items-center justify-content-between">
+        <h4 class="fw-normal fs-4">{{ id ? "Update" : "New" }} Contact</h4>
+        <div
+          class="d-block d-md-flex align-items-center flex-grow-1 justify-content-end"
+        >
+          <div
+            class="border rounded-pill py-2 ps-3 pe-1 mb-3 mb-md-0 d-flex align-items-center justify-content-between"
+          >
+            <small class="me-2">Active</small>
+            <mat-slide-toggle
+              class=""
+              color=""
+              class="float-end"
+              [disabled]="!dataSource?._id"
+              (change)="updateStatus()"
+              [checked]="dataSource?.isActive"
+            ></mat-slide-toggle>
+          </div>
+          <div class="float-end">
+            <button
+              class="btn btn-transparent rounded-pill border-grey fs-14 px-3 py-2 fw-medium mx-2"
+              (click)="close()"
+              type="button"
+            >
+              Cancel
+            </button>
+            <button
+              class="btn btn-secondary text-white fs-14 fw-medium px-3 py-2 rounded-pill"
+              type="button"
+              (click)="submit()"
+            >
+              <i class="fa fa-check me-2"></i>{{ id ? "Update" : "Save" }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <mat-dialog-content class="mat-typography">
+    <form
+      [formGroup]="form"
+      (ngSubmit)="submit()"
+      autocomplete="off"
+      class="mt-4"
+    >
+      <div class="row">
+        <div class="col-12">
+          <div class="form-group">
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Name</mat-label>
+              <input
+                matInput
+                formControlName="name"
+                placeholder="Name"
+                autocomplete="new-name"
+                type="text"
+              />
+              <mat-error>
+                <vmessage field="name" [control]="form.controls['name']">
+                </vmessage>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="form-group">
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Email</mat-label>
+              <input
+                matInput
+                formControlName="email"
+                autocomplete="new-email"
+                placeholder="Email"
+                type="email"
+              />
+              <mat-error>
+                <vmessage field="email" [control]="form.controls['email']">
+                </vmessage>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="form-group">
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Contact no</mat-label>
+              <input
+                matInput
+                formControlName="phoneNumber"
+                placeholder="Contact no"
+                autocomplete="phoneNumber"
+                type="tel"
+              />
+              <mat-error>
+                <vmessage
+                  field="phoneNumber"
+                  [control]="form.controls['phoneNumber']"
+                >
+                </vmessage>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="form-group">
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Position</mat-label>
+              <input
+                matInput
+                formControlName="position"
+                placeholder="Position"
+                autocomplete="position"
+                type="text"
+              />
+              <mat-error>
+                <vmessage
+                  field="position"
+                  [control]="form.controls['position']"
+                >
+                </vmessage>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="float-end">
+            <mat-label>Set as default contact</mat-label>
+            <mat-checkbox formControlName="isDefault"> </mat-checkbox>
+          </div>
+        </div>
+      </div>
+    </form>
+  </mat-dialog-content>
+</div>

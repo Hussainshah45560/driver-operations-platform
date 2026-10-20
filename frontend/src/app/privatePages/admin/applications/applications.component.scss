@@ -1,0 +1,31 @@
+.rows-select {
+  width: auto;
+  border: none;
+  background-color: transparent;
+  font-size: 12px;
+  box-shadow: none !important;
+  outline: none !important;
+  color: #000000;
+}
+
+.rows-select:focus {
+  border-color: transparent;
+  box-shadow: none;
+}
+.nav-btn {
+  background: transparent;
+  border: none;
+  color: #000000;
+  opacity: 56%;
+  padding: 2px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.nav-btn:hover {
+  background-color: #e9ecff;
+}
+
+
+

@@ -1,0 +1,141 @@
+<div class="container-fluid p-0">
+  <div>
+    <!-- sidebar -->
+    <div class="componentsSideBar">
+      <div class="sidebarHeader d-block">
+        <h4 class="fw-bold text-secondary">Induction</h4>
+        <p class="fw-medium">
+          {{ candidateInfo?.firstName ? candidateInfo?.firstName : "New" }}
+          {{ candidateInfo?.lastName }}
+        </p>
+      </div>
+      <div id="componentSteps">
+        <ul class="p-0">
+          <ng-container *ngFor="let item of customerSteps">
+            <li *ngIf="item.display">
+              <a class="border-0" [routerLink]="getRouterLink(item.url)" [queryParams]="
+                  inductionId ? { inductionId: inductionId , recruitmentId : recruitmentId } : {recruitmentId : recruitmentId}
+                " [ngClass]="{ 'active-step': currentStep === item.url }">
+                <span>{{ item.title }}</span>
+              </a>
+            </li>
+          </ng-container>
+        </ul>
+      </div>
+    </div>
+    <!-- forms -->
+    <div class="form-content">
+      <!-- Mobile Step Dropdown -->
+      <div class="d-lg-none mb-3 bg-light py-2 px-3">
+        <div class="w-100" (click)="expandDropdown()" style="cursor: pointer"
+          [ngClass]="{ 'expanded-row': expandedApp === true }">
+          <p class="text-secondary text-capitalize fw-semibold m-0 align-items-center justify-content-between d-flex">
+            {{ stepName }} <i class="fa fa-chevron-down float-end"></i>
+          </p>
+        </div>
+        <div id="componentSteps" class="" *ngIf="expandedApp === true">
+          <ul class="w-100 p-0">
+            <ng-container *ngIf="expandedApp === true">
+              <ng-container *ngFor="let item of customerSteps; let i = index">
+                <li>
+                  <a [routerLink]="getRouterLink(item.url)" [queryParams]="
+                      inductionId ? { inductionId: inductionId , recruitmentId : recruitmentId } : {recruitmentId : recruitmentId}
+                    " [class.active-step]="currentStep === item.url" (click)="expandedApp = null">
+                    <span>{{ item.title }}
+                      <span class="badge rounded-pill fw-medium text-capitalize" [style.background]="
+                          getColors(steps?.stepStatus[item.url]).background
+                        " [style.border]="
+                          getColors(steps?.stepStatus[item.url]).border
+                        " [style.color]="
+                          getColors(steps?.stepStatus[item.url]).color
+                        ">
+                        {{ steps?.stepStatus[item.url] || "In Progress" }}</span></span>
+                  </a>
+                </li>
+              </ng-container>
+            </ng-container>
+          </ul>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="fw-bold text-secondary text-capitalize">{{ stepName }}</h4>
+      </div>
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="bg-silver py-3 px-4 rounded-4 mb-4">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center gap-4">
+                <!-- Profile Image -->
+                <img src="data:image/jpeg;base64,{{candidateInfo?.selfie}}"
+                  onError="this.src='/assets/images/selfie.jpeg'" class="rounded-circle" width="50" height="50"
+                  alt="profile" />
+
+                <div>
+                  <p class="mb-0 fw-medium text-secondary text-capitalize">
+                    {{ candidateInfo?.firstName }} {{ candidateInfo?.lastName }}
+                  </p>
+                  <p class="text-muted mb-0 fs-12 fw-normal">
+                    {{ candidateInfo?.applicationNumber }}
+                  </p>
+                </div>
+                <span class="badge fw-medium px-4 py-2 fs-14 rounded-pill text-capitalize" [style.background]="
+                    getColors(candidateInfo?.applicationStatus).background
+                  " [style.border]="
+                    getColors(candidateInfo?.applicationStatus).border
+                  " [style.color]="
+                    getColors(candidateInfo?.applicationStatus).color
+                  ">
+                  {{ candidateInfo?.applicationStatus }}</span>
+              </div>
+            </div>
+
+            <hr class="my-3" />
+            <div class="row  text-start  gy-3 text-capitalize">
+              <div class="col-12 col-md-6 col-lg-2">
+                <p class="text-muted fs-12 fw-normal mb-0">Customer</p>
+                <p class="fw-normal mb-0">{{ candidateInfo?.customerName }}</p>
+              </div>
+              <div class="col-12 col-md-12 col-lg-7">
+                <div class="row">
+                  <div class="col-md-3">
+                    <p class="text-muted fs-12 fw-normal mb-0">Request Title</p>
+                    <p class="fw-normal mb-0">{{ candidateInfo?.jobTitle }}</p>
+                  </div>
+
+                  <div class="col-md-3">
+                    <p class="text-muted fs-12 fw-normal mb-0">
+                      Employment Type
+                    </p>
+                    <p class="fw-normal mb-0">{{ candidateInfo?.jobType }}</p>
+                  </div>
+                  <div class="col-md-3">
+                    <p class="text-muted fs-12 fw-normal mb-0">Province</p>
+                    <p class="fw-normal mb-0">{{ candidateInfo?.region }}</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-12 col-lg-3">
+                <div class="d-flex justify-content-end gap-3">
+                  <!-- Phone -->
+                  <a href="tel : {{ candidateInfo?.phoneNumber }}" type="button"
+                    class="btn btn-outline-grey d-flex align-items-center gap-2 rounded-pill text-secondary fs-14 px-4 py-2 fw-medium">
+                    <i class="fa fa-phone"></i>
+                    {{ candidateInfo?.phoneNumber }}
+                  </a>
+                  <a href="mailto:{{ candidateInfo?.email }}"
+                    class="btn btn-outline-grey d-flex align-items-center gap-2 rounded-pill text-secondary fs-14 px-4 py-2 fw-medium">
+                    <i class="fa fa-envelope"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+
+<td></td>

@@ -1,0 +1,120 @@
+<div class="container p-4 bg-silver">
+  <div class="row align-items-center">
+    <div class="col-6">
+      <h4 class="fw-normal fs-4">Issue Equipment</h4>
+    </div>
+    <div class="col-6">
+      <div class="float-end">
+        <button
+          class="btn btn-transparent border-grey fs-14 fw-medium px-3 py-2 me-2 rounded-pill"
+          (click)="close()"
+          type="button"
+        >
+          Cancel
+        </button>
+        <button
+          class="btn btn-secondary text-white fs-14 fw-medium px-3 py-2 rounded-pill"
+          type="submit"
+          (click)="submit()"
+        >
+          {{ data?.equipmentId ? "Update" : "Add" }}
+        </button>
+      </div>
+    </div>
+  </div>
+  
+    <form [formGroup]="form" (ngSubmit)="submit()" class="mt-4">
+      <div class="row">
+        <div class="col-12">
+          <div class="form-group">
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Name</mat-label>
+              <input
+                matInput
+                formControlName="candidateName"
+                placeholder="Name"
+                type="text"
+                readonly
+              />
+              <mat-error>
+                <vmessage
+                  field="candidateName"
+                  [control]="form.controls['candidateName']"
+                >
+                </vmessage>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-group">
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Cellphone Number</mat-label>
+              <input
+                matInput
+                formControlName="contactNumber"
+                placeholder="Cellphone Number"
+                type="text"
+                readonly
+              />
+              <mat-error>
+                <vmessage
+                  field="contactNumber"
+                  [control]="form.controls['contactNumber']"
+                >
+                </vmessage>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-group">
+            <app-date-picker
+              placeholderText="Issue Date"
+              label="Issue Date"
+              [fControl]="form.controls['issueDate']"
+            >
+            </app-date-picker>
+          </div>
+          <div class="form-group">
+            <app-date-picker
+              placeholderText="Returned Date"
+              label="Returned Date"
+              [fControl]="form.controls['returnDate']"
+            >
+            </app-date-picker>
+          </div>
+
+          <div class="form-group">
+            <lb-auto-complete
+              appearance="outline"
+              placeholder="Status"
+              label="Status"
+              [multiple]="false"
+              [clear]="false"
+              [fControl]="form.controls['status']"
+              [options]="selectStatus"
+            >
+            </lb-auto-complete>
+          </div>
+
+          <div class="form-group">
+            <lb-auto-complete
+              appearance="outline"
+              placeholder="Select Equipment"
+              label="Select Equipment"
+              [multiple]="true"
+              [clear]="false"
+              [fControl]="form.controls['equipmentsIds']"
+              (selectionChange)="pushToArray($event)"
+              [options]="selectEquipments"
+            >
+            </lb-auto-complete>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="float-end mt-4">
+                  <button class="btn btn-transparent  fs-14 fw-medium mx-2" (click)="close()" type="button">Cancel</button>
+                  <button class="btn btn-secondary text-white fs-14 fw-medium px-3 py-2 rounded-4"
+                      type="submit">{{data?.equipmentId ?
+                      'Update' : 'Add'}}</button>
+              </div> -->
+    </form>
+  
+</div>

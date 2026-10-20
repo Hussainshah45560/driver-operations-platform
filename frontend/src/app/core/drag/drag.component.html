@@ -1,0 +1,6 @@
+<div class="uploadImage border-grey" (click)="uploadAsset.click()" [class.hover]="isHovering">
+    <i class="fa-solid fa-file-arrow-up text-secondary fs-3"></i>
+    <p class="fw-normal my-3 mb-0"><span class="text-secondary">Upload</span> or drag and drop</p>
+    <span class="fs-14 text-grey">{{extensions}}</span>
+    <input #uploadAsset type="file" hidden (change)="onFileSelect($event)">
+</div>

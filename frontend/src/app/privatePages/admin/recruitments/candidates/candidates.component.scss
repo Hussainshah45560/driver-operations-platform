@@ -1,0 +1,65 @@
+.custom-bg {
+    background-color: #E6E8EE;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+
+    .custom-filter {
+        border: 1px solid #C3C6CF;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #43474E;
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+        margin-right: 8px;
+    }
+
+    .ring {
+        width: 16px;
+        height: 16px;
+        border: 2px solid #43474E;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: transparent;
+        transition: all 0.3s ease;
+    }
+
+    .inner {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        opacity: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transform: scale(0.4);
+        transition: all 0.3s ease;
+
+        i {
+            width: 14px;
+            height: 14px;
+        }
+    }
+
+    .custom-filter.active {
+        background-color: #D0E4FF;
+
+        .inner {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+}
+
+.disabled-link {
+  pointer-events: none;
+  opacity: 0.6;
+  cursor: not-allowed;
+}

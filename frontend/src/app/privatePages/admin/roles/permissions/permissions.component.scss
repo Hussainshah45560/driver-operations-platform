@@ -1,0 +1,5 @@
+.scrollable {
+    max-height: calc(100vh - 90px - 50px);
+    overflow-y: auto;
+    overflow-x: hidden;
+}

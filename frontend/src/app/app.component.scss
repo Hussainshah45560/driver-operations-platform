@@ -1,0 +1,110 @@
+.loading {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100vw;
+    height: 100vh;
+    z-index: 999999;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(0.5px);
+}
+
+.spinner-circle {
+    width: 50px;
+    height: 50px;
+    border: 6px solid rgba(0, 0, 0, 0.15);
+    border-top: 6px solid #36618E;
+    border-right: 6px solid #36618E;
+    border-left: 6px solid #36618E;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Spin animation */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.loadingApp {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    background-color: #fff;
+    width: 100vw;
+    height: 100vh;
+    z-index: 999999;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+
+    .spinner-square {
+        width: 60px;
+        height: 60px;
+
+        .square {
+            width: 10px;
+            height: 100px;
+        }
+    }
+}
+
+.spinner-square {
+    display: flex;
+    flex-direction: row;
+    width: 30px;
+    height: 30px;
+
+    .square {
+        width: 5px;
+        height: 15px;
+        margin: auto auto;
+        border-radius: 4px;
+    }
+
+    .square-1 {
+        animation: square-anim 1200ms cubic-bezier(0.445, 0.05, 0.55, 0.95) 0s infinite;
+    }
+
+    .square-2 {
+        animation: square-anim 1200ms cubic-bezier(0.445, 0.05, 0.55, 0.95) 200ms infinite;
+    }
+
+    .square-3 {
+        animation: square-anim 1200ms cubic-bezier(0.445, 0.05, 0.55, 0.95) 400ms infinite;
+    }
+}
+
+
+@keyframes square-anim {
+    0% {
+        height: 50%;
+        background-color: rgba(208, 228, 255, 1);
+    }
+
+    20% {
+        height: 50%;
+    }
+
+    40% {
+        height: 100%;
+        background-color: rgba(23, 73, 116, 1);
+    }
+
+    80% {
+        height: 50%;
+    }
+
+    100% {
+        height: 50%;
+        background-color: rgba(208, 228, 255, 1);
+    }
+}

@@ -1,0 +1,205 @@
+<div class="row">
+  <div class="col-12">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="row mt-3">
+        <div class="col-12 col-md-6">
+          <p class="text-secondary fw-semibold">Schedule Hearing</p>
+          <div class="form-group">
+            <app-date-picker placeholderText="Date Scheduled" label="Date Scheduled"
+              [fControl]="form.controls['scheduledDate']">
+            </app-date-picker>
+          </div>
+
+          <div class="form-group">
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Location</mat-label>
+              <input matInput formControlName="location" placeholder="Location" type="text" />
+              <mat-error>
+                <vmessage field="location" [control]="form.controls['location']">
+                </vmessage>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="mb-4">
+            <div class="d-flex justify-content-start align-items-center">
+              <button class="btn btn-info text-secondary rounded-pill py-1 px-2 me-4 border" type="button"
+                (click)="sendNotice()">
+                <i class="fa-regular fa-bell me-2"></i>Send Notice
+              </button>
+              <small class="text-muted" *ngIf="hearingData && hearingData.noticeDate">Last notice sent on {{
+                hearingData.noticeDate
+                ? moment(hearingData.noticeDate).format("DD-MM-YYYY")
+                : "-"
+                }} at {{
+                hearingData.noticeDate
+                ? moment(hearingData.noticeDate).format("hh:mm A")
+                : "-"
+                }}</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-6">
+          <p class="text-secondary fw-semibold">Post Hearing</p>
+          <div class="form-group">
+            <p class="mb-2 fs-12 text-muted">Has the Client Authorised this?</p>
+            <div class="mb-4">
+              <button class="btn px-5 py-3 rounded-start-pill" type="button" [ngClass]="
+                  form.value.isEmployeeAttended === true
+                    ? 'btn-info text-dark'
+                    : 'btn-light text-dark'
+                " (click)="setBooleanValue('isEmployeeAttended', true)">
+                <i class="fa fa-check me-3"></i>Yes
+              </button>
+              <button class="btn px-5 py-3 rounded-end-pill" type="button" [ngClass]="
+                  form.value.isEmployeeAttended === false
+                    ? 'btn-info text-dark'
+                    : 'btn-light text-dark'
+                " (click)="setBooleanValue('isEmployeeAttended', false)">
+                <i class="fa fa-xmark me-3"></i>No
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <app-date-picker placeholderText="Date Attended" label="Date Attended"
+              [fControl]="form.controls['attendedDate']">
+            </app-date-picker>
+          </div>
+          <div class="form-group">
+            <lb-auto-complete appearance="outline" placeholder="Outcome" label="Outcome" [multiple]="false"
+              [clear]="false" [fControl]="form.controls['hearingOutcome']" [options]="selectOutcome"
+              (selectionChange)="checkOutcomeValue($event)">
+            </lb-auto-complete>
+          </div>
+          <div class="form-group" *ngIf="form.value.hearingOutcome == 'dismissed'">
+            <app-date-picker placeholderText="Dismissal Date" label="Dismissal Date"
+              [fControl]="form.controls['dismissalDate']">
+            </app-date-picker>
+          </div>
+          <div class="form-group">
+            <p class="mb-2 fs-12 text-muted">AOD Required?</p>
+            <div class="mb-4">
+              <button class="btn px-5 py-3 rounded-start-pill" type="button" [ngClass]="
+                  form.value.isAodRequired === true
+                    ? 'btn-info text-dark'
+                    : 'btn-light text-dark'
+                " (click)="setBooleanValue('isAodRequired', true)">
+                <i class="fa fa-check me-3"></i>Yes
+              </button>
+              <button class="btn px-5 py-3 rounded-end-pill" type="button" [ngClass]="
+                  form.value.isAodRequired === false
+                    ? 'btn-info text-dark'
+                    : 'btn-light text-dark'
+                " (click)="setBooleanValue('isAodRequired', false)">
+                <i class="fa fa-xmark me-3"></i>No
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <lb-auto-complete appearance="outline" placeholder="Status" label="Status" [multiple]="false"
+              [clear]="false" [fControl]="form.controls['status']" [options]="selectStatus">
+            </lb-auto-complete>
+          </div>
+        </div>
+      </div>
+      <hr class="my-5" />
+      <div class="row mt-3">
+        <div class="col-12 col-md-6 col-lg-6">
+          <p class="fs-6 text-secondary fw-semibold text-capitalize">
+            Upload documents
+          </p>
+          <div class="form-group">
+            <lb-auto-complete appearance="outline" placeholder="Document Type" label="Document Type" [multiple]="false"
+              [clear]="false" [fControl]="form.controls['type']" [options]="selectDocumentType"
+              (selectionChange)="saveDocument()">
+            </lb-auto-complete>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-6">
+          <div class="mt-4">
+            <app-drag (fileDropped)="selectImage($event, 'document')"
+              [extensions]="'WORD, EXCEL, JPEG, PNG, PDF (max. 10MB)'"></app-drag>
+          </div>
+          <div>
+            <div class="d-flex align-items-center gap-6 my-4" *ngIf="uploads['document']?.loading">
+              <div>
+                <i class="fa-solid fa-file-arrow-up text-secondary fs-4"></i>
+              </div>
+              <div class="flex-grow-1 mx-4">
+                <p class="fw-normal mb-0">{{ uploads["document"]?.name }}</p>
+                <span class="fs-14 text-grey">{{ uploads["document"]?.size }}MB -
+                  {{ uploads["document"]?.loadingText }}</span>
+                <div class="progress" style="height: 4px">
+                  <div class="progress-bar progress-bar-striped progress-bar-animated bg-secondary" role="progressbar"
+                    [style.width.%]="uploads['document']?.progress"></div>
+                </div>
+              </div>
+              <div class="flex-grow-1">
+                <i class="fa fa-trash-can text-secondary fs-5 float-end" type="button"
+                  (click)="removeUpload('document', uploadDocument)"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="listing-card">
+            <div class="card">
+              <div class="card-header">
+                <div class="searchAndAdd">
+                  <h6 class="mb-0 fw-semibold text-secondary">Documents</h6>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="table-container">
+                  <table class="table dataTable">
+                    <thead>
+                      <tr>
+                        <th>Document Type</th>
+                        <th>Document Name</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody class="noFooter">
+                      <tr *ngFor="let item of dataSource">
+                        <td class="text-capitalize">{{ item?.type }}</td>
+                        <td class="text-capitalize">{{ item?.name }}</td>
+                        <td>
+                          <span class="badge fw-medium rounded-pill text-capitalize uploadBadge">{{ item?.status }}
+                          </span>
+                        </td>
+                        <td>
+                          <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill" type="button"
+                            (click)="viewDocument(item.url)">
+                            View
+                          </a>
+                          <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill mx-2" type="button"
+                            (click)="downloadFile(item.url, item.name)">
+                            <i class="fa fa-download"></i>
+                          </a>
+                          <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill" type="button"
+                            (click)="deleteDocument(item._id)" *ngIf="canDelete(item.deleteAllowedUntil)">
+                            <i class="fa fa-trash-can"></i>
+                          </a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex align-items-center justify-content-end mt-5">
+        <button class="btn btn-transparent rounded-pill py-3 px-5 mx-2 border" type="button" (click)="goBack()">
+          Back
+        </button>
+        <button class="btn btn-primary rounded-pill py-3 px-5" type="submit">
+          Next
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

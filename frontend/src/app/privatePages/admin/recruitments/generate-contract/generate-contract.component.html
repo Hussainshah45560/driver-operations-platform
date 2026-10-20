@@ -1,0 +1,139 @@
+<div class="container p-4 bg-silver">
+  <div class="row align-items-baseline">
+    <div class="col-12 col-md-6 col-lg-6">
+      <h4 class="fw-normal fs-4">Generate Contract</h4>
+    </div>
+    <div class="col-12 col-md-6 col-lg-6">
+      <div class="float-end">
+        <button class="btn btn-transparent border-grey fs-14 fw-medium px-3 py-2 me-2 rounded-pill" (click)="close()"
+          type="button">
+          Cancel
+        </button>
+        <button class="btn btn-secondary text-white fs-14 fw-medium px-3 py-2 rounded-pill" type="button"
+          (click)="submit()">
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+  <mat-dialog-content class="mat-typography">
+    <div class="row">
+      <div class="col-12">
+        <form [formGroup]="form" (ngSubmit)="submit()">
+          <!-- <p class="fs-6 text-primary fw-semibold text-capitalize">
+                    Contract
+                </p> -->
+          <div class="row rounded-3 mt-3 px-4 pt-4">
+            <div class="col-12 col-md-4 col-lg-4">
+              <div class="bg-silver border-muted h-100 d-flex flex-column justify-content-end align-items-center"
+                style="border: 1px dashed #73777f">
+                <div class="bg-white p-4 rounded-top-4" *ngIf="data?.templateName">
+                  <h5 class="text-center">{{ data?.templateName }}</h5>
+                  <p class="blur-text fs-14">
+                    In accordance with the Protection of Personal Information
+                    Act (POPIA), I hereby consent to the collection, processing,
+                    and storage of my personal information by [Company Name] for
+                    the purpose of assessing my application.
+                  </p>
+                </div>
+                <span class="text-muted fw-semibold" *ngIf="data == null">Empty</span>
+              </div>
+            </div>
+            <div class="col-12 col-md-8 col-lg-8">
+              <div class="pb-4 pt-4 pt-md-0 text-start">
+                <p class="text-secondary fw-semibold">
+                  {{ data?.templateName }}
+                </p>
+                <div class="col-md-4 col-12">
+                  <div class="form-group">
+                    <lb-auto-complete appearance="outline" placeholder="Contract Templates" label="Contract Templates"
+                      [multiple]="false" [clear]="false" [fControl]="form.controls['templateId']"
+                      [options]="selectTemplates">
+                    </lb-auto-complete>
+                  </div>
+                </div>
+                <div class="d-flex align-items-end justify-content-start">
+                  <button class="btn btn-primary rounded-pill py-2 px-3 px-md-5  border" type="button"
+                    *ngIf="data == null" [disabled]="!form.value.templateId" (click)="generateContract()">
+                    <i class="fa fa-plus "></i> Generate
+                  </button>
+                  <button class="btn btn-primary rounded-pill py-2 px-3 px-md-5 mx-2  border" type="button"
+                    *ngIf="data?.templateName && !data?.signNowDocumentId" (click)="showTemplateContent('sign')">
+                    <i class="fa fa-plus me-2"></i> Sign
+                  </button>
+
+                  <button class="btn btn-info text-secondary rounded-pill py-2 px-5 " type="button"
+                    *ngIf="data?.templateName" (click)="showTemplateContent('view')">
+                    <i class="fa fa-eye me-2"></i> View
+                  </button>
+                  <button class="btn btn-info text-secondary rounded-pill py-2 px-5 ms-2" type="button"
+                    *ngIf="data?.signNowDocumentId && data?.signNowDocumentId!=null" (click)="downloadContact()">
+                    <i class="fa fa-download me-2"></i> Download
+                  </button>
+                  <a class="btn btn-info text-secondary rounded-pill py-2 px-5 ms-2" type="button"
+                    [href]="data?.adminInviteLink" target="_blank" *ngIf="data?.adminInviteLink && !data?.adminSigned">
+                    Sign Now
+                  </a>
+                  <!-- <button class="btn btn-info text-secondary rounded-pill py-2 px-3 px-md-5" type="button"
+                (click)="uploadContract.click()">
+                <i class="fa fa-upload me-2"></i> upload
+              </button>
+              <div class="uploadImage border-grey d-none">
+                <input #uploadContract type="file" hidden (change)="selectImage($event , 'contract' , true)">
+              </div> -->
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr class="my-5" />
+          <div class="row mt-5" *ngIf="showTemplate">
+            <div class="col-12">
+              <div class="fw-normal" [innerHtml]="templateData"></div>
+            </div>
+            <div class="col-md-6" *ngIf="isEdit">
+              <div class="row">
+                <div class="col-12">
+                  <h4>For Admin</h4>
+                </div>
+                <div class="col-md-10">
+                  <div class="signature-label">Signature</div>
+                  <app-sign #signPadForDeclaration (signature)="patchSign($event, 'admin')"
+                    [viewSign]="data?.signature?.adminSign" [disabled]="hasAdminSigned"></app-sign>
+                </div>
+                <div class="col-md-10">
+                  <div class="signature-label">Date</div>
+                  <div class="form-group">
+                    <app-date-picker placeholderText="Signature Date" label="Signature Date"
+                      [fControl]="form.controls['adminSignDate']" [disabled]="hasAdminSigned">
+                    </app-date-picker>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6" *ngIf="showTemplate && isEdit">
+              <div class="row justify-content-end">
+                <div class="col-10">
+                  <h4>For User</h4>
+                </div>
+                <div class="col-md-10">
+                  <div class="signature-label">Signature</div>
+                  <app-sign #signPadForDeclaration (signature)="patchSign($event, 'user')"
+                    [viewSign]="data?.signature?.userSign"
+                    [disabled]="!['Driver'].includes(role) || hasUserSigned"></app-sign>
+                </div>
+                <div class="col-md-10">
+                  <div class="signature-label">Date</div>
+                  <div class="form-group">
+                    <app-date-picker placeholderText="Signature Date" label="Signature Date"
+                      [fControl]="form.controls['userSignDate']">
+                    </app-date-picker>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </mat-dialog-content>
+</div>

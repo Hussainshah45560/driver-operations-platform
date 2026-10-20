@@ -1,0 +1,292 @@
+<div class="row align-items-center pb-5">
+    <div class="col-12 col-md-4">
+        <h4 class="text-secondary fw-medium">Step 4: Work<span *ngIf="stepData?.stepStatus?.step4"
+                class="badge  rounded-pill px-3 py-2  fw-medium ms-3 fs-14 text-capitalize"
+                [style.background]="getColors(stepData?.stepStatus?.step4).background"
+                [style.border]="getColors(stepData?.stepStatus?.step4).border"
+                [style.color]="getColors(stepData?.stepStatus?.step4).color">
+                {{stepData?.stepStatus?.step4}}</span></h4>
+    </div>
+    <div class="col-12 col-md-8">
+        <div class="d-flex align-items-center gap-2">
+            <!-- confirmer -->
+            <div class="d-flex align-items-center flex-grow-1 justify-content-end" Permission="applications:confirmer"
+                 *ngIf="isView && statusCheckService.isStepValid('confirmer' , stepData?.stepStatus?.step4 , stepData?.applicationStatus)">
+                <small class=" me-2 text-brown fw-semibold">Confirm this step?</small>
+                <div class="me-2">
+                    <button class="btn btn-warning text-brown rounded-pill p-2 px-4 fw-medium" type="button"
+                        (click)="approveStep('confirmed')">
+                        <i class="fa fa-check me-2"></i> <small>Confirmed</small>
+                    </button>
+                </div>
+                <div>
+                    <button class="btn btn-warning text-brown rounded-pill p-2 fw-medium px-4" type="button"
+                        (click)="rejected = true">
+                        <i class="fa fa-xmark me-2"></i> <small>Not Confirmed</small>
+                    </button>
+                </div>
+            </div>
+            <!-- for approver -->
+            <div class="d-flex align-items-center flex-grow-1 justify-content-end" Permission="applications:approver"
+                 *ngIf="isView && statusCheckService.isStepValid('approver' , stepData?.stepStatus?.step4 , stepData?.applicationStatus)">
+                <small class=" me-2 text-brown fw-semibold">Approve this step?</small>
+                <div class="me-2">
+                    <button class="btn btn-warning text-brown rounded-pill p-2 px-4 fw-medium" type="button"
+                        (click)="approveStep('approved')">
+                        <i class="fa fa-check me-2"></i> <small>Approved</small>
+                    </button>
+                </div>
+                <div>
+                    <button class="btn btn-warning text-brown rounded-pill p-2 fw-medium px-4" type="button"
+                        (click)="rejected = true">
+                        <i class="fa fa-xmark me-2"></i> <small>Rejected</small>
+                    </button>
+                </div>
+            </div>
+            <div class="ms-auto" *ngIf="isView && statusCheckService.isStepValid('editable' , stepData?.stepStatus?.step4 , stepData?.applicationStatus)">
+                <a class="btn btn-grey bg-transparent text-muted fw-medium rounded-pill me-2"
+                    [routerLink]="'/applications/edit/' + id + '/step4'">
+                    <i class="fa fa-pencil me-2"></i><small>Edit</small>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <!-- status banner -->
+    <div *ngIf="['rejected' , 'not confirmed'].includes(stepData?.stepStatus?.step4)"
+        class="bg-danger p-2 text-white rounded">
+        <p class="m-0"><i class="fa fa-triangle-exclamation me-2"></i>{{stepData?.stepReject?.step4Reason}}</p>
+    </div>
+    <!-- approval form -->
+    <div *ngIf="rejected">
+        <form [formGroup]="approvalForm" autocomplete="off">
+            <div class="row">
+                <div class="col-md-6 col-12 offset-md-6">
+                    <div class="d-flex align-items-baseline gap-2">
+                        <div class="form-group flex-grow-1">
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-label>Reason</mat-label>
+                                <input matInput formControlName="reason" placeholder="Reason" type="text" />
+                                <mat-error>
+                                    <vmessage field="reason" [control]="approvalForm.controls['reason']">
+                                    </vmessage>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div>
+                            <a type="button" class="btn btn-secondary px-4 py-2 rounded-pill"
+                                (click)="approveStep(stepData?.applicationStatus == 'confirmed' || stepData?.applicationStatus == 'in contract' || stepData?.applicationStatus == 'rejected' ? 'rejected' : 'not confirmed');">Submit</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <form [formGroup]="step4" (ngSubmit)="submit()">
+        <div class="row mt-3">
+            <div class="col-12 col-md-6 col-lg-6">
+                <p class="fs-6 text-primary fw-semibold">
+                    Tell us about your most recent or current job
+                </p>
+                <div class="form-group">
+                    <mat-form-field class="w-100" appearance="outline"
+                        [class.field-changed]="step4Changes?.jobDescription">
+                        <mat-label>What did you do at this job?</mat-label>
+                        <input matInput formControlName="jobDescription" placeholder="What did you do at this job?"
+                            type="text" />
+                        <span matSuffix>
+                            {{ step4Changes?.jobDescription }}
+                        </span>
+                        <mat-error>
+                            <vmessage field="jobDescription" [control]="step4.controls['jobDescription']"> </vmessage>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="mt-4">
+                    <p class="fw-normal mb-2 text-secondary">Benefits</p>
+                    <p class="fs-12 text-muted">
+                        What benefits did you receive from this job?
+                    </p>
+                    <div class="">
+                        <div class="bg-light rounded-3">
+                            <ng-container *ngFor="let item of selectBenfits">
+                                <div class="d-flex justify-content-between align-items-center py-2 px-3 fw-normal">
+                                    <p class="mb-0">{{ item.name }}</p>
+                                    <mat-checkbox [value]="item.value" (change)="onChange(item.value, $event.checked)"
+                                        [checked]="step4.value.benefits.includes(item.value)" labelPosition="before">
+                                    </mat-checkbox>
+                                </div>
+                            </ng-container>
+                        </div>
+
+                        <div *ngFor="let item of addedBenefits" class="mt-3 field-changed p-2">
+                            {{getNameByValue(item)}} has been added.
+                        </div>
+                        <div *ngFor="let item of removedBenefits" class="mt-3 field-changed p-2">
+                            <b>{{getNameByValue(item)}}</b> has been removed.
+                        </div>
+
+                    </div>
+                </div>
+                <div class="form-group mt-4" *ngIf="showInput">
+                    <mat-form-field class="w-100" appearance="outline"
+                        [class.field-changed]="step4Changes?.otherBenefit">
+                        <mat-label>Other benefits</mat-label>
+                        <input matInput formControlName="otherBenefit" placeholder="Other benefits" type="text" />
+                        <span matSuffix>
+                            {{ step4Changes?.otherBenefit }}
+                        </span>
+                        <mat-error>
+                            <vmessage field="otherBenefit" [control]="step4.controls['otherBenefit']">
+                            </vmessage>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+
+            </div>
+            <div class="col-12 col-md-6 col-lg-6">
+                <p class="fs-6 text-primary fw-semibold mt-md-0 mt-3">Dismissals History</p>
+                <p class="fs-12 text-muted">
+                    Have you ever been dismissed from a job?
+                </p>
+                <div class="mb-4">
+                    <button class="btn px-5 py-3 rounded-start-pill" type="button" [disabled]="isView" [ngClass]="
+                     step4.value.dismissedFromJob === true
+                      ? 'btn-info text-dark'
+                      : 'btn-light text-dark'
+                  " (click)="setBooleanValue('dismissedFromJob', true);customRequired(true , ['employersDismissalEndorsement','reasonForDismissal'])">
+                        <i class="fa fa-check me-3"></i>Yes
+                    </button>
+                    <button class="btn px-5 py-3 rounded-end-pill" type="button" [disabled]="isView" [ngClass]="
+                     step4.value.dismissedFromJob === false
+                      ? 'btn-info text-dark'
+                      : 'btn-light text-dark'
+                  " (click)="setBooleanValue('dismissedFromJob', false);customRequired(false , ['employersDismissalEndorsement','reasonForDismissal'])">
+                        <i class="fa fa-xmark me-3"></i>No
+                    </button>
+                </div>
+                <div *ngIf="step4Changes && step4Changes?.dismissedFromJob !== undefined && step4Changes?.dismissedFromJob != step4.value.dismissedFromJob"
+                    class="field-changed p-2 mb-3">
+                    Changed to : <b>{{ step4Changes?.dismissedFromJob}}</b>
+                </div>
+                <ng-container *ngIf="step4.value.dismissedFromJob || (step4Changes && step4Changes?.dismissedFromJob)">
+                    <div class="form-group">
+                        <mat-label>
+                            When we contact your previous employers, how many would report
+                            that you were dismissed from their employment?</mat-label>
+                        <mat-form-field class="w-100" appearance="outline"
+                            [class.field-changed]="step4Changes?.employersDismissalEndorsement">
+                            <input matInput formControlName="employersDismissalEndorsement" placeholder="" min="0"
+                                type="number" />
+                            <span matSuffix>
+                                {{ step4Changes?.employersDismissalEndorsement }}
+                            </span>
+                            <mat-error>
+                                <vmessage field="employersDismissalEndorsement"
+                                    [control]="step4.controls['employersDismissalEndorsement']"> </vmessage>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group">
+                        <mat-label>
+                            What was the reason for your most recent dismissal?</mat-label>
+                        <mat-form-field class="w-100" appearance="outline"
+                            [class.field-changed]="step4Changes?.reasonForDismissal">
+                            <input matInput formControlName="reasonForDismissal" placeholder="" type="text" />
+                            <span matSuffix>
+                                {{ step4Changes?.reasonForDismissal }}
+                            </span>
+                            <mat-error>
+                                <vmessage field="reasonForDismissal" [control]="step4.controls['reasonForDismissal']">
+                                </vmessage>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </ng-container>
+
+            </div>
+            <hr class="my-4" />
+            <div class="col-12 col-md-12 col-lg-12">
+                <p class="fs-6 text-secondary fw-semibold">Work Experience & References</p>
+                <div class="listing-card">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="searchAndAdd">
+                                <h6 class="mb-0 fw-semibold text-secondary">
+                                    Saved References
+                                </h6>
+                                <div>
+                                    <button class="btn btn-info rounded-button text-secondary px-3 py-2 fw-medium"
+                                        mat-ripple type="button" (click)="newDialog()"
+                                        [disabled]="isView || stepStatus =='changed'">
+                                        <small> <i class="fa fa-plus me-2"></i> Add Work Experience</small>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-container">
+
+
+                                <table class="table dataTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Started</th>
+                                            <th>Ended</th>
+                                            <th>Job Title</th>
+                                            <th>Company</th>
+                                            <th>Brief Description</th>
+                                            <th>Reference Name</th>
+                                            <th>Reference Job Title</th>
+                                            <th>Reference Cellphone Number</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="noFooter">
+                                        <tr *ngFor="let item of employmentHistory">
+                                            <td>{{item?.startDate ? moment(item.startDate).format('DD-MM-YYYY'): "-" }}
+                                            </td>
+                                            <td>{{item?.endDate ? moment(item.endDate).format('DD-MM-YYYY'): "-" }}</td>
+                                            <td>{{item?.position}}</td>
+                                            <td>{{item?.companyName}}</td>
+                                            <td>{{item?.jobDescription}}</td>
+                                            <td>{{item?.referenceName}}</td>
+                                            <td>{{item?.referenceDesignation}}</td>
+                                            <td>{{item?.referenceContact}}</td>
+                                            <td>
+                                                <button
+                                                    class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill me-2"
+                                                    type="button" (click)="deleteEmployment(item._id)">
+                                                    <i class="fa fa-trash-can me-1"></i>Remove
+                                                </button>
+                                                <button
+                                                    class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill"
+                                                    type="button" (click)="newDialog(item._id)">
+                                                    Edit
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="d-flex align-items-center justify-content-end mt-5">
+                <button class="btn btn-transparent rounded-pill py-3 px-5 mx-2 border" type="button" (click)="goBack()">
+                    Back
+                </button>
+                <button class="btn btn-primary rounded-pill py-3 px-5" type="submit"
+                    [disabled]="stepStatus == 'changed' || isView">
+                    Next
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

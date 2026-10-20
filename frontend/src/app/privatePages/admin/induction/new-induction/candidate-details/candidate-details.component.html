@@ -1,0 +1,246 @@
+<div class="row">
+    <div class="col-12">
+        <form [formGroup]="form" (ngSubmit)="submit()">
+            <!-- <div class="row mt-3">
+                <div class="col-12 col-md-6 col-lg-6">
+                    <p class="text-secondary fw-semibold">Application Details</p>
+                    <div class="form-group">
+                        <mat-form-field class="w-100" appearance="outline">
+                            <mat-label>Application Number</mat-label>
+                            <input matInput formControlName="applicationNumber" placeholder="Application Number"
+                                readonly type="number" />
+                            <mat-error>
+                                <vmessage field="applicationNumber" [control]="form.controls['applicationNumber']">
+                                </vmessage>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="form-group">
+                        <mat-form-field class="w-100" appearance="outline">
+                            <mat-label>Status</mat-label>
+                            <input matInput formControlName="status" placeholder="Status" type="text" readonly />
+                            <mat-error>
+                                <vmessage field="status" [control]="form.controls['status']">
+                                </vmessage>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                </div>
+                <div class="col-12 col-md-6 col-lg-6">
+                    <p class="text-secondary fw-semibold">Customer</p>
+
+                    <div class="form-group">
+                        <mat-form-field class="w-100" appearance="outline">
+                            <mat-label>Customer</mat-label>
+                            <input matInput formControlName="customer" placeholder="Customer" type="text" readonly />
+                            <mat-error>
+                                <vmessage field="customer" [control]="form.controls['customer']">
+                                </vmessage>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                </div>
+            </div> -->
+
+            <!-- <hr class="my-5"> -->
+            <div class="row mt-3">
+                <div class="col-12 col-md-6 col-lg-6">
+                    <p class="text-secondary fw-semibold">Personal Information</p>
+
+                    <div class="form-group">
+                        <mat-form-field class="w-100" appearance="outline">
+                            <mat-label>Nick Name (Optional)</mat-label>
+                            <input matInput formControlName="nickName" placeholder="Nick Name (Optional)" type="text"
+                                readonly />
+                            <mat-error>
+                                <vmessage field="nickName" [control]="form.controls['nickName ']">
+                                </vmessage>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group">
+                        <mat-form-field class="w-100" appearance="outline">
+                            <mat-label>Legal First Name</mat-label>
+                            <input matInput formControlName="firstName" placeholder="Legal First Name" type="text"
+                                readonly />
+                            <mat-error>
+                                <vmessage field="firstName" [control]="form.controls['firstName ']">
+                                </vmessage>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group">
+                        <mat-form-field class="w-100" appearance="outline">
+                            <mat-label>Legal Surname</mat-label>
+                            <input matInput formControlName="lastName" placeholder="Legal Surname" type="text"
+                                readonly />
+                            <mat-error>
+                                <vmessage field="lastName" [control]="form.controls['lastName ']">
+                                </vmessage>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group">
+                        <mat-form-field class="w-100" appearance="outline">
+                            <mat-label>Nationality</mat-label>
+                            <input matInput formControlName="nationality" placeholder="Nationality" type="text"
+                                readonly />
+                            <mat-error>
+                                <vmessage field="nationality" [control]="form.controls['nationality ']">
+                                </vmessage>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group">
+                        <mat-form-field class="w-100" appearance="outline">
+                            <mat-label>ID/Passport</mat-label>
+                            <input matInput formControlName="documentNumber" placeholder="ID/Passport" type="text"
+                                readonly />
+                            <mat-error>
+                                <vmessage field="documentNumber" [control]="form.controls['documentNumber ']">
+                                </vmessage>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                </div>
+                <div class="col-12 col-md-6 col-lg-6">
+                    <p class="text-secondary fw-semibold">Contact Information</p>
+
+                    <div class="form-group">
+                        <mat-form-field class="w-100" appearance="outline">
+                            <mat-label>Email</mat-label>
+                            <input matInput formControlName="email" placeholder="Email" type="email" readonly />
+                            <mat-error>
+                                <vmessage field="email" [control]="form.controls['email']">
+                                </vmessage>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group">
+                        <mat-form-field class="w-100" appearance="outline">
+                            <mat-label>Cellphone Number</mat-label>
+                            <input matInput formControlName="phoneNumber" placeholder="Cellphone Number" type="tel"
+                                readonly />
+                            <mat-error>
+                                <vmessage field="phoneNumber" [control]="form.controls['phoneNumber']">
+                                </vmessage>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                </div>
+            </div>
+            <hr class="my-5">
+            <div class="row mt-3">
+                <div class="col-12 col-md-6 col-lg-6">
+                    <p class="fs-6 text-primary fw-semibold text-capitalize">
+                        Upload documents
+                    </p>
+                    <div class="form-group flex-grow-1 mt-4">
+                        <lb-auto-complete appearance="outline" placeholder="Document Type" label="Document Type"
+                            [multiple]="false" [clear]="false" [fControl]="form.controls['type']"
+                            [options]="selectDocumentType" (selectionChange)="saveDocument()">
+                        </lb-auto-complete>
+                    </div>
+
+                    <div>
+                        <div class="d-flex align-items-center gap-6 my-4" *ngIf="uploads['document']?.loading">
+                            <div>
+                                <i class="fa-solid fa-file-arrow-up text-secondary fs-4"></i>
+                            </div>
+                            <div class="flex-grow-1 mx-4">
+                                <p class="fw-normal mb-0">{{ uploads["document"]?.name }}</p>
+                                <span class="fs-14 text-grey">{{ uploads["document"]?.size }}MB -
+                                    {{ uploads["document"]?.loadingText }}</span>
+                                <div class="progress" style="height: 4px">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-secondary"
+                                        role="progressbar" [style.width.%]="uploads['document']?.progress"></div>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1">
+                                <i class="fa fa-trash-can text-secondary fs-5 float-end" type="button"
+                                    (click)="removeUpload('document', uploadDocument)"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-6">
+                    <div class="mt-4">
+                        <app-drag (fileDropped)="selectImage($event, 'document')"
+                            [extensions]="'WORD, EXCEL, JPEG, PNG, PDF (max. 10MB)'"></app-drag>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="listing-card">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="searchAndAdd">
+                                    <h6 class="mb-0 fw-semibold text-secondary">Documents</h6>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-container">
+                                    <table class="table dataTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Document Type</th>
+                                                <th>Document Name</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="noFooter">
+                                            <tr *ngFor="let item of dataSource">
+                                                <td class="text-capitalize">{{ item?.type }}</td>
+                                                <td class="text-capitalize">{{ item?.name }}</td>
+                                                <td>
+                                                    <span class="badge rounded-pill  fw-medium text-capitalize"
+                                                        [style.background]="getColors(item?.status).background"
+                                                        [style.border]="getColors(item?.status).border"
+                                                        [style.color]="getColors(item?.status).color">
+                                                        {{ item?.status }}</span>
+
+                                                </td>
+                                                <td>
+                                                    <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill"
+                                                        type="button" (click)="viewDocument(item.url)">
+                                                        View
+                                                    </a>
+                                                    <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill mx-2"
+                                                        type="button" (click)="downloadFile(item.url, item.name)">
+                                                        <i class="fa fa-download"></i>
+                                                    </a>
+                                                    <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill"
+                                                        type="button" (click)="deleteDocument(item._id)"
+                                                        *ngIf="canDelete(item.deleteAllowedUntil)">
+                                                        <i class="fa fa-trash-can"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-12">
+                    <div class="float-end">
+                        <button class="btn btn-secondary rounded-pill py-3 px-5" type="submit">
+                            Next
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>

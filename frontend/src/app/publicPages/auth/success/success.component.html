@@ -1,0 +1,28 @@
+<div class="container-fluid background min-vh-100 d-flex flex-column position-relative">
+    <!-- <div class="publicPage-logo pt-3 ps-3">
+        <img src="/assets/logos/horizontalLogo.png" alt="Logo" routerLink="/" type="button" />
+    </div> -->
+    <div class="pt-3 ps-3">
+        <div class="d-flex align-items-center">
+            <img src="/assets/logos/globe.png" alt="Logo" routerLink="/" type="button"
+                style="width: 30px; height: 30px;" />
+            <p class="fw-semibold text-secondary mb-0 ms-2">Online Application</p>
+        </div>
+
+    </div>
+    <div class="centerDiv">
+        <div>
+            <img src="/assets/icons/success.png" alt="success">
+        </div>
+        <div class="mt-4">
+            <h2 class="fw-medium text-primary mb-2 display-4">
+                Password <br> Successfully Changed
+            </h2>
+            <p class="fs-3 text-dark">Your new Password has been saved. You can <br> now Sign In to your account with
+                it.</p>
+        </div>
+
+        <button class="btn btn-primary rounded-button mt-4 w-50" (click)="goTo('login')">Sign In</button>
+    </div>
+
+</div>

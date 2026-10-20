@@ -1,0 +1,38 @@
+@media (max-width: 768px) {
+  .componentsSideBar {
+    display: none !important;
+  }
+}
+/* ===== Desktop (unchanged) ===== */
+.roles-list {
+  list-style: none;
+}
+
+/* ===== Mobile horizontal row ===== */
+@media (max-width: 991px) {
+  .roles-scroll {
+    overflow-x: auto;
+    width: 100%;
+
+    &::-webkit-scrollbar {
+      height: 6px;
+    }
+  }
+
+  .roles-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 12px;
+    white-space: nowrap;
+  }
+
+  .role-item {
+    flex: 0 0 auto;
+    margin-bottom: 0;
+  }
+  .role-link.active-step {
+    background: #0dcaf0;
+    color: #fff;
+  }
+}

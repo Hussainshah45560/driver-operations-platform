@@ -1,0 +1,112 @@
+<div class="row align-items-center">
+  <div class="col-12 col-md-6">
+    <h4 class="text-secondary fw-medium">Checklist</h4>
+  </div>
+  <div class="col-12 col-md-6">
+    <div class="d-flex align-items-center float-end">
+      <div class="border rounded-pill d-flex align-items-center py-2 px-3">
+        <small class="me-3">Checklist Active</small>
+        <mat-slide-toggle (change)="updateStatus(dataSource?._id)" [checked]="dataSource?.isActive" color=""
+          [disabled]="!id"></mat-slide-toggle>
+      </div>
+      <span class="border-start mx-2" style="height: 24px"></span>
+      <div class="me-2">
+        <button class="btn btn-info bg-transparent text-dark rounded-pill px-3 py-2 fw-medium w-100 fs-14" type="button"
+          (click)="goBack()">
+          Cancel
+        </button>
+      </div>
+      <div>
+        <button class="btn btn-primary rounded-pill px-3 py-2 fw-medium w-100 fs-14" type="submit" (click)="submit()">
+          <i class="fa fa-check me-2"></i>Save
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<form [formGroup]="form" (ngSubmit)="submit()" class="mt-4">
+  <div class="row">
+    <div class="col-12 col-md-6 col-lg-6">
+      <div class="form-group mt-4">
+        <lb-auto-complete appearance="outline" placeholder="Checklist Type" label="Checklist Type" [multiple]="false"
+          [clear]="false" [fControl]="form.controls['checklistTypeId']" [options]="selectChecklistType">
+        </lb-auto-complete>
+      </div>
+      <div class="form-group">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Checklist name</mat-label>
+          <input matInput formControlName="name" placeholder="Checklist name" type="text" />
+          <mat-error>
+            <vmessage field="name" [control]="form.controls['name']">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6 col-md-6-col-lg-6">
+      <p class="text-secondary fw-semibold">Groups</p>
+    </div>
+    <div class="col-6 col-md-6-col-lg-6">
+      <div>
+        <button class="btn btn-info rounded-button text-secondary px-3 py-2 fw-medium float-end" type="button"
+          (click)="addItem()">
+          <small> <i class="fa fa-plus me-2"></i> New Group</small>
+        </button>
+      </div>
+    </div>
+    <ng-container>
+
+      <div formArrayName="groups" class="mt-4">
+        <div class="row">
+          <div *ngFor="let item of groups.controls; let i = index" [formGroupName]="i" class="col-md-4 col-12">
+            <div class=" bg-silver p-3 mb-3 rounded">
+              <div class="d-flex align-items-center justify-content-between mb-3">
+                <p class="text-secondary fw-medium m-0">Group {{ i + 1 }}</p>
+                <button type="button" class="btn" (click)="removeItem(i)">
+                  <i class="fa fa-trash-can text-muted"></i>
+                </button>
+              </div>
+              <div class="form-group">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Group name</mat-label>
+                  <input matInput formControlName="name" placeholder="Group name" type="text" />
+                  <mat-error>
+                    <vmessage field="name" [control]="form.controls['name']">
+                    </vmessage>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <!-- Options -->
+              <div formArrayName="options" class="mt-2">
+                <div *ngFor="let opt of getOptions(i).controls; let j = index" [formGroupName]="j"
+                  class="d-flex align-items-baseline justify-content-between mb-2 gap-4">
+                  <div class="form-group flex-grow-1">
+                    <mat-form-field class="w-100" appearance="outline">
+                      <mat-label>Option name</mat-label>
+                      <input matInput formControlName="name" placeholder="Option name" type="text" />
+                      <mat-error>
+                        <vmessage field="name" [control]="form.controls['name']">
+                        </vmessage>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <button type="button" class="btn  p-0 float-end text-muted"  [disabled]="getOptions(i).length <= 1"
+                    (click)="removeOption(i, j)">
+                    <i class="fa fa-trash-can"></i>
+                  </button>
+                </div>
+                <button type="button" class="btn btn-link p-0 text-decoration-none" (click)="addOption(i)">
+                  Add option
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </ng-container>
+  </div>
+</form>

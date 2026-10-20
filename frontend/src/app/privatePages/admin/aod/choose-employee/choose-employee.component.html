@@ -1,0 +1,31 @@
+<div class="container p-4 bg-silver">
+  <div class="row align-items-baseline">
+    <div class="col-12">
+      <h4 class="fw-normal fs-4"> Choose {{title ? title : 'Employee'}}</h4>
+      <p class="fs-14">{{ data?.text }}</p>
+    </div>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="mt-4">
+    <div class="row">
+      <div class="col-12">
+        <div class="form-group">
+          <lb-auto-complete appearance="outline" placeholder="{{title ? title : 'Employee'}}"
+            label="{{title ? title : 'Employee'}}" [multiple]="false" [clear]="false"
+            [fControl]="form.controls['profileId']" [options]="selectProfile" [searchFunction]="null"
+            (search)="getProfileLookup($event)">
+          </lb-auto-complete>
+        </div>
+      </div>
+    </div>
+    <div class="float-end mt-4">
+      <button class="btn btn-transparent fs-14 fw-medium mx-2" (click)="close()" type="button">
+        Cancel
+      </button>
+      <button class="btn btn-secondary text-white fs-14 fw-medium px-3 py-2 rounded-4" type="submit">
+        Create
+      </button>
+    </div>
+  </form>
+
+</div>

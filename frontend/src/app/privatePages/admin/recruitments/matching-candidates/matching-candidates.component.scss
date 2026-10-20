@@ -1,0 +1,43 @@
+.tabs-wrapper {
+  // display: inline-flex;
+  border-radius: 14px;
+  width: 100%;
+  background-color: #E6E8EE;
+}
+
+// ::ng-deep mat-tab-header {
+//   background-color: #007bff !important;
+//   width: 100% !important;
+//   color: #fff;
+// }
+::ng-deep .mat-mdc-tab .mdc-tab__text-label {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: #43474E !important;
+  line-height: 20px !important;
+}
+
+::ng-deep .mat-mdc-tab {
+  align-items: center !important;
+  padding: 30px !important;
+}
+
+::ng-deep .mat-mdc-tab:nth-child(1) {
+  border-top-left-radius: 14px !important;
+}
+
+::ng-deep .mat-mdc-tab:nth-child(4) {
+  border-top-right-radius: 14px !important;
+}
+
+::ng-deep .mdc-tab--active {
+  background-color: #D1E4FF !important;
+  color: #194975 !important;
+}
+
+
+.custom-dialog-radius .mat-dialog-container {
+  border-radius: 20px !important;
+  padding: 0 !important;
+  overflow: hidden;
+}

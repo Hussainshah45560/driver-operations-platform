@@ -1,0 +1,191 @@
+<div class="container-fluid p-0">
+  <div class="row mb-4">
+    <div class="col-12 col-md-12 col-lg-12">
+      <h4 class="fw-medium text-secondary">Acknowledgement of Debt</h4>
+    </div>
+  </div>
+
+  <div class="listing-card">
+    <div class="card">
+      <div class="card-header">
+        <div class="searchAndAdd">
+          <div class="searchBar">
+            <form [formGroup]="searchForm">
+              <div class="position-relative">
+                <i class="fa fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"
+                  type="button" (click)="search(searchForm.value.searchTerm)"></i>
+                <input type="text" class="form-control ps-5" matInput formControlName="searchTerm"
+                  (keydown.enter)="search(searchForm.value.searchTerm)" placeholder="Search AOD" />
+              </div>
+            </form>
+          </div>
+          <div>
+            <a class="btn btn-info rounded-button text-secondary fs-14 px-3 py-2 fw-medium" type="button"
+              (click)="chooseEmployee()" Permission="aod:add">
+              <i class="fa fa-plus me-2"></i> New AOD
+            </a>
+          </div>
+        </div>
+      </div>
+      <ng-container *ngIf="['Driver'].includes(role); else adminTemplate">
+        <div class="card-body">
+          <div class="table-container">
+            <table class="table dataTable">
+              <thead>
+                <tr>
+                  <th>
+                    Date
+                    <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('profile.firstName', -1)"></i>
+                    <i class="fa fa-arrow-up ms-1" (click)="sort('profile.firstName', 1)" type="button"></i>
+                  </th>
+                  <th>
+                    Reason
+                    <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('profile.lastName', -1)"></i>
+                    <i class="fa fa-arrow-up ms-1" (click)="sort('profile.lastName', 1)" type="button"></i>
+                  </th>
+                  <th>
+                    Amount
+                    <i class="fa fa-arrow-down ms-1" type="button"
+                      (click)="sort('amount', -1)"></i>
+                    <i class="fa fa-arrow-up ms-1" (click)="sort('amount', 1)" type="button"></i>
+                  </th>
+                  <th>
+                    Type
+                    <i class="fa fa-arrow-down ms-1" type="button"
+                      (click)="sort('application.applicantNumber', -1)"></i>
+                    <i class="fa fa-arrow-up ms-1" (click)="sort('application.applicantNumber', 1)" type="button"></i>
+                  </th>
+
+                  <th>
+                    Status
+                    <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('application.status', -1)"></i>
+                    <i class="fa fa-arrow-up ms-1" (click)="sort('application.status', 1)" type="button"></i>
+                  </th>
+
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let item of dataSource">
+                  <tr>
+                    <td>{{ item?.date ? moment(item?.date).format('yyyy-MM-DD') : '' }}</td>
+                    <td class="text-capitalize">{{ item.reason }}</td>
+                    <td>{{ item.amount }}</td>
+                    <td class="text-capitalize">{{ item.paymentDuration }}</td>
+                    <td>
+                      <span class="badge rounded-pill  fw-medium text-capitalize"
+                        [style.background]="getColors(item.status).background"
+                        [style.border]="getColors(item.status).border" [style.color]="getColors(item.status).color">
+                        {{ item.status }}</span>
+                    <td>
+                      <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill" Permission="aod:view"
+                        routerLink="sign/{{item?._id}}">
+                        View
+                      </a>
+                      <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill mx-2" type="button"
+                        Permission="aod:view" (click)="downloadFile(item?._id)">
+                        <i class="fa fa-download"></i>
+                      </a>
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #adminTemplate>
+        <div class="card-body">
+          <div class="table-container">
+            <table class="table dataTable">
+              <thead>
+                <tr>
+                  <th>
+                    First Name
+                    <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('profile.firstName', -1)"></i>
+                    <i class="fa fa-arrow-up ms-1" (click)="sort('profile.firstName', 1)" type="button"></i>
+                  </th>
+                  <th>
+                    Last Name
+                    <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('profile.lastName', -1)"></i>
+                    <i class="fa fa-arrow-up ms-1" (click)="sort('profile.lastName', 1)" type="button"></i>
+                  </th>
+                  <th>
+                    Application #
+                    <i class="fa fa-arrow-down ms-1" type="button"
+                      (click)="sort('application.applicantNumber', -1)"></i>
+                    <i class="fa fa-arrow-up ms-1" (click)="sort('application.applicantNumber', 1)" type="button"></i>
+                  </th>
+                  <th>
+                    Application Status
+                    <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('application.status', -1)"></i>
+                    <i class="fa fa-arrow-up ms-1" (click)="sort('application.status', 1)" type="button"></i>
+                  </th>
+                  <th>
+                    Amount
+                    <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('amount', -1)"></i>
+                    <i class="fa fa-arrow-up ms-1" (click)="sort('amount', 1)" type="button"></i>
+                  </th>
+                  <th>
+                    AOD Sign Date
+                    <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('userSignDate', -1)"></i>
+                    <i class="fa fa-arrow-up ms-1" (click)="sort('userSignDate', 1)" type="button"></i>
+                  </th>
+                  <th>AOD</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let item of dataSource">
+                  <tr>
+                    <td>{{ item.firstName }}</td>
+                    <td>{{ item.lastName }}</td>
+                    <td>{{ item.applicationNumber }}</td>
+                    <td>
+                      <span class="badge rounded-pill  fw-medium text-capitalize"
+                        [style.background]="getColors(item.status).background"
+                        [style.border]="getColors(item.status).border" [style.color]="getColors(item.status).color">
+                        {{ item.status }}</span>
+                    <td>{{ item.amount }}</td>
+                    <td>{{ item?.userSignDate ? moment(item?.userSignDate).format('yyyy-MM-DD') : '' }}</td>
+                    <td>
+                      <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill " type="button"
+                        *ngIf="item?.userSignDate" Permission="aod:view"
+                        (click)="aodSigned(item?._id , item?.userSign,item?.userSignDate)">
+                        <i class="fa fa-eye me-1"></i>View
+                      </a>
+                      <a *ngIf="item?.userSignDate"
+                        class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill mx-2" type="button"
+                        Permission="aod:view" (click)="downloadFile(item?._id)">
+                        <i class="fa fa-download"></i>
+                      </a>
+                    </td>
+                    <td>
+                      <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill mx-2"
+                        routerLink="edit/{{item?._id}}" Permission="aod:update">
+                        <i class="fa fa-pencil me-1"></i>Edit
+                      </a>
+                      <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill" type="button"
+                        (click)="deleteAod(item._id)" Permission="aod:delete">
+                        <i class="fa fa-trash-can me-1"></i> Delete
+                      </a>
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </ng-template>
+      <div class="card-footer">
+        <div>
+          <pagination [pager]="pager" [params]="queryParams"></pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+</div>

@@ -1,0 +1,164 @@
+<div class="row align-items-center">
+  <div class="col-6 col-md-6 col-lg-6">
+    <h4 class="text-secondary fw-medium">Acknowledgement of Debt</h4>
+  </div>
+  <div class="col-6 col-md-6 col-lg-6">
+    <div class="d-flex align-items-center float-end">
+      <div class="me-2">
+        <a *ngIf="!profileId" class="btn btn-info bg-transparent text-dark rounded-pill px-3 py-2 fw-medium w-100 fs-14"
+          routerLink="/aod">
+          Cancel
+        </a>
+        <a *ngIf="profileId" class="btn btn-info bg-transparent text-dark rounded-pill px-3 py-2 fw-medium w-100 fs-14"
+          type="button" (click)="sendBackToParent()">
+          Cancel
+        </a>
+      </div>
+      <div>
+        <a class="btn btn-primary rounded-pill px-3 py-2 fw-medium w-100 fs-14" type="button" (click)="submit()">
+          <i class="fa fa-check me-2"></i>Save
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+<form [formGroup]="form" class="mt-4">
+
+  <ng-container *ngIf="employeeId !=''">
+    <div class="bg-silver py-3 px-4 rounded-4 mb-4">
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center gap-4">
+          <!-- Profile Image -->
+          <img  src="data:image/jpeg;base64,{{employeeData?.selfie}}" onError="this.src='/assets/images/selfie.jpeg'"  class="rounded-circle" width="50" height="50" alt="profile">
+
+          <div>
+            <p class="mb-0 fw-medium text-secondary text-capitalize">{{employeeData?.firstName}} {{employeeData?.lastName}}</p>
+            <p class="text-muted mb-0 fs-12 fw-normal">{{employeeData?.applicationNumber}}</p>
+          </div>
+
+          <span class="badge fw-medium px-4 py-2 fs-14 rounded-pill text-capitalize"
+            [style.background]="getColors(employeeData?.status).background"
+            [style.border]="getColors(employeeData?.status).border"
+            [style.color]="getColors(employeeData?.status).color">
+            {{employeeData?.status}}</span>
+        </div>
+      </div>
+
+      <hr class="my-3">
+      <div class="row text-start text-lg-center text-md-start gy-3">
+
+        <div class="col-12 col-md-12 col-lg-2">
+          <p class="text-muted fs-12 fw-normal mb-0">Customer</p>
+          <p class="fw-normal mb-0">{{employeeData?.customerName}}</p>
+        </div>
+        <div class="col-12 col-md-12 col-lg-7">
+          <div class="row">
+            <div class="col-md-4">
+              <p class="text-muted fs-12 fw-normal mb-0">Request Title</p>
+              <p class="fw-normal mb-0">{{employeeData?.jobTitle}}</p>
+            </div>
+
+            <div class="col-md-3">
+              <p class="text-muted fs-12 fw-normal mb-0">Employment Type</p>
+              <p class="fw-normal mb-0">{{employeeData?.jobType}}</p>
+            </div>
+            <div class="col-md-3">
+              <p class="text-muted fs-12 fw-normal mb-0">Region</p>
+              <p class="fw-normal mb-0">{{employeeData?.region}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-12 col-lg-3">
+          <div class="d-flex justify-content-end gap-3">
+
+            <!-- Phone -->
+            <button
+              class="btn btn-outline-grey d-flex align-items-center gap-2 rounded-pill text-secondary fs-14 px-4 py-2 fw-medium">
+              <i class="fa fa-phone"></i>
+              {{employeeData?.phoneNumber}}
+            </button>
+
+            <a [href]="'mailto:' + employeeData?.email"
+              class="btn btn-outline-grey d-flex align-items-center gap-2 rounded-pill text-secondary fs-14 px-4 py-2 fw-medium">
+              <i class="fa fa-envelope"></i>
+            </a>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </ng-container>
+  <div class="row">
+    <div class="col-12 col-md-6 col-lg-6">
+      <p class="text-secondary fw-semibold">Acknowledgement of Debt Details</p>
+      <div class="form-group mt-4">
+        <lb-auto-complete appearance="outline" placeholder="Template" label="Template" [multiple]="false"
+          [clear]="false" [fControl]="form.controls['templateId']" [options]="selectTemplate"
+          (selectionChange)="getTemplateData($event)">
+        </lb-auto-complete>
+      </div>
+      <div class="form-group ">
+        <lb-auto-complete appearance="outline" placeholder="Reason" label="Reason" [multiple]="false" [clear]="false"
+          [fControl]="form.controls['aodReasonId']" [options]="selectReason">
+        </lb-auto-complete>
+      </div>
+      <div class="form-group">
+        <app-date-picker placeholderText="Date" label="Date" [fControl]="form.controls['date']">
+        </app-date-picker>
+      </div>
+      <div class="form-group cutomMarginToLabel">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Amount</mat-label>
+          <span matPrefix class="fw-bold">R</span>
+          <input matInput class="custom-input" formControlName="amount" placeholder="Amount" type="text" />
+          <mat-error>
+            <vmessage field="amount" [control]="form.controls['amount']">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-6">
+      <p class="text-secondary fw-semibold invisible">Personal Information</p>
+      <div class="form-group mt-4">
+        <lb-auto-complete appearance="outline" placeholder="Payment Terms" label="Payment Terms" [multiple]="false"
+          [clear]="false" [fControl]="form.controls['paymentTermId']" [options]="selectPaymentTerms">
+        </lb-auto-complete>
+      </div>
+      <div class="form-group ">
+        <lb-auto-complete appearance="outline" placeholder="Type" label="Type" [multiple]="false" [clear]="false"
+          [fControl]="form.controls['aodTypeId']" [options]="selectAodType">
+        </lb-auto-complete>
+      </div>
+      <div class="form-group">
+        <p class="mb-2 fs-12 text-muted">
+          Payment Duration
+        </p>
+        <div class="mb-4">
+          <button class="btn px-4 px-lg-5 py-3 rounded-start-pill" type="button" [ngClass]="
+                     form.value.paymentDuration === 'weekly'
+                      ? 'btn-info text-dark'
+                      : 'btn-light text-dark'
+                  " (click)="setBooleanValue('paymentDuration', 'weekly');">
+            <i class="fa fa-check me-3" *ngIf="form.value.paymentDuration === 'weekly'"></i>Weekly
+          </button>
+          <button class="btn px-4 px-lg-5 py-3 rounded-end-pill" type="button" [ngClass]="
+                     form.value.paymentDuration === 'monthly'
+                      ? 'btn-info text-dark'
+                      : 'btn-light text-dark'
+                  " (click)="setBooleanValue('paymentDuration', 'monthly');">
+            <i class="fa fa-check me-3" *ngIf="form.value.paymentDuration === 'monthly'"></i>Monthly
+          </button>
+        </div>
+      </div>
+      <div class="form-group ">
+        <lb-auto-complete appearance="outline" placeholder="Day of Week/Month" label="Day of Week/Month"
+          [multiple]="false" [clear]="false" [fControl]="form.controls['weekOrMonth']"
+          [options]="form.value.paymentDuration == 'weekly' ?  selectWeekDays : selectMonths">
+        </lb-auto-complete>
+      </div>
+    </div>
+  </div>
+ 
+</form>

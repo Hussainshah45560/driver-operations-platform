@@ -1,0 +1,158 @@
+<div class="container-fluid p-0 mb-3">
+  <div>
+    <div class="d-flex align-items-center justify-content-between pb-3">
+      <div>
+        <h4 class="fw-bold text-secondary text-capitalize">Query</h4>
+      </div>
+      <div class="float-end">
+        <button class="btn btn-grey bg-transparent text-muted rounded-pill py-2 px-4 me-2" type="button"
+          (click)="goBack()">
+          Cancel
+        </button>
+        <button class="btn btn-primary rounded-pill py-2 px-4" type="button" (click)="submit()">
+          <i class="fa fa-check me-2"></i>Save
+        </button>
+      </div>
+    </div>
+    <div class="row mt-4">
+      <div class="col-12">
+        <div class="bg-silver py-3 px-4 rounded-4 mb-4">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center gap-4">
+              <!-- Profile Image -->
+              <img [src]="candidateInfo?.selfie" onError="this.src='/assets/images/selfie.jpeg'" class="rounded-circle"
+                width="50" height="50" alt="profile">
+
+              <div>
+                <p class="mb-0 fw-medium text-secondary">{{candidateInfo?.firstName}}</p>
+                <p class="text-muted mb-0 fs-12 fw-normal">{{candidateInfo?.applicationNumber}}
+                </p>
+              </div>
+              <span class="badge fw-medium px-4 py-2 fs-14 rounded-pill text-capitalize"
+                [style.background]="getColors(candidateInfo?.applicationStatus).background"
+                [style.border]="getColors(candidateInfo?.applicationStatus).border"
+                [style.color]="getColors(candidateInfo?.applicationStatus).color">
+                {{candidateInfo?.applicationStatus}}</span>
+            </div>
+          </div>
+
+          <hr class="my-3">
+          <div class="row text-start text-lg-center text-md-start gy-3 text-capitalize">
+
+            <div class="col-12 col-md-12 col-lg-2">
+              <p class="text-muted fs-12 fw-normal mb-0">Customer</p>
+              <p class="fw-normal mb-0">{{candidateInfo?.customerName}}</p>
+            </div>
+            <div class="col-12 col-md-12 col-lg-7">
+              <div class="row">
+                <div class="col-md-4">
+                  <p class="text-muted fs-12 fw-normal mb-0">Request Title</p>
+                  <p class="fw-normal mb-0">{{candidateInfo?.jobTitle}}</p>
+                </div>
+
+                <div class="col-md-3">
+                  <p class="text-muted fs-12 fw-normal mb-0">Employment Type</p>
+                  <p class="fw-normal mb-0">{{candidateInfo?.jobType}}</p>
+                </div>
+                <div class="col-md-3">
+                  <p class="text-muted fs-12 fw-normal mb-0">Province</p>
+                  <p class="fw-normal mb-0">{{candidateInfo?.region}}</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-12 col-lg-3">
+              <div class="d-flex justify-content-end gap-3">
+
+                <!-- Phone -->
+                <a href="tel : {{candidateInfo?.phoneNumber}}" type="button"
+                  class="btn btn-outline-grey d-flex align-items-center gap-2 rounded-pill text-secondary fs-14 px-4 py-2 fw-medium">
+                  <i class="fa fa-phone"></i>
+                  {{candidateInfo?.phoneNumber}}
+                </a>
+                <a href="mailto:{{candidateInfo?.email}}"
+                  class="btn btn-outline-grey d-flex align-items-center gap-2 rounded-pill text-secondary fs-14 px-4 py-2 fw-medium">
+                  <i class="fa fa-envelope"></i>
+                </a>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <form [formGroup]="form" (ngSubmit)="submit()">
+          <div class="row mt-3">
+            <div class="col-12 col-md-12 col-lg-6">
+              <p class="text-secondary fw-semibold">Assign to User</p>
+              <div class="form-group">
+                <lb-auto-complete appearance="outline" placeholder="Assign To" label="Assign To" [multiple]="false"
+                  [clear]="false" [fControl]="form.controls['assignedTo']" [options]="selectAdmin">
+                </lb-auto-complete>
+              </div>
+
+              <div Permission="queries:Can Approve/Reject">
+                <button class="btn px-4 px-lg-5 py-3 rounded-start-pill" type="button" [ngClass]="
+                      form.value.approved === true
+                        ? 'btn-info text-dark'
+                        : 'btn-light text-dark'
+                    " (click)="
+                      setBooleanValue('approved', true)
+                    ">
+                  <i class="fa fa-check me-3" *ngIf="
+                        form.value.approved === true
+                      "></i>Approved
+                </button>
+                <button class="btn px-4 px-lg-5 py-3 rounded-end-pill" type="button" [ngClass]="
+                      form.value.approved === false
+                        ? 'btn-info text-dark'
+                        : 'btn-light text-dark'
+                    " (click)="
+                      setBooleanValue('approved', false)
+                    ">
+                  <i class="fa fa-check me-3" *ngIf="form.value.approved === false"></i>Rejected
+                </button>
+              </div>
+
+            </div>
+            <div class="col-12 col-md-12 col-lg-6">
+              <p class="fw-medium mb-2 text-secondary">Type</p>
+              <div class="bg-light rounded p-4">
+                <div class="row" *ngFor="let item of dataSource; let i = index" [formGroup]="type.at(i)">
+                  <div class="col-12 col-md-6">
+                    <p class="pt-3 text-muted mb-lg-0 mb-2">{{item?.name}}</p>
+                  </div>
+                  <div class="col-12 col-md-6">
+                    <div class="form-group">
+                      <lb-auto-complete appearance="outline" placeholder="Select Status" label="Status"
+                        [disabledSelect]="!form.value.assignedTo" [multiple]="false" [clear]="false"
+                        [fControl]="type.at(i).get('status')"
+                        (selectionChange)="updateStatus(dataSource[i]._id, $event)" [options]="selectStatus">
+                      </lb-auto-complete>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-5">
+            <div class="col-12">
+              <div class="form-group">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Query</mat-label>
+                  <textarea matInput formControlName="notes" rows="5" cols="5" placeholder="Write out your query"
+                    readonly type="text"></textarea>
+                  <mat-error>
+                    <vmessage field="notes" [control]="form.controls['notes']">
+                    </vmessage>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

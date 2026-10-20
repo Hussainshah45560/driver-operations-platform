@@ -1,0 +1,121 @@
+<div class="container-fluid">
+  <div class="d-flex align-items-center justify-content-between">
+    <div>
+      <h4 class="fs-4 text-secondary fw-medium">Documents</h4>
+    </div>
+  </div>
+</div>
+<div class="row mt-5">
+  <div class="col-12">
+    <div class="searchBar">
+      <form [formGroup]="searchForm">
+        <div class="position-relative">
+          <i class="fa fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted" type="button"
+            (click)="search(searchForm.value.searchTerm)"></i>
+          <input type="text" class="form-control ps-5" matInput formControlName="searchTerm"
+            (keydown.enter)="search(searchForm.value.searchTerm)" placeholder="Search Documents" />
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="row mt-3 bg-light p-4 rounded-4">
+  <div class="col-12 col-md-12 col-lg-12">
+    <div class="d-flex align-items-center justify-content-between">
+      <p class="fs-6 text-primary fw-semibold text-capitalize">
+        Upload documents
+      </p>
+      <div class="">
+        <a routerLink="/home" class="btn btn-transparent border-grey rounded-pill py-2 px-5 me-2">
+          Cancel
+        </a>
+        <button class="btn btn-secondary rounded-pill py-2 px-5" type="button" (click)="submit()">
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-6 col-lg-6">
+    <div class="form-group flex-grow-1 mt-4">
+      <lb-auto-complete appearance="outline" placeholder="Document Type" label="Document Type" [multiple]="false"
+        [clear]="false" [fControl]="form.controls['type']" [options]="selectDocumentType"
+        (selectionChange)="saveDocument()">
+      </lb-auto-complete>
+    </div>
+
+    <div>
+      <div class="d-flex align-items-center gap-6 my-4" *ngIf="uploads['document']?.loading">
+        <div>
+          <i class="fa-solid fa-file-arrow-up text-secondary fs-4"></i>
+        </div>
+        <div class="flex-grow-1 mx-4">
+          <p class="fw-normal mb-0">{{ uploads["document"]?.name }}</p>
+          <span class="fs-14 text-grey">{{ uploads["document"]?.size }}MB -
+            {{ uploads["document"]?.loadingText }}</span>
+          <div class="progress" style="height: 4px">
+            <div class="progress-bar progress-bar-striped progress-bar-animated bg-secondary" role="progressbar"
+              [style.width.%]="uploads['document']?.progress"></div>
+          </div>
+        </div>
+        <div class="flex-grow-1">
+          <i class="fa fa-trash-can text-secondary fs-5 float-end" type="button"
+            (click)="removeUpload('document', uploadDocument)"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-6 col-lg-6">
+    <div class="mt-4">
+      <app-drag (fileDropped)="selectImage($event, 'document')"
+        [extensions]="'WORD, EXCEL, JPEG, PNG, PDF (max. 10MB)'"></app-drag>
+    </div>
+  </div>
+</div>
+<div class="row mt-3">
+  <div class="col-12 col-md-12 col-lg-12">
+    <p class="fs-6 text-secondary fw-semibold">Uploaded Documents</p>
+  </div>
+  <div class="col-12 col-md-12 col-lg-6 mb-3" *ngFor="let item of dataSource">
+    <div class="card p-3">
+      <div class="d-flex align-items-center justify-content-between">
+        <div>
+          <p class="fw-semibold text-capitalize">{{item?.type}}</p>
+        </div>
+        <div>
+          <span class="badge rounded-pill fw-medium text-capitalize"
+            [style.background]="getColors(item.status).background" [style.border]="getColors(item.status).border"
+            [style.color]="getColors(item.status).color">
+            {{ item.status }}</span>
+        </div>
+      </div>
+      <div>
+        <p class="text-muted small">
+          {{item?.name}}
+        </p>
+      </div>
+      <div class="d-flex align-items-center justify-content-between mt-4">
+        <div>
+          <a class="btn btn-primary bg-transparent border-grey text-muted fw-medium rounded-pill"
+            Permission="documents:view" type="button" (click)="viewDocument(item.url , item?.type)">
+            View
+          </a>
+          <a class="btn btn-primary bg-transparent border-grey text-muted fw-medium rounded-pill ms-2" type="button"
+            (click)="downloadFile(item.url, item.name)">
+            <i class="fa fa-download"></i>
+          </a>
+          <a class="btn btn-primary bg-transparent border-grey text-muted fw-medium rounded-pill ms-2" type="button"
+            (click)="printImage(item?.url , item?.type)">
+            <i class="fa fa-print"></i>
+          </a>
+        </div>
+        <div *ngIf="item?.updatedAt">
+          <p>Uploaded {{
+            item.updatedAt
+            ? moment(item.updatedAt).format("DD/MM/YYYY")
+            : "-"
+            }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

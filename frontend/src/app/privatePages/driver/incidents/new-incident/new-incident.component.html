@@ -1,0 +1,213 @@
+<div class="container-fluid">
+  <div class="d-flex align-items-center justify-content-between">
+    <div>
+      <h4 class="fs-4 text-secondary fw-medium">Incident</h4>
+    </div>
+    <div class="float-end">
+      <a routerLink="/incidents" class="btn btn-transparent border-grey rounded-pill py-2 px-5 me-2">
+        Cancel
+      </a>
+      <button *ngIf="showButton || !isView" class="btn btn-secondary rounded-pill py-2 px-5" type="button"
+        (click)="submit()">
+        Save
+      </button>
+
+      <a *ngIf="(isView && ps.havePerm('incidents','update')) && !isEdit" (click)="edit()"
+        class="btn btn-transparent border-grey rounded-pill py-2 px-5" type="button">
+        Edit
+      </a>
+    </div>
+  </div>
+</div>
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div class="row mt-5">
+    <div class="col-12 col-md-6 col-lg-6">
+      <div class="form-group">
+        <app-date-picker placeholderText="Date of incident" label="Date of incident" [fControl]="form.controls['date']">
+        </app-date-picker>
+      </div>
+      <div class="form-group">
+        <lb-auto-complete appearance="outline" placeholder="Incident Type" label="Incident Type" [multiple]="false"
+          [clear]="false" [fControl]="form.controls['templateId']" [options]="selectIncidentType"
+          (selectionChange)="getDynamicFields($event)">
+        </lb-auto-complete>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-6">
+      <div class="form-group">
+        <lb-auto-complete appearance="outline" placeholder="vehicle" label="Vehicle" [multiple]="false" [clear]="false"
+          [fControl]="form.controls['assetId']" [options]="selectAssetType">
+        </lb-auto-complete>
+      </div>
+      <div class="form-group" *ngIf="ps.havePerm('incidents','update')">
+        <lb-auto-complete appearance="outline" placeholder="Status" label="Status" [multiple]="false" [clear]="false"
+          [fControl]="form.controls['status']" [options]="selectStatus">
+        </lb-auto-complete>
+      </div>
+      <div class="form-group" *ngIf="ps.havePerm('incidents','update')">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label class="text-capitalize">Notes</mat-label>
+          <textarea matInput formControlName="notes" type="text" placeholder="notes"></textarea>
+          <mat-error>
+            <vmessage field="notes" [control]="form.controls['notes']">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <hr class="my-5" />
+  <div class="row mt-3">
+    <div class="col-12">
+      <p class="fs-6 text-primary fw-semibold">Incident Details</p>
+    </div>
+    <div class="col-md-6 col-12" *ngFor="let field of dynamicFields">
+      <div class="form-group" *ngIf="field.type == 'string'">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label class="text-capitalize">{{field.name}}</mat-label>
+          <input matInput [formControlName]="field.name" [type]="field.type" [placeholder]="field.name"
+            [readonly]="isEdit || isView" />
+          <mat-error>
+            <vmessage field="{{field.name}}" [control]="field.name">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="form-group" *ngIf="field.type == 'text'">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label class="text-capitalize">{{field.name}}</mat-label>
+          <textarea matInput [formControlName]="field.name" [type]="field.type" [placeholder]="field.name"
+            [readonly]="isEdit || isView"></textarea>
+          <mat-error>
+            <vmessage field="{{field.name}}" [control]="field.name">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="form-group" *ngIf="field.type == 'time'">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label class="text-capitalize">{{field.name}}</mat-label>
+          <input matInput [formControlName]="field.name" [type]="field.type" [placeholder]="field.name"
+            [readonly]="isEdit || isView" />
+          <mat-error>
+            <vmessage field="{{field.name}}" [control]="field.name">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="form-group" *ngIf="field.type == 'boolean'">
+        <p class="fs-12 text-capitalize">{{field.name}}</p>
+        <div class="mb-4">
+          <button class="btn px-5 py-3 rounded-start-pill" type="button" [disabled]="isEdit || isView" [ngClass]="
+                     form.value[field.name] === true
+                      ? 'btn-info text-dark'
+                      : 'btn-light text-dark'
+                  " (click)="setBooleanValue(field.name, true);">
+            <i class="fa fa-check me-3"></i>Yes
+          </button>
+          <button class="btn px-5 py-3 rounded-end-pill" type="button" [disabled]="isEdit || isView" [ngClass]="
+                     form.value[field.name] === false
+                      ? 'btn-info text-dark'
+                      : 'btn-light text-dark'
+                  " (click)="setBooleanValue(field.name, false); ">
+            <i class="fa fa-xmark me-3"></i>No
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr class="my-5" />
+  <div class="row mt-3">
+    <div class="col-12 col-md-6 col-lg-6">
+      <p class="fs-6 text-primary fw-semibold text-capitalize">
+        Upload documents
+      </p>
+      <div class="form-group flex-grow-1 mt-4">
+        <lb-auto-complete appearance="outline" placeholder="Document Type" label="Document Type" [multiple]="false"
+          [clear]="false" [fControl]="form.controls['type']" [options]="selectDocumentType" [disabledSelect]="isView"
+          (selectionChange)="saveDocument()">
+        </lb-auto-complete>
+      </div>
+
+      <div>
+        <div class="d-flex align-items-center gap-6 my-4" *ngIf="uploads['document']?.loading">
+          <div>
+            <i class="fa-solid fa-file-arrow-up text-secondary fs-4"></i>
+          </div>
+          <div class="flex-grow-1 mx-4">
+            <p class="fw-normal mb-0">{{ uploads["document"]?.name }}</p>
+            <span class="fs-14 text-grey">{{ uploads["document"]?.size }}MB -
+              {{ uploads["document"]?.loadingText }}</span>
+            <div class="progress" style="height: 4px">
+              <div class="progress-bar progress-bar-striped progress-bar-animated bg-secondary" role="progressbar"
+                [style.width.%]="uploads['document']?.progress"></div>
+            </div>
+          </div>
+          <div class="flex-grow-1">
+            <i class="fa fa-trash-can text-secondary fs-5 float-end" type="button"
+              (click)="removeUpload('document', uploadDocument)"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-6">
+      <div class="mt-4">
+        <app-drag (fileDropped)="selectImage($event, 'document')"
+          [extensions]="'WORD, EXCEL, JPEG, PNG, PDF (max. 10MB)'"></app-drag>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="listing-card">
+        <div class="card">
+          <div class="card-header">
+            <div class="searchAndAdd">
+              <h6 class="mb-0 fw-semibold text-secondary">Documents</h6>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="table-container">
+              <table class="table dataTable">
+                <thead>
+                  <tr>
+                    <th>Document Type</th>
+                    <th>Document Name</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody class="noFooter">
+                  <tr *ngFor="let item of dataSource">
+                    <td class="text-capitalize">{{ item?.type }}</td>
+                    <td class="text-capitalize">{{ item?.name }}</td>
+                    <td>
+                      <span class="badge rounded-pill fw-medium text-capitalize"
+                        [style.background]="getColors(item?.status).background"
+                        [style.border]="getColors(item?.status).border" [style.color]="getColors(item?.status).color">
+                        {{ item?.status }}</span>
+                    </td>
+                    <td>
+                      <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill" type="button"
+                        (click)="viewDocument(item.url)">
+                        View
+                      </a>
+                      <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill mx-2" type="button"
+                        (click)="downloadFile(item.url, item.name)">
+                        <i class="fa fa-download"></i>
+                      </a>
+                      <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill" type="button"
+                        (click)="deleteDocument(item._id)" *ngIf="canDelete(item.deleteAllowedUntil)">
+                        <i class="fa fa-trash-can"></i>
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

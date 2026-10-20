@@ -1,0 +1,45 @@
+<div class="container p-4 bg-silver">
+  <div class="row align-items-baseline">
+    <div class="col-12">
+      <h4 class="fw-normal fs-4">New Role</h4>
+    </div>
+  </div>
+ 
+    <form [formGroup]="form" class="mt-4" (ngSubmit)="submit()">
+      <div class="row">
+        <div class="col-12">
+          <div class="form-group">
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Role Name</mat-label>
+              <input
+                matInput
+                formControlName="name"
+                placeholder="Role Name"
+                type="text"
+              />
+              <mat-error>
+                <vmessage field="name" [control]="form.controls['name']">
+                </vmessage>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="float-end mt-4">
+        <button
+          class="btn btn-transparent fs-14 fw-medium mx-2"
+          (click)="close()"
+          type="button"
+        >
+          Cancel
+        </button>
+        <button
+          class="btn btn-secondary text-white fs-14 fw-medium px-3 py-2 rounded-4"
+          type="submit"
+        >
+          Create
+        </button>
+      </div>
+    </form>
+  
+</div>

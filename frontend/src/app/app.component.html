@@ -1,0 +1,11 @@
+<div  class="loading" *ngIf="load">
+   <div class="spinner-circle"></div>
+</div>
+<div *ngIf="loadApp | async" class="loadingApp">
+  <div class="spinner-square">
+    <div class="square-1 square"></div>
+    <div class="square-2 square"></div>
+    <div class="square-3 square"></div>
+  </div>
+</div>
+<router-outlet />

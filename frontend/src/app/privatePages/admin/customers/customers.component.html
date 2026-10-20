@@ -1,0 +1,93 @@
+<div class="container-fluid p-0">
+  <div class="row mb-4">
+    <div class="col-12 col-md-12 col-lg-12">
+      <h4 class="fw-medium text-secondary">Customers</h4>
+    </div>
+  </div>
+  <div class="listing-card">
+    <div class="card">
+      <div class="card-header">
+        <div class="searchAndAdd">
+          <div class="searchBar">
+            <form [formGroup]="searchForm">
+              <div class="position-relative">
+                <i class="fa fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"
+                  type="button" (click)="search(searchForm.value.searchTerm)"></i>
+                <input type="text" class="form-control ps-5" matInput formControlName="searchTerm"
+                  (keydown.enter)="search(searchForm.value.searchTerm)" placeholder="Search Customer" />
+              </div>
+            </form>
+          </div>
+          <div>
+            <a class="btn btn-info rounded-button text-secondary px-3 py-2 fw-medium me-2 me-md-3" 
+              routerLink="new" Permission="customers:add">
+              <small> <i class="fa fa-plus me-2"></i> New Customer</small>
+            </a>
+            <a class="btn btn-info rounded-button text-secondary px-3 py-2 fw-medium">
+              <small>Log Request</small>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="table-container">
+          <table class="table dataTable">
+            <thead>
+              <tr>
+                <th>Code<i class="fa fa-arrow-down ms-1" type="button" (click)="sort('code', -1)"></i>
+                  <i class="fa fa-arrow-up ms-1" (click)="sort('code', 1)" type="button"></i>
+                </th>
+                <th>Customer<i class="fa fa-arrow-down ms-1" type="button" (click)="sort('name', -1)"></i>
+                  <i class="fa fa-arrow-up ms-1" (click)="sort('name', 1)" type="button"></i>
+                </th>
+                <th>Tradings As<i class="fa fa-arrow-down ms-1" type="button" (click)="sort('tradingAs', -1)"></i>
+                  <i class="fa fa-arrow-up ms-1" (click)="sort('tradingAs', 1)" type="button"></i>
+                </th>
+                <th>Contact No <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('phoneNumber', -1)"></i>
+                  <i class="fa fa-arrow-up ms-1" (click)="sort('phoneNumber', 1)" type="button"></i>
+                </th>
+                <th>Email <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('email', -1)"></i>
+                  <i class="fa fa-arrow-up ms-1" (click)="sort('email', 1)" type="button"></i>
+                </th>
+                <th>Active</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let item of dataSource">
+                <tr>
+                  <td>{{ item.code }}</td>
+                  <td>{{ item.name }}</td>
+                  <td>{{ item.tradingAs }}</td>
+                  <td>{{ item.telNumber }}</td>
+                  <td>
+                    <span>{{ item.email }} </span>
+                  </td>
+                  <td>
+                    <mat-slide-toggle color="" (change)="updateStatus(item._id)"
+                      [checked]="item.isActive"></mat-slide-toggle>
+                  </td>
+                  <td>
+                    <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill mx-2"
+                      routerLink="edit/{{item?._id}}" Permission="customers:update">
+                      <i class="fa fa-pencil me-1"></i>Edit
+                    </a>
+                    <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill" type="button"
+                      (click)="deleteCustomer(item._id)" Permission="customers:delete">
+                      <i class="fa fa-trash-can me-1"></i> Delete
+                    </a>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div>
+          <pagination [pager]="pager" [params]="queryParams"></pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

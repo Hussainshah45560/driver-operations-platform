@@ -1,0 +1,642 @@
+<div class="container-fluid">
+  <div class="d-flex align-items-center justify-content-between">
+    <div>
+      <h4 class="fs-4 text-secondary fw-medium">Personal Details</h4>
+    </div>
+    <div class="float-end">
+      <button
+        class="btn btn-transparent border-grey rounded-pill py-2 px-5 me-2"
+        type="button"
+      >
+        Cancel
+      </button>
+      <button
+        class="btn btn-secondary rounded-pill py-2 px-5"
+        type="button"
+        onclick="submit()"
+      >
+        Save
+      </button>
+    </div>
+  </div>
+</div>
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div class="row mt-3">
+    <div class="col-12 col-md-6 col-lg-6">
+      <p class="text-secondary fw-semibold">Personal Information</p>
+      <div class="form-group">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Nick name (optional)</mat-label>
+          <input
+            matInput
+            formControlName="userName"
+            placeholder="Nick name (optional)"
+            type="text"
+          />
+
+          <mat-error>
+            <vmessage field="userName" [control]="form.controls['userName']">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="form-group">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Legal first name</mat-label>
+          <input
+            matInput
+            formControlName="firstName"
+            placeholder="Legal first name"
+            type="text"
+          />
+
+          <mat-error>
+            <vmessage field="firstName" [control]="form.controls['firstName']">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="form-group">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Legal surname</mat-label>
+          <input
+            matInput
+            formControlName="lastName"
+            placeholder="Legal surname"
+            type="text"
+          />
+
+          <mat-error>
+            <vmessage field="lastName" [control]="form.controls['lastName']">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-6">
+      <p class="text-secondary fw-semibold">Contact Information</p>
+      <div class="form-group">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Your email address</mat-label>
+          <input
+            matInput
+            formControlName="email"
+            placeholder="Your email address"
+            type="email"
+          />
+
+          <mat-error>
+            <vmessage field="email" [control]="form.controls['email']">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-group">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Your cellphone number</mat-label>
+          <input
+            matInput
+            formControlName="phoneNumber"
+            placeholder="Your cellphone number"
+            type="tel"
+          />
+
+          <mat-error>
+            <vmessage
+              field="phoneNumber"
+              [control]="form.controls['phoneNumber']"
+            >
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-group">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Alternative cellphone number</mat-label>
+          <input
+            matInput
+            formControlName="alternativeNumber"
+            placeholder="Alternative cellphone number"
+            type="tel"
+          />
+
+          <mat-error>
+            <vmessage
+              field="alternativeNumber"
+              [control]="form.controls['alternativeNumber']"
+            >
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <hr class="my-4" />
+  <div class="row py-2">
+    <div class="col-12 col-md-6 col-lg-6">
+      <p class="text-secondary fw-semibold">Nationality and Identity</p>
+
+      <div class="form-group">
+        <lb-auto-complete
+          appearance="outline"
+          placeholder="Nationality"
+          label="Nationality"
+          [multiple]="false"
+          [clear]="false"
+          [fControl]="form.controls['nationalityId']"
+          [options]="selectNationality"
+        >
+        </lb-auto-complete>
+      </div>
+      <div class="form-group">
+        <lb-auto-complete
+          appearance="outline"
+          placeholder="Document type"
+          label="Document type"
+          [multiple]="false"
+          [clear]="false"
+          [fControl]="form.controls['documentTypeId']"
+          [options]="selectDocumentType"
+          (selectionChange)="
+            customRequired('documentTypeId', 'documentExpiryDate', $event)
+          "
+        >
+        </lb-auto-complete>
+      </div>
+      <div class="form-group">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>{{
+            getNameByValue("number", form.value.documentTypeId)
+          }}</mat-label>
+          <input
+            matInput
+            formControlName="idNumber"
+            placeholder="{{
+              getNameByValue('number', form.value.documentTypeId)
+            }}"
+            type="text"
+          />
+
+          <mat-error>
+            <vmessage field="idNumber" [control]="form.controls['idNumber']">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div
+        class="form-group"
+        *ngIf="
+          getNameByValue('Number', form.value.documentTypeId) != 'ID Number'
+        "
+      >
+        <app-date-picker
+          placeholderText="{{
+            getNameByValue('expiry', form.value.documentTypeId)
+          }} date"
+          label="{{ getNameByValue('expiry', form.value.documentTypeId) }} date"
+          [fControl]="form.controls['documentExpiryDate']"
+        >
+        </app-date-picker>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-6">
+      <p class="text-secondary fw-semibold">Languages</p>
+
+      <div class="form-group">
+        <lb-auto-complete
+          appearance="outline"
+          placeholder="Languages"
+          label="Languages"
+          [multiple]="false"
+          [clear]="false"
+          [fControl]="form.controls['nativeLanguageId']"
+          [options]="selectLanguage"
+        >
+        </lb-auto-complete>
+      </div>
+
+      <div class="form-group">
+        <lb-auto-complete
+          appearance="outline"
+          placeholder="Additional languages"
+          label="Additional languages"
+          [multiple]="true"
+          [clear]="false"
+          [fControl]="form.controls['additionalLanguageIds']"
+          [options]="selectLanguage"
+        >
+        </lb-auto-complete>
+      </div>
+    </div>
+  </div>
+  <hr class="my-4" />
+  <div class="row py-2">
+    <div class="col-12 col-md-6 col-lg-6">
+      <p class="text-secondary fw-semibold">Employment Information</p>
+      <p class="mb-2 fs-12 text-muted">Have you worked for us before?</p>
+      <div class="mb-4">
+        <button
+          class="btn px-5 py-3 rounded-start-pill"
+          type="button"
+          [ngClass]="
+            form.value.workForUs === true
+              ? 'btn-info text-dark'
+              : 'btn-light text-dark'
+          "
+          (click)="
+            setBooleanValue('workForUs', true);
+            customRequired('workForUs', 'workAddress')
+          "
+        >
+          <i class="fa fa-check me-3"></i>Yes
+        </button>
+        <button
+          class="btn px-5 py-3 rounded-end-pill"
+          type="button"
+          [ngClass]="
+            form.value.workForUs === false
+              ? 'btn-info text-dark'
+              : 'btn-light text-dark'
+          "
+          (click)="
+            setBooleanValue('workForUs', false);
+            customRequired('workForUs', 'workAddress')
+          "
+        >
+          <i class="fa fa-xmark me-3"></i>No
+        </button>
+      </div>
+
+      <div *ngIf="form.value.workForUs === true">
+        <div class="form-group">
+          <mat-form-field class="w-100" appearance="outline">
+            <mat-label>At which company</mat-label>
+            <input
+              matInput
+              formControlName="workAddress"
+              placeholder="At which company"
+              [required]="form.value.workForUs == true"
+              type="text"
+            />
+
+            <mat-error>
+              <vmessage
+                field="workAddress"
+                [control]="form.controls['workAddress']"
+              ></vmessage>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-6">
+      <p class="text-secondary fw-semibold">Known Associates</p>
+      <p class="mb-2 text-muted fs-12">
+        Other than business acquaintances do you have any friends or relatives
+        that you know that are currently employed by CMC Global?
+      </p>
+      <div class="mb-4">
+        <button
+          class="btn px-5 py-3 rounded-start-pill"
+          type="button"
+          [ngClass]="
+            form.value.relativeOnCompany === true
+              ? 'btn-info text-dark'
+              : 'btn-light text-dark'
+          "
+          (click)="
+            setBooleanValue('relativeOnCompany', true);
+            customRequired('relativeOnCompany', 'relativeDetails')
+          "
+        >
+          <i class="fa fa-check me-3"></i>Yes
+        </button>
+        <button
+          class="btn px-5 py-3 rounded-end-pill"
+          type="button"
+          [ngClass]="
+            form.value.relativeOnCompany === false
+              ? 'btn-info text-dark'
+              : 'btn-light text-dark'
+          "
+          (click)="
+            setBooleanValue('relativeOnCompany', false);
+            customRequired('relativeOnCompany', 'relativeDetails')
+          "
+        >
+          <i class="fa fa-xmark me-3"></i>No
+        </button>
+      </div>
+
+      <div *ngIf="form.value.relativeOnCompany === true">
+        <div class="form-group">
+          <mat-form-field class="w-100" appearance="outline">
+            <mat-label>What are their names and what do they do?</mat-label>
+            <input
+              matInput
+              formControlName="relativeDetails"
+              placeholder="What are their names and what do they do?"
+              [required]="form.value.relativeOnCompany == true"
+              type="text"
+            />
+
+            <mat-error>
+              <vmessage
+                field="relativeDetails"
+                [control]="form.controls['relativeDetails']"
+              >
+              </vmessage>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr class="my-4" />
+  <div class="row py-2">
+    <div class="col-12 col-md-6 col-lg-6">
+      <p class="text-secondary fw-semibold">Your Physical Address</p>
+      <div class="form-group">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Street</mat-label>
+          <input
+            matInput
+            formControlName="line1"
+            placeholder="Street"
+            type="text"
+          />
+
+          <mat-error>
+            <vmessage field="line1" [control]="form.controls['line1']">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="form-group">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Apartment, suite, unit, building (optional)</mat-label>
+          <input
+            matInput
+            formControlName="line2"
+            placeholder="Apartment, suite, unit, building (optional)"
+            type="text"
+          />
+
+          <mat-error>
+            <vmessage field="line2" [control]="form.controls['line2']">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-group">
+        <lb-auto-complete
+          appearance="outline"
+          placeholder="Region"
+          label="Region"
+          [multiple]="false"
+          [clear]="false"
+          [fControl]="form.controls['regionId']"
+          [options]="selectRegion"
+        >
+        </lb-auto-complete>
+      </div>
+
+      <div class="form-group">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Suburb</mat-label>
+          <input
+            matInput
+            formControlName="suburb"
+            placeholder="Suburb"
+            type="text"
+          />
+
+          <mat-error>
+            <vmessage field="suburb" [control]="form.controls['suburb']">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-group">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Postal code</mat-label>
+          <input
+            matInput
+            formControlName="zipCode"
+            placeholder="Postal code"
+            type="text"
+          />
+
+          <mat-error>
+            <vmessage field="zipCode" [control]="form.controls['zipCode']">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-6">
+      <p class="text-secondary fw-semibold">Postal Address</p>
+      <div
+        class="d-flex justify-content-start align-items-center py-2 px-3 mb-20"
+      >
+        <input
+          class="form-check-input fs-4 rounded-1 m-2"
+          type="checkbox"
+          formControlName="sameAs"
+          (change)="sameAs()"
+        />
+        <span> Use the same address as physical</span>
+      </div>
+      <ng-container>
+        <div class="form-group">
+          <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Street</mat-label>
+            <input
+              matInput
+              formControlName="postalline1"
+              placeholder="Street"
+              type="text"
+            />
+
+            <mat-error>
+              <vmessage
+                field="postalline1"
+                [control]="form.controls['postalline1']"
+              >
+              </vmessage>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="form-group">
+          <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Apartment, suite, unit, building (optional)</mat-label>
+            <input
+              matInput
+              formControlName="postalline2"
+              placeholder="Apartment, suite, unit, building (optional)"
+              type="text"
+            />
+
+            <mat-error>
+              <vmessage
+                field="postalline2"
+                [control]="form.controls['postalline2']"
+              >
+              </vmessage>
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-group">
+          <lb-auto-complete
+            appearance="outline"
+            placeholder="Region"
+            label="Region"
+            [multiple]="false"
+            [clear]="false"
+            [fControl]="form.controls['postalregionId']"
+            [options]="selectRegion"
+          >
+          </lb-auto-complete>
+        </div>
+
+        <div class="form-group">
+          <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Suburb</mat-label>
+            <input
+              matInput
+              formControlName="postalsuburb"
+              placeholder="Suburb"
+              type="text"
+            />
+
+            <mat-error>
+              <vmessage
+                field="postalsuburb"
+                [control]="form.controls['postalsuburb']"
+              >
+              </vmessage>
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-group">
+          <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Postal code</mat-label>
+            <input
+              matInput
+              formControlName="postalzipCode"
+              placeholder="Postal code"
+              type="text"
+            />
+
+            <mat-error>
+              <vmessage
+                field="postalzipCode"
+                [control]="form.controls['postalzipCode']"
+              >
+              </vmessage>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <hr class="my-4" />
+  <div class="row py-2">
+    <div class="col-12 col-md-6 col-lg-6">
+      <p class="text-secondary fw-semibold">Bank Details</p>
+      <div class="form-group">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Name of bank</mat-label>
+          <input
+            matInput
+            formControlName="bankName"
+            placeholder="Name of bank"
+            type="text"
+          />
+
+          <mat-error>
+            <vmessage field="bankName" [control]="form.controls['bankName']">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="form-group">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Branch name</mat-label>
+          <input
+            matInput
+            formControlName="branchName"
+            placeholder="Branch name"
+            type="text"
+          />
+
+          <mat-error>
+            <vmessage
+              field="branchName"
+              [control]="form.controls['branchName']"
+            >
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="form-group">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Branch code</mat-label>
+          <input
+            matInput
+            formControlName="branchCode"
+            placeholder="Branch code"
+            type="number"
+          />
+
+          <mat-error>
+            <vmessage
+              field="branchCode"
+              [control]="form.controls['branchCode']"
+            >
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="form-group">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Bank account number</mat-label>
+          <input
+            matInput
+            formControlName="accountNumber"
+            placeholder="Bank account number"
+            type="number"
+          />
+
+          <mat-error>
+            <vmessage
+              field="accountNumber"
+              [control]="form.controls['accountNumber']"
+            >
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-group">
+        <lb-auto-complete
+          appearance="outline"
+          placeholder="Account type"
+          label="Account type"
+          [multiple]="false"
+          [clear]="false"
+          [fControl]="form.controls['accountTypeId']"
+          [options]="selectAccountType"
+        >
+        </lb-auto-complete>
+      </div>
+    </div>
+  </div>
+</form>

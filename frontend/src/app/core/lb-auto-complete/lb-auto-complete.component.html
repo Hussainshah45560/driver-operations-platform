@@ -1,0 +1,28 @@
+<i class="fa fa-close clearFilter " *ngIf="(fControl.value != '' || fControl.value.length != 0) && clear"
+	(click)="fControl.setValue(''); onSelectionChange('')"></i>
+
+<mat-form-field class="w-100 text-start" [appearance]="appearance" [class.field-changed]="changedValue">
+	<mat-label *ngIf="label != ''">{{label}}</mat-label>
+	<mat-select #selectElem (openedChange)="searchInput.focus(); searchInput.value=''; searchFunction('')"
+		[placeholder]="placeholder" [disabled]="disabledSelect" [formControl]="fControl" [multiple]="multiple"
+		[(ngModel)]="selectedValue" (selectionChange)="onSelectionChange($event.value)">
+		<mat-form-field class="w-100" appearance="fill">
+			<input autocomplete="off" style="padding-left: 16px; padding-right: 16px; box-sizing: border-box;"
+				(keydown)="$event.stopPropagation()" #searchInput matInput type="text"
+				(input)="(searchFunction)?searchFunction(searchInput.value): searchEmit(searchInput.value)" />
+		</mat-form-field>
+		<mat-select-trigger>
+			<span class="text-dark">{{ onDisplayString() }}</span>
+			<span class="changedValueClass">
+				{{showChangedValues(changedValue)}}
+			</span>
+		</mat-select-trigger>
+		<mat-option *ngFor="let option of options; trackBy: trackByFn" [disabled]="disabled || option.disabled"
+			 class="text-capitalize" [value]="option[value]"
+			[style.display]="hideOption(option) ? 'none' : 'flex'">{{(option[display])}}
+		</mat-option>
+	</mat-select>
+	<mat-error>
+		<vmessage [form]="null" [control]="fControl"></vmessage>
+	</mat-error>
+</mat-form-field>

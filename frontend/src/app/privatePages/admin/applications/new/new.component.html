@@ -1,0 +1,131 @@
+<div class="container-fluid p-0">
+  <div>
+    <!-- sidebar -->
+    <div class="componentsSideBar d-none d-lg-block">
+      <div class="sidebarHeader d-block">
+        <h4 class="fw-bold text-secondary">Application</h4>
+        <p class="fw-medium text-capitalize">{{ name }}</p>
+      </div>
+      <div id="componentSteps">
+        <ul class="p-0">
+          <ng-container *ngFor="let item of filteredApplicationSteps; let i = index">
+            <li>
+              <a
+                [routerLink]="[
+                  '/applications',
+                  isView ? 'view' : 'edit',
+                  id,
+                  item.url
+                ]"
+                [class.active-step]="currentStep === item.url"
+                [class.disabled]="isStepDisabled(item)"
+                routerLinkActive="active"
+              >
+                <span
+                  >Step {{ item.stepNumber }}: {{ item.title }}
+                  <span
+                    class="badge fw-medium rounded-pill text-capitalize"
+                    [ngStyle]="{
+                      'background-color':
+                        steps?.stepStatus[item.url] === 'approved'
+                          ? '#D1FADF'
+                          : steps?.stepStatus[item.url] === 'completed'
+                          ? '#EAF1FF'
+                          : steps?.stepStatus[item.url] == 'rejected' ||
+                            steps?.stepStatus[item.url] == 'not confirmed' ||
+                            steps?.stepStatus[item.url] == 'duplicate'
+                          ? '#FFEDEA'
+                          : 'rgb(208, 228, 255)',
+                      color:
+                        steps?.stepStatus[item.url] === 'approved'
+                          ? '#00522A'
+                          : steps?.stepStatus[item.url] === 'completed'
+                          ? '#174974'
+                          : steps?.stepStatus[item.url] == 'rejected' ||
+                            steps?.stepStatus[item.url] == 'not confirmed' ||
+                            steps?.stepStatus[item.url] == 'duplicate'
+                          ? '#93000A'
+                          : 'rgb(23, 73, 116)',
+                      border: '1px solid',
+                      'border-color':
+                        steps?.stepStatus[item.url] === 'approved'
+                          ? '#4CBD75'
+                          : steps?.stepStatus[item.url] === 'completed'
+                          ? '#94ADCD'
+                          : steps?.stepStatus[item.url] == 'rejected' ||
+                            steps?.stepStatus[item.url] == 'not confirmed' ||
+                            steps?.stepStatus[item.url] == 'duplicate'
+                          ? '#FF897D'
+                          : 'rgb(23, 73, 116)'
+                    }"
+                    >{{ steps?.stepStatus[item.url] || "In Progress" }}
+                  </span></span
+                >
+              </a>
+            </li>
+          </ng-container>
+        </ul>
+      </div>
+    </div>
+    <!-- forms -->
+    <div class="form-content">
+      <!-- Mobile Step Dropdown -->
+      <div class="d-lg-none mb-3">
+        <div
+          class="w-100"
+          (click)="expandDropdown()"
+          style="cursor: pointer"
+          [ngClass]="{ 'expanded-row': expandedApp === true }"
+        >
+          <p class="text-secondary fw-semibold border-bottom pb-2">
+            Step {{ currentStepInfo.number }}: {{ currentStepInfo.title
+            }}<i class="fa fa-chevron-down ms-2 float-end"></i>
+          </p>
+        </div>
+        <div id="componentSteps" class="mt-0">
+          <ul class="w-100 p-0">
+            <ng-container *ngIf="expandedApp === true">
+              <ng-container
+                *ngFor="let item of filteredApplicationSteps; let i = index"
+              >
+                <li>
+                  <a
+                    [routerLink]="[
+                      '/applications',
+                      isView ? 'view' : 'edit',
+                      id,
+                      item.url
+                    ]"
+                    [class.active-step]="currentStep === item.url"
+                    [class.disabled]="isStepDisabled(item)"
+                    (click)="expandedApp = null"
+                  >
+                    <span
+                      >Step {{ item.stepNumber }}: {{ item.title }}
+                      <span
+                        class="badge rounded-pill fw-medium text-capitalize"
+                        [style.background]="
+                          getColors(steps?.stepStatus[item.url]).background
+                        "
+                        [style.border]="
+                          getColors(steps?.stepStatus[item.url]).border
+                        "
+                        [style.color]="
+                          getColors(steps?.stepStatus[item.url]).color
+                        "
+                      >
+                        {{ steps?.stepStatus[item.url] || "In Progress" }}</span
+                      ></span
+                    >
+                  </a>
+                </li>
+              </ng-container>
+            </ng-container>
+          </ul>
+        </div>
+      </div>
+
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

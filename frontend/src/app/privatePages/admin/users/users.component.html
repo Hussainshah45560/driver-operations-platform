@@ -1,0 +1,109 @@
+<div class="container-fluid p-0">
+  <div class="row mb-4">
+    <div class="col-12 col-md-12 col-lg-12">
+      <h4 class="fw-medium text-secondary">Users (Manage Admin)</h4>
+    </div>
+  </div>
+  <div class="listing-card">
+    <div class="card">
+      <div class="card-header">
+        <form [formGroup]="searchForm">
+          <div class="searchAndAdd">
+            <div class="searchBar">
+              <div class="position-relative">
+                <i class="fa fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"
+                  type="button" (click)="filter({'q': searchForm.value.searchTerm})"></i>
+                <input type="text" class="form-control ps-5" matInput formControlName="searchTerm"
+                  (keydown.enter)="filter({'q': searchForm.value.searchTerm})" placeholder="Search user" />
+              </div>
+            </div>
+            <div class="form-group m-0 mb-md-0 mb-2">
+              <lb-auto-complete appearance="fill" placeholder="Role" label="Role" [multiple]="true" [clear]="true"
+                [fControl]="searchForm.controls['roleId']" [options]="selectRoles" [disabled]="isDisabled"
+                (selectionChange)="onRoleChange( $event)">
+              </lb-auto-complete>
+            </div>
+            <div *ngIf="isObjectEmpty(queryParams)">
+              <a class="btn btn-transparent border" type="button" (click)="clearFilters()">Clear</a>
+            </div>
+            <div>
+              <a class="btn btn-info rounded-button text-secondary px-3 py-2 fw-medium" routerLink="/users/new"
+                Permission="users:add">
+                <small> <i class="fa fa-plus me-2"></i> New User</small>
+              </a>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="card-body">
+        <div class="table-container">
+          <table class="table dataTable">
+            <thead>
+              <tr>
+                <th>
+                  First Name
+                  <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('profile.firstName', -1)"></i>
+                  <i class="fa fa-arrow-up ms-1" (click)="sort('profile.firstName', 1)" type="button"></i>
+                </th>
+                <th>
+                  Last Name
+                  <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('profile.lastName', -1)"></i>
+                  <i class="fa fa-arrow-up ms-1" (click)="sort('profile.lastName', 1)" type="button"></i>
+                </th>
+                <th>
+                  User Name
+                  <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('profile.userName', -1)"></i>
+                  <i class="fa fa-arrow-up ms-1" (click)="sort('profile.userName', 1)" type="button"></i>
+                </th>
+                <th>
+                  Cell No.
+                  <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('phoneNumber', -1)"></i>
+                  <i class="fa fa-arrow-up ms-1" (click)="sort('phoneNumber', 1)" type="button"></i>
+                </th>
+                <th>
+                  Email
+                  <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('email', -1)"></i>
+                  <i class="fa fa-arrow-up ms-1" (click)="sort('email', 1)" type="button"></i>
+                </th>
+                <th>Active</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let item of dataSource">
+                <tr>
+                  <td>{{ item.firstName }}</td>
+                  <td>{{ item.lastName }}</td>
+                  <td>{{ item.userName }}</td>
+                  <td>{{ item.phoneNumber }}</td>
+                  <td>
+                    <span>{{ item.email }} </span>
+                  </td>
+                  <td>
+                    <mat-slide-toggle color="" (change)="updateStatus(item._id)"
+                      [checked]="item.isActive"></mat-slide-toggle>
+                  </td>
+                  <td>
+                    <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill mx-2"
+                      routerLink="edit/{{item._id}}" Permission="users:update">
+                      <i class="fa fa-pencil me-1"></i>Edit
+                    </a>
+                    <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill"
+                      (click)="deleteUser(item._id)" Permission="users:delete" type="button">
+                      <i class="fa fa-trash-can me-1"></i> Delete
+                    </a>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div>
+          <pagination [pager]="pager" [params]="queryParams"></pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

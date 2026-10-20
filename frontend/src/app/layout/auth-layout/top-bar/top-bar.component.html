@@ -1,0 +1,29 @@
+<!-- Topbar Start -->
+<div class="navbar-custom d-lg-none top-bar">
+  <div class="container-fluid">
+    <div class="row align-items-center">
+      <div class="col-6">
+        <button
+          class="btn btn-transparent text-dark btn-sm"
+          mat-ripple
+          (click)="showMenu()"
+        >
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+      <div class="col-6">
+        <div class="logo-box py-2 float-end" [routerLink]="ps.havePerm('dashboard', 'view') ? 'dashboard' : 'home'">
+          <a class="logo text-center">
+            <span class="logo-sm">
+              <img
+                src="/assets/logos/cmcLogo.png"
+                alt="logo"
+                style="height: 48px"
+              />
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

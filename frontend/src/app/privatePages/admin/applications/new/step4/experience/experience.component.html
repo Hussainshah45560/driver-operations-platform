@@ -1,0 +1,213 @@
+<div class="container p-4 bg-silver">
+  <div class="row align-items-baseline">
+    <div class="col-12">
+      <h4 class="fw-normal fs-4">Experience</h4>
+    </div>
+  </div>
+  <mat-dialog-content class="mat-typography">
+    <form [formGroup]="form" class="mt-4" (ngSubmit)="submit()">
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <p class="fw-semibold text-secondary">
+            Current/Past Work Information
+          </p>
+          <div class="form-group mt-4">
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Company</mat-label>
+              <input
+                matInput
+                formControlName="companyName"
+                placeholder="Company"
+                type="text"
+                autocomplete="companyName"
+              />
+              <mat-error>
+                <vmessage
+                  field="companyName"
+                  [control]="form.controls['companyName']"
+                >
+                </vmessage>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-group">
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Job title</mat-label>
+              <input
+                matInput
+                formControlName="position"
+                placeholder="Job title"
+                type="text"
+                autocomplete="position"
+              />
+              <mat-error>
+                <vmessage
+                  field="position"
+                  [control]="form.controls['position']"
+                >
+                </vmessage>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-group">
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Brief description of the job</mat-label>
+              <input
+                matInput
+                formControlName="jobDescription"
+                placeholder="Brief description of the job"
+                autocomplete="jobDescription"
+                type="text"
+              />
+              <mat-error>
+                <vmessage
+                  field="jobDescription"
+                  [control]="form.controls['jobDescription']"
+                >
+                </vmessage>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-group">
+            <app-date-picker
+              placeholderText="Started"
+              label="Started"
+              [fControl]="form.controls['startDate']"
+            >
+            </app-date-picker>
+          </div>
+          <div class="form-group">
+            <app-date-picker
+              placeholderText="Ended"
+              label="Ended"
+              [fControl]="form.controls['endDate']"
+            >
+            </app-date-picker>
+          </div>
+          <div class="form-group">
+            <lb-auto-complete
+              appearance="outline"
+              placeholder="Monthly / Weekly"
+              label="Monthly / Weekly"
+              [multiple]="false"
+              [clear]="false"
+              [fControl]="form.controls['type']"
+              [options]="selectType"
+            >
+            </lb-auto-complete>
+          </div>
+          <div class="form-group">
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Pay</mat-label>
+              <input
+                matInput
+                formControlName="salary"
+                placeholder="Pay"
+                type="text"
+                autocomplete="salary"
+              />
+              <mat-error>
+                <vmessage field="salary" [control]="form.controls['salary']">
+                </vmessage>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-group">
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Reason for job ending</mat-label>
+              <input
+                matInput
+                formControlName="reasonForLeaving"
+                placeholder="Reason for job ending"
+                autocomplete="reasonForLeaving"
+                type="text"
+              />
+              <mat-error>
+                <vmessage
+                  field="reasonForLeaving"
+                  [control]="form.controls['reasonForLeaving']"
+                >
+                </vmessage>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-12 col-md-6">
+          <p class="fw-semibold text-secondary">Reference Information</p>
+          <div class="form-group mt-4">
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Full name of your reference</mat-label>
+              <input
+                matInput
+                formControlName="referenceName"
+                placeholder="Full name of your reference"
+                autocomplete="referenceName"
+                type="text"
+              />
+              <mat-error>
+                <vmessage
+                  field="referenceName"
+                  [control]="form.controls['referenceName']"
+                >
+                </vmessage>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-group">
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Job title</mat-label>
+              <input
+                matInput
+                formControlName="referenceDesignation"
+                placeholder="Job title"
+                type="text"
+                autocomplete="referenceDesignation"
+              />
+              <mat-error>
+                <vmessage
+                  field="referenceDesignation"
+                  [control]="form.controls['referenceDesignation']"
+                >
+                </vmessage>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-group">
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Their cellphone number</mat-label>
+              <input
+                matInput
+                formControlName="referenceContact"
+                placeholder="Their cellphone number"
+                autocomplete="referenceContact"
+                type="tel"
+              />
+              <mat-error>
+                <vmessage
+                  field="referenceContact"
+                  [control]="form.controls['referenceContact']"
+                >
+                </vmessage>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="float-end mt-4">
+        <button
+          class="btn btn-transparent fs-14 fw-medium mx-2"
+          (click)="close()"
+          type="button"
+        >
+          Cancel
+        </button>
+        <button
+          class="btn btn-secondary text-white fs-14 fw-medium px-3 py-2 rounded-4"
+          type="submit"
+        >
+          {{ id ? "Update" : "Create" }}
+        </button>
+      </div>
+    </form>
+  </mat-dialog-content>
+</div>

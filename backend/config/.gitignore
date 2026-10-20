@@ -1,0 +1,4 @@
+/config.ts
+config-backup.ts
+.env
+.env.*

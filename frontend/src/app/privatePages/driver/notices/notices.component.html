@@ -1,0 +1,95 @@
+<div class="container-fluid p-0">
+  <div class="row mb-4">
+    <div class="col-12 col-md-12 col-lg-12">
+      <h4 class="fw-medium text-secondary">Notices</h4>
+    </div>
+  </div>
+  <div class="listing-card">
+    <div class="card">
+      <div class="card-header">
+        <div class="searchAndAdd">
+          <div class="searchBar">
+            <form [formGroup]="searchForm">
+              <div class="position-relative">
+                <i class="fa fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"
+                  type="button" (click)="search(searchForm.value.searchTerm)"></i>
+                <input type="text" class="form-control ps-5" matInput formControlName="searchTerm"
+                  (keydown.enter)="search(searchForm.value.searchTerm)" placeholder="Search Notices" />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="table-container">
+          <table class="table dataTable">
+            <thead>
+              <tr>
+                <th>
+                  Date
+                  <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('date', -1)"></i>
+                  <i class="fa fa-arrow-up ms-1" (click)="sort('date', 1)" type="button"></i>
+                </th>
+                <th>
+                  Type
+                  <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('type', -1)"></i>
+                  <i class="fa fa-arrow-up ms-1" (click)="sort('type', 1)" type="button"></i>
+                </th>
+                <th>
+                  Client
+                  <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('client', -1)"></i>
+                  <i class="fa fa-arrow-up ms-1" (click)="sort('client', 1)" type="button"></i>
+                </th>
+                <th>Reason</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let item of dataSource">
+                <tr>
+                  <td>
+                    {{
+                    item.date
+                    ? moment(item.date).format("DD-MM-YYYY")
+                    : "-"
+                    }}
+                  </td>
+                  <td>{{item?.requestTypeName}}</td>
+                  <td>{{item?.customerName}}</td>
+                  <td>
+                    {{item?.warningReason}}
+                  </td>
+                  <td>
+                    <span class="badge rounded-pill fw-medium text-capitalize"
+                      [style.background]="getColors(item.status).background"
+                      [style.border]="getColors(item.status).border" [style.color]="getColors(item.status).color">
+                      {{ item.status }}</span>
+                  </td>
+
+                  <td>
+                    <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill"
+                      Permission="notices:view" routerLink="sign/{{item?.disciplinaryId}}"
+                      [queryParams]="{warningNumber : item?.warningNumber}">
+                      View
+                    </a>
+                    <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill ms-2"
+                      (click)="downloadFile(item?.warningNumber , item?.disciplinaryId)" type="button">
+                      <i class="fa fa-download"></i>
+                    </a>
+
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div>
+          <pagination [pager]="pager" [params]="queryParams"></pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

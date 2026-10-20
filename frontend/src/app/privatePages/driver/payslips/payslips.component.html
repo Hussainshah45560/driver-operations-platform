@@ -1,0 +1,79 @@
+<div class="container-fluid p-0">
+    <div class="row mb-4">
+        <div class="col-12 col-md-12 col-lg-12">
+            <h4 class="fw-medium text-secondary">PaySlips</h4>
+        </div>
+    </div>
+    <div class="listing-card">
+        <div class="card">
+            <div class="card-header">
+                <div class="searchAndAdd">
+                    <div class="searchBar">
+                        <form [formGroup]="searchForm">
+                            <div class="position-relative">
+                                <i class="fa fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"
+                                    type="button" (click)="search(searchForm.value.searchTerm)"></i>
+                                <input type="text" class="form-control ps-5" matInput formControlName="searchTerm"
+                                    (keydown.enter)="search(searchForm.value.searchTerm)"
+                                    placeholder="Search payslips" />
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-container">
+                    <table class="table dataTable">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Date
+                                    <i class="fa fa-arrow-down ms-1" type="button" (click)="sort('make', -1)"></i>
+                                    <i class="fa fa-arrow-up ms-1" (click)="sort('make', 1)" type="button"></i>
+                                </th>
+                                <th>
+                                    Document Name
+                                    <i class="fa fa-arrow-down ms-1" type="button"
+                                        (click)="sort('registrationNumber', -1)"></i>
+                                    <i class="fa fa-arrow-up ms-1" (click)="sort('registrationNumber', 1)"
+                                        type="button"></i>
+                                </th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container *ngFor="let item of [1,2,3]">
+                                <tr>
+                                    <td>21/12/2025</td>
+                                    <td>
+                                        DAW2305672DBG.pdf
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill"
+                                            Permission="remittance:view">
+                                            View
+                                        </a>
+                                        <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill ms-2"
+                                            type="button">
+                                            <i class="fa fa-download"></i>
+                                        </a>
+                                        <a class="btn btn-primary bg-transparent text-muted fw-medium rounded-pill ms-2"
+                                            type="button">
+                                            <i class="fa fa-print"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div>
+                    <pagination [pager]="pager" [params]="queryParams"></pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

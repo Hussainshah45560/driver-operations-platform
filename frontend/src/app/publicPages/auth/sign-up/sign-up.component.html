@@ -1,0 +1,115 @@
+<div class="container-fluid publicPage-background min-vh-100 d-flex flex-column">
+  <!-- <div class="publicPage-logo pt-3 ps-3">
+    <img src="/assets/logos/horizontalLogo.png" alt="Logo" routerLink="/" type="button" />
+  </div> -->
+  <div class="pt-3 ps-3">
+    <div class="d-flex align-items-center">
+      <img src="/assets/logos/globe.png" alt="Logo" routerLink="/" type="button" style="width: 30px; height: 30px;" />
+      <p class="fw-semibold text-secondary mb-0 ms-2">Online Application</p>
+    </div>
+
+  </div>
+  <div class="h-100 custom-width mx-auto my-auto">
+    <div class="row my-md-0 my-5">
+      <div class="col-12 col-lg-7  text-white d-flex align-items-center justify-content-start ">
+        <div>
+          <div class="fw-medium text-primary mb-2" [innerHTML]="heading">
+          </div>
+          <div class="text-muted mb-0 fs-3" [innerHTML]="description">
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="col-lg-1 col-0"> 
+      </div> -->
+      <div class="col-12 col-lg-5 mt-lg-0 mt-4">
+        <div class="bg-light p-4 rounded-3">
+          <form class="mt-3" [formGroup]="form"   autocomplete="off"  (ngSubmit)="submit()">
+            <div class="row">
+              <div class="col-12 col-md-12">
+                <div class="form-group ">
+                  <mat-form-field class="w-100" appearance="outline">
+                    <mat-label>First name</mat-label>
+                    <input matInput formControlName="firstName" placeholder="First name" type="text" autocomplete="firstName"  />
+                    <mat-error>
+                      <vmessage field="firstName" [control]="form.controls['firstName']">
+                      </vmessage>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="col-12 col-md-12">
+                <div class="form-group ">
+                  <mat-form-field class="w-100" appearance="outline">
+                    <mat-label>Last name</mat-label>
+                    <input matInput formControlName="lastName" placeholder="Last name" type="text" autocomplete="lastName" />
+                    <mat-error>
+                      <vmessage field="lastName" [control]="form.controls['lastName']">
+                      </vmessage>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="col-12 col-md-12">
+                <div class="form-group ">
+                  <mat-form-field class="w-100" appearance="outline">
+                    <mat-label>Cellphone number</mat-label>
+                    <input matInput form placeholder="Cellphone number (0123456789)" formControlName="phoneNumber" type="tel" autocomplete="phoneNumber" />
+                    <mat-error>
+                      <vmessage field="phoneNumber" [control]="form.controls['phoneNumber']">
+                      </vmessage>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="form-group">
+                  <mat-form-field class="custom-outline w-100" appearance="outline">
+                    <mat-label>Password</mat-label>
+                    <input matInput placeholder="Passsword" formControlName="password" autocomplete="new-password"
+                      [type]="showPassword ? 'text' : 'password'" />
+                    <i matSuffix (click)="showPassword = !showPassword" class="fa-solid"
+                      [ngClass]="showPassword ? 'fa-eye' : 'fa-eye-slash'"></i>
+                    <mat-error>
+                      <vmessage field="password" [control]="form.controls['password']">
+                      </vmessage>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="form-group">
+                  <mat-form-field class="custom-outline w-100" appearance="outline">
+                    <mat-label>Confirm password</mat-label>
+                    <input matInput placeholder="Confirm passsword" formControlName="passwordConfirm" autocomplete="new-confirmpassword"
+                      [type]="confirmPasswordShow ? 'text' : 'password'" />
+                    <i matSuffix (click)="confirmPasswordShow = !confirmPasswordShow" class="fa-solid" [ngClass]="
+                        confirmPasswordShow ? 'fa-eye' : 'fa-eye-slash'
+                      "></i>
+                    <mat-error>
+                      <vmessage field="passwordConfirm" [control]="form.controls['passwordConfirm']">
+                      </vmessage>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div>
+              <button type="submit" class="btn btn-primary w-100 rounded-button">
+                Register
+              </button>
+            </div>
+            <div class="mt-3">
+              <button mat-ripple type="button" class="btn btn-primary w-100 rounded-button bg-transparent text-primary"
+                (click)="goTo('login')">
+                Already have an account?
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

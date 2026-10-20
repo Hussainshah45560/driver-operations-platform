@@ -1,0 +1,86 @@
+<div class="container p-4 bg-silver">
+  
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="row align-items-baseline mb-4">
+        <div class="col-12">
+          <div
+            class="d-block d-md-flex align-items-center justify-content-between"
+          >
+            <h4 class="fw-normal fs-4">{{ id ? "Update" : "New" }} Calendar</h4>
+            <div
+              class="d-block d-md-flex align-items-center flex-grow-1 justify-content-end"
+            >
+              <div
+                class="border rounded-pill py-2 ps-3 pe-1 mb-3 mb-md-0 d-flex align-items-center justify-content-between"
+              >
+                <small class="me-2">Active</small>
+                <mat-slide-toggle
+                  class="float-end"
+                  color=""
+                  [disabled]="!dataSource?._id"
+                  (change)="updateStatus(dataSource?._id)"
+                  [checked]="dataSource?.isActive"
+                ></mat-slide-toggle>
+              </div>
+              <div class="float-end">
+                <button
+                  class="btn btn-transparent fs-14 fw-medium mx-2"
+                  (click)="close()"
+                  type="button"
+                >
+                  Cancel
+                </button>
+                <button
+                  class="btn btn-secondary text-white fs-14 fw-medium px-3 py-2 rounded-pill"
+                  type="submit"
+                >
+                  <i class="fa fa-check me-2"></i>{{ id ? "Update" : "Save" }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <div class="form-group">
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Name</mat-label>
+              <input
+                matInput
+                formControlName="name"
+                placeholder="Name"
+                type="text"
+              />
+              <mat-error>
+                <vmessage field="name" [control]="form.controls['name']">
+                </vmessage>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="form-group">
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Calendly address</mat-label>
+              <input
+                matInput
+                formControlName="calendlyAddress"
+                placeholder="Calendly address"
+                type="text"
+              />
+              <mat-error>
+                <vmessage
+                  field="calendlyAddress"
+                  [control]="form.controls['calendlyAddress']"
+                >
+                </vmessage>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </form>
+
+</div>

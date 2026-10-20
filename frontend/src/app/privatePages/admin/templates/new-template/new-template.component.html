@@ -1,0 +1,166 @@
+<div class="row align-items-center">
+  <div class="col-12 col-md-6">
+    <h4 class="text-secondary fw-medium">
+      Templates
+    </h4>
+  </div>
+  <div class="col-12 col-md-6">
+    <div class="d-flex align-items-center float-end">
+      <div class="border rounded-pill d-flex align-items-center py-2 px-3">
+        <small class="me-3">Template Active</small>
+        <mat-slide-toggle class="" (change)="updateStatus(data?._id)" [checked]="data?.isActive"
+          color=""></mat-slide-toggle>
+      </div>
+      <span class="border-start mx-2" style="height: 24px"></span>
+      <div class="me-2">
+        <button class="btn btn-info bg-transparent text-dark rounded-pill px-3 py-2 fw-medium w-100"
+          routerLink="/templates">
+          <small>Cancel</small>
+        </button>
+      </div>
+      <div>
+        <button class="btn btn-primary rounded-pill px-3 py-2 fw-medium w-100" type="submit" (click)="submit()">
+          <i class="fa fa-check me-2"></i> <small>Save</small>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<form [formGroup]="form" class="mt-4">
+  <div class="row">
+    <div class="col-12 col-md-6 col-lg-6">
+      <p class="text-secondary fw-semibold">Information</p>
+      <div class="form-group mt-4">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Template Name</mat-label>
+          <input matInput formControlName="name" placeholder="Template Name" type="text" />
+          <mat-error>
+            <vmessage field="name" [control]="form.controls['name']">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- <div class="form-group">
+        <lb-auto-complete appearance="outline" placeholder="Template Type" label="Template Type" [multiple]="false"
+          [clear]="false" [fControl]="form.controls['templateTypeId']" [options]="selectTemplateType"
+          [disabledSelect]="true">
+        </lb-auto-complete>
+      </div> -->
+
+      <div *ngIf="showFieldsDropDown">
+        <div class="form-group">
+          <lb-auto-complete appearance="outline" placeholder="Dynamic Fields" label="Dynamic Fields" [multiple]="true"
+            [clear]="false" [fControl]="form.controls['templateFields']" (selectionChange)="pushSelectedField($event)"
+            [options]="selectTemplateFields">
+          </lb-auto-complete>
+        </div>
+      </div>
+      <div class="form-group">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Description</mat-label>
+          <textarea matInput formControlName="description" placeholder="Enter Description" type="text" rows="5"
+            cols="30"></textarea>
+          <mat-error>
+            <vmessage field="description" [control]="form.controls['description']">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-6">
+      <p class="text-secondary fw-semibold">Document Information</p>
+      <div class="form-group mt-4">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Document Name</mat-label>
+          <input matInput formControlName="documentName" placeholder="Document Name" type="text" />
+          <mat-error>
+            <vmessage field="documentName" [control]="form.controls['documentName']">
+            </vmessage>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <div class="form-group">
+          <lb-auto-complete appearance="outline" placeholder="Document Type" label="Document Type" [multiple]="false"
+            [clear]="false" [fControl]="form.controls['documentTypeId']" [options]="selectDocumentType">
+          </lb-auto-complete>
+        </div>
+      </div>
+      <div class="form-group">
+        <lb-auto-complete appearance="outline" placeholder="Customer" label="Customer" [multiple]="false"
+          [clear]="false" [fControl]="form.controls['customerId']" [options]="selectCustomer">
+        </lb-auto-complete>
+      </div>
+      <div class="form-group" *ngIf="showSignFields">
+        <small>E-Signature Platform</small>
+        <mat-radio-group formControlName="signPlatform">
+          <mat-radio-button *ngFor="let  item of platForms" [value]="item.value">
+            {{ item.name }}
+          </mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <!-- <div>
+        <div class="uploadImage border-grey" (click)="uploadDocument.click()">
+          <i class="fa-solid fa-file-arrow-up text-secondary fs-3"></i>
+          <p class="fw-normal my-3 mb-0"><span class="text-secondary">Upload</span> or drag and drop</p>
+          <span class="fs-14 text-grey">WORD, EXCEL, JPEG, PNG, PDF (max. 10MB)</span>
+          <input #uploadDocument type="file" hidden (change)="selectImage($event , 'document')">
+        </div>
+      </div>
+      <div>
+        <div class="d-flex align-items-center gap-6 my-4" *ngIf="uploads['document']?.loading">
+          <div>
+            <i class="fa-solid fa-file-arrow-up text-secondary fs-4"></i>
+          </div>
+          <div class="flex-grow-1 mx-4">
+            <p class="fw-normal mb-0">{{ uploads['document']?.name }}</p>
+            <span class="fs-14 text-grey">{{ uploads['document']?.size }}MB -
+              {{uploads['document']?.loadingText}}</span>
+            <div class="progress" style="height: 4px;">
+              <div class="progress-bar progress-bar-striped progress-bar-animated bg-secondary" role="progressbar"
+                [style.width.%]="uploads['document']?.progress"></div>
+            </div>
+          </div>
+          <div class="flex-grow-1">
+            <i class="fa fa-trash-can text-secondary fs-5 float-end" type="button"
+              (click)="removeUpload('document' , uploadDocument)"></i>
+          </div>
+        </div>
+      </div> -->
+
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="mb-0">Fields you can use in template</h4>
+          <small>Click on highlighted text to copy it for using in template</small>
+          <div class="d-flex mt-3  flex-wrap gap-3">
+            <div class="d-flex flex-column" *ngFor="let field of templateFields">
+              <p class="mb-0 fs-14">
+                {{ field.for }}:
+              </p>
+
+              <span class="badge bg-primary fs-6" (click)="copyClipboard(field?.variableFor)" style="cursor: pointer;">
+                {{ field.variableFor }}
+              </span>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 col-md-12 col-lg-12">
+      <div class="form-group">
+        <app-text-editor placeholderText="Content" [fControl]="form.controls['content']"></app-text-editor>
+        <vmessage field="content" [control]="form.controls['content']"></vmessage>
+      </div>
+    </div>
+  </div>
+</form>

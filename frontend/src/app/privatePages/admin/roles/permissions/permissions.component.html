@@ -1,0 +1,35 @@
+<div class="card border-0 bg-silver">
+  <div class="card-body">
+    <div class="d-flex align-items-center justify-content-between mb-2 mb-md-3">
+      <h4 class="fw-medium text-secondary m-0">{{data?.name}} Permissions</h4>
+      <button class="btn btn-grey bg-transparent rounded-pill py-2 px-3 fw-medium fs-14" type="button"
+        (click)="submit()">
+        <i class="fa fa-check me-2"></i>
+        Save
+      </button>
+    </div>
+    <div class="scrollable">
+      <div class="row mt-4">
+        <div class="col-12 col-md-6 col-lg-6" *ngFor="let item of getKeys(dataSource)">
+          <div class="card mb-4 border-0">
+            <div class="card-body">
+              <p class="text-secondary mb-0 fw-medium">{{ item | titlecase }}</p>
+              <hr class="mb-3" />
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-12" *ngFor="let permission of getKeys(dataSource[item])">
+                  <mat-slide-toggle color="" class="mb-3" (change)="setPermission(item, permission, $event)" [checked]="
+                    permissions[item] != undefined
+                      ? permissions[item][permission]
+                      : false
+                  ">
+                    <p class=" fw-normal mb-0 ms-3">{{ permission | titlecase }}</p>
+                  </mat-slide-toggle>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,424 @@
+<div class="row align-items-center pb-5">
+    <div class="col-12 col-md-4">
+        <h4 class="text-secondary fw-medium">Step 5: Work Details<span *ngIf="stepData?.stepStatus?.step5"
+                class="badge  rounded-pill px-3 py-2  fw-medium ms-1 fs-14 text-capitalize"
+                [style.background]="getColors(stepData?.stepStatus?.step5).background"
+                [style.border]="getColors(stepData?.stepStatus?.step5).border"
+                [style.color]="getColors(stepData?.stepStatus?.step5).color">
+                {{stepData?.stepStatus?.step5}}</span></h4>
+    </div>
+    <div class="col-12 col-md-8">
+        <div class="d-flex align-items-center gap-2">
+            <!-- confirmer -->
+            <div class="d-flex align-items-center flex-grow-1 justify-content-end" Permission="applications:confirmer"
+                 *ngIf="isView && statusCheckService.isStepValid('confirmer' , stepData?.stepStatus?.step5 , stepData?.applicationStatus)">
+                <small class=" me-2 text-brown fw-semibold">Confirm this step?</small>
+                <div class="me-2">
+                    <button class="btn btn-warning text-brown rounded-pill p-2 px-4 fw-medium" type="button"
+                        (click)="approveStep('confirmed')">
+                        <i class="fa fa-check me-2"></i> <small>Confirmed</small>
+                    </button>
+                </div>
+                <div>
+                    <button class="btn btn-warning text-brown rounded-pill p-2 fw-medium px-4" type="button"
+                        (click)="rejected = true">
+                        <i class="fa fa-xmark me-2"></i> <small>Not Confirmed</small>
+                    </button>
+                </div>
+            </div>
+            <!-- for approver -->
+            <div class="d-flex align-items-center flex-grow-1 justify-content-end" Permission="applications:approver"
+                 *ngIf="isView && statusCheckService.isStepValid('approver' , stepData?.stepStatus?.step5 , stepData?.applicationStatus)">
+                <small class=" me-2 text-brown fw-semibold">Approve this step?</small>
+                <div class="me-2">
+                    <button class="btn btn-warning text-brown rounded-pill p-2 px-4 fw-medium" type="button"
+                        (click)="approveStep('approved')">
+                        <i class="fa fa-check me-2"></i> <small>Approved</small>
+                    </button>
+                </div>
+                <div>
+                    <button class="btn btn-warning text-brown rounded-pill p-2 fw-medium px-4" type="button"
+                        (click)="rejected = true">
+                        <i class="fa fa-xmark me-2"></i> <small>Rejected</small>
+                    </button>
+                </div>
+            </div>
+            <div class="ms-auto" *ngIf="isView && statusCheckService.isStepValid('editable' , stepData?.stepStatus?.step5 , stepData?.applicationStatus)">
+                <a class="btn btn-grey bg-transparent text-muted fw-medium rounded-pill me-2"
+                    [routerLink]="'/applications/edit/' + id + '/step5'">
+                    <i class="fa fa-pencil me-2"></i><small>Edit</small>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <!-- status banner -->
+    <div *ngIf="['rejected' , 'not confirmed'].includes(stepData?.stepStatus?.step5)"
+        class="bg-danger p-2 text-white rounded">
+        <p class="m-0"><i class="fa fa-triangle-exclamation me-2"></i>{{stepData?.stepReject?.step5Reason}}</p>
+    </div>
+    <!-- approval form -->
+    <div *ngIf="rejected">
+        <form [formGroup]="approvalForm">
+            <div class="row">
+                <div class="col-md-6 col-12 offset-md-6">
+                    <div class="d-flex align-items-baseline gap-2">
+                        <div class="form-group flex-grow-1">
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-label>Reason</mat-label>
+                                <input matInput formControlName="reason" placeholder="Reason" type="text" />
+                                <mat-error>
+                                    <vmessage field="reason" [control]="approvalForm.controls['reason']">
+                                    </vmessage>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div>
+                            <a type="button" class="btn btn-secondary px-4 py-2 rounded-pill"
+                                (click)="approveStep(stepData?.applicationStatus == 'confirmed' || stepData?.applicationStatus == 'in contract' || stepData?.applicationStatus == 'rejected' ? 'rejected' : 'not confirmed');">Submit</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <form [formGroup]="step5" (ngSubmit)="submit()" autocomplete="off">
+        <div class="row mt-3">
+            <div class="col-12 col-md-6 col-lg-6">
+                <p class="fs-6 text-primary fw-semibold">Work Application Type</p>
+                <p class="mb-2 fs-12 text-muted">
+                    What type of  position are you applying for?
+                </p>
+
+                <div class="mb-4">
+                    <button class="btn px-5 py-3 rounded-start-pill" type="button" [disabled]="isView" [ngClass]="
+                     step5.value.applicationType === 'driver'
+                      ? 'btn-info text-dark'
+                      : 'btn-light text-dark'
+                  " (click)="setBooleanValue('applicationType', 'driver');customRequired(true , ['licenseNumber','drivingExperience','licenseCodeIds','issuedDate','licenseExpiry','anyAccidents','licenseSuspended','medicationCondition', 'medication'])">
+                        <i class="fa fa-check me-3"></i>Driver
+                    </button>
+                    <button class="btn px-5 py-3 rounded-end-pill" type="button" [disabled]="isView" [ngClass]="
+                     step5.value.applicationType === 'other'
+                      ? 'btn-info text-dark'
+                      : 'btn-light text-dark'
+                  " (click)="setBooleanValue('applicationType', 'other');customRequired(true , ['skillIds','areaIds','jobPosition', 'medicationCondition', 'medication'])">
+                        <i class="fa fa-xmark me-3"></i>Other
+                    </button>
+                </div>
+                <div *ngIf="step5Changes && step5Changes?.applicationType !== undefined && step5Changes?.applicationType != step5.value.applicationType"
+                    class="field-changed p-2 mb-3">
+                    Changed to : <b>{{ step5Changes?.applicationType}}</b>
+                </div>
+                <!-- Driver -->
+                <ng-container
+                    *ngIf="step5.value.applicationType == 'driver' || (step5Changes?.applicationType == 'driver')">
+                    <div>
+                        <p class="fs-6 text-primary fw-semibold">
+                            Driver’s Application Details
+                        </p>
+                        <div class="mb-4">
+                            <p class="mb-2 fs-12 text-muted">
+                                Do you have a valid driver’s license?
+                            </p>
+                            <button class="btn px-5 py-3 rounded-start-pill" type="button" [disabled]="isView"
+                                [ngClass]="
+                     step5.value.hasLicense === true
+                      ? 'btn-info text-dark'
+                      : 'btn-light text-dark'
+                  " (click)="setBooleanValue('hasLicense', true)">
+                                <i class="fa fa-check me-3"></i>Yes
+                            </button>
+                            <button class="btn px-5 py-3 rounded-end-pill" type="button" [disabled]="isView" [ngClass]="
+                     step5.value.hasLicense === false
+                      ? 'btn-info text-dark'
+                      : 'btn-light text-dark'
+                  " (click)="setBooleanValue('hasLicense', false)">
+                                <i class="fa fa-xmark me-3"></i>No
+                            </button>
+                        </div>
+                        <div *ngIf="step5Changes && step5Changes?.hasLicense !== undefined && step5Changes?.hasLicense != step5.value.hasLicense"
+                            class="field-changed p-2 mb-3">
+                            Changed to : <b>{{ step5Changes?.hasLicense}}</b>
+                        </div>
+                        <div class="mb-4">
+                            <p class="mb-2 fs-12 text-muted">
+                                Do you have any endorsements?
+                            </p>
+                            <button class="btn px-5 py-3 rounded-start-pill" type="button" [disabled]="isView"
+                                [ngClass]="
+                     step5.value.endorsements === true
+                      ? 'btn-info text-dark'
+                      : 'btn-light text-dark'
+                  " (click)="setBooleanValue('endorsements', true)">
+                                <i class="fa fa-check me-3"></i>Yes
+                            </button>
+                            <button class="btn px-5 py-3 rounded-end-pill" type="button" [disabled]="isView" [ngClass]="
+                     step5.value.endorsements === false
+                      ? 'btn-info text-dark'
+                      : 'btn-light text-dark'
+                  " (click)="setBooleanValue('endorsements', false)">
+                                <i class="fa fa-xmark me-3"></i>No
+                            </button>
+                        </div>
+                        <div *ngIf="step5Changes && step5Changes?.endorsements !== undefined && step5Changes?.endorsements != step5.value.endorsements"
+                            class="field-changed p-2 mb-3">
+                            Changed to : <b>{{ step5Changes?.endorsements}}</b>
+                        </div>
+                        <div class="mb-4">
+                            <p class="mb-2 fs-12 text-muted">
+                                Do you own a motor bike or vehicle?
+                            </p>
+                            <button class="btn px-5 py-3 rounded-start-pill" type="button" [disabled]="isView"
+                                [ngClass]="
+                     step5.value.vehicleOwned === true
+                      ? 'btn-info text-dark'
+                      : 'btn-light text-dark'
+                  " (click)="setBooleanValue('vehicleOwned', true)">
+                                <i class="fa fa-check me-3"></i>Yes
+                            </button>
+                            <button class="btn px-5 py-3 rounded-end-pill" type="button" [disabled]="isView" [ngClass]="
+                     step5.value.vehicleOwned === false
+                      ? 'btn-info text-dark'
+                      : 'btn-light text-dark'
+                  " (click)="setBooleanValue('vehicleOwned', false)">
+                                <i class="fa fa-xmark me-3"></i>No
+                            </button>
+                        </div>
+                        <div *ngIf="step5Changes && step5Changes?.vehicleOwned !== undefined && step5Changes?.vehicleOwned != step5.value.vehicleOwned"
+                            class="field-changed p-2 mb-3">
+                            Changed to : <b>{{ step5Changes?.vehicleOwned}}</b>
+                        </div>
+                    </div>
+                </ng-container>
+                <!-- other -->
+                <ng-container>
+                    
+                    <div class="form-group" *ngIf="step5.value.applicationType == 'other' ||  (step5Changes?.applicationType == 'other')">
+                        <p class="fs-6 text-primary fw-semibold">
+                            Application Details
+                        </p>
+                        <mat-form-field class="w-100" appearance="outline"
+                            [class.field-changed]="step5Changes?.jobPosition">
+                            <mat-label>What’s the job you’re applying for?</mat-label>
+                            <input matInput formControlName="jobPosition"
+                                placeholder="What’s the job you’re applying for?" type="text" />
+                            <span matSuffix>
+                                {{ step5Changes?.jobPosition }}
+                            </span>
+                            <mat-error>
+                                <vmessage field="jobPosition" [control]="step5.controls['jobPosition']"> </vmessage>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </ng-container>
+            </div>
+            <div class="col-12 col-md-6 col-lg-6">
+                <!-- Driver -->
+                <ng-container *ngIf="step5.value.applicationType == 'driver'">
+                    <p class="fs-6 text-primary fw-semibold">
+                        Driver’s License Details
+                    </p>
+                    <div class="form-group">
+                        <mat-form-field class="w-100" appearance="outline"
+                            [class.field-changed]="step5Changes?.licenseNumber">
+                            <mat-label>License number</mat-label>
+                            <input matInput formControlName="licenseNumber" placeholder="License number" type="text" />
+                            <span matSuffix>
+                                {{ step5Changes?.licenseNumber }}
+                            </span>
+                            <mat-error>
+                                <vmessage field="licenseNumber" [control]="step5.controls['licenseNumber']"> </vmessage>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group">
+                        <lb-auto-complete appearance="outline" placeholder="License code" label="License code"
+                            [multiple]="true" [clear]="false" [fControl]="step5.controls['licenseCodeIds']"
+                            [options]="selectLicenseCode" changedValue="{{ step5Changes?.licenseCodeIds }}">
+                        </lb-auto-complete>
+                    </div>
+                    <div class="form-group">
+                        <app-date-picker placeholderText="Date issued" label="Date issued"
+                            [fControl]="step5.controls['issuedDate']" changedValue="{{ step5Changes?.issuedDate }}">
+                        </app-date-picker>
+                    </div>
+                    <div class="form-group">
+                        <app-date-picker placeholderText="Date of expiry" label="Date of expiry"
+                            [fControl]="step5.controls['licenseExpiry']"
+                            changedValue="{{ step5Changes?.licenseExpiry }}">
+                        </app-date-picker>
+                    </div>
+                    <div class="form-group">
+                        <app-date-picker placeholderText="PRDP expiry date" label="PRDP expiry date"
+                            [fControl]="step5.controls['prdpExpiry']" changedValue="{{ step5Changes?.prdpExpiry }}">
+                        </app-date-picker>
+                    </div>
+                </ng-container>
+                <!-- Other -->
+                <ng-container *ngIf="step5.value.applicationType == 'other'">
+                    <p class="fs-6 text-primary fw-semibold">Skills</p>
+                    <div class="d-flex gap-4 align-items-center">
+                        <div class="form-group flex-grow-1">
+                            <lb-auto-complete appearance="outline" placeholder="Choose skills" label="Choose skills"
+                                [multiple]="true" [clear]="false" [fControl]="step5.controls['skillIds']"
+                                [options]="selectSkills" (selectionChange)="showSelectedValues($event , 'skills')"
+                                changedValue="{{ step5Changes?.skillIds }}">
+                            </lb-auto-complete>
+                            <p class="fs-12 text-muted ms-3">
+                                You can choose a maximum of 5 skills
+                            </p>
+                        </div>
+                    </div>
+                    <div class="mt-4" *ngIf="selectedSkills?.length">
+                        <p class="fs-12 text-muted">Skills you chose</p>
+                        <div class="">
+                            <div class="bg-light rounded-3">
+                                <ng-container *ngFor="let item of selectedSkills">
+                                    <div class="d-flex justify-content-between align-items-center py-2 px-3 fw-normal">
+                                        <p class="mb-0 text-capitalize">{{ getNameByValue(item , selectSkills) }}</p>
+                                        <mat-checkbox [value]="item" (change)="onChange(item, $event.checked)"
+                                             (click)="$event.preventDefault()"
+                                            [checked]="step5.value.skillIds.includes(item)" labelPosition="before">
+                                        </mat-checkbox>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+        <hr class="my-4" />
+        <!-- Driver -->
+        <div class="row mt-3">
+            <div class="col-12 col-md-6 col-lg-6">
+                <p class="fs-6 text-primary fw-semibold">Areas Where You Can Work</p>
+                <div class="form-group">
+                    <lb-auto-complete appearance="outline" placeholder="Areas" label="Areas"
+                        [multiple]="true" [clear]="false" [fControl]="step5.controls['areaIds']"
+                        [options]="selectAreaOfEmployments" (selectionChange)="showSelectedValues($event , 'areas')"
+                        changedValue="{{ step5Changes?.areaIds }}">
+                    </lb-auto-complete>
+                </div>
+                <div class="mt-4" *ngIf="selectedAreas?.length">
+                    <p class="fs-12 text-muted">Areas you chose</p>
+                    <div class="">
+                        <div class="bg-light rounded-3">
+                            <ng-container *ngFor="let item of selectedAreas">
+                                <div class="d-flex justify-content-between align-items-center py-2 px-3 fw-normal">
+                                    <p class="mb-0 text-capitalize">{{ getNameByValue(item , selectAreaOfEmployments) }}
+                                    </p>
+                                    <mat-checkbox [value]="item" (change)="onChange(item, $event.checked)"
+                                        class="readonly-checkbox" (click)="$event.preventDefault()"
+                                        [checked]="step5.value.areaIds.includes(item)" labelPosition="before">
+                                    </mat-checkbox>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <hr class="my-4" />
+        <!-- Driver -->
+        <div class="row mt-3">
+            <div class="col-12 col-md-6 col-lg-6" *ngIf="step5.value.applicationType == 'driver'">
+                <p class="fs-6 text-primary fw-semibold">Driving Record</p>
+                <div class="form-group">
+                    <mat-label>How many years have you been driving?*</mat-label>
+                    <mat-form-field class="w-100" appearance="outline"
+                        [class.field-changed]="step5Changes?.drivingExperience">
+                        <input matInput formControlName="drivingExperience"
+                            placeholder="How many years have you been driving?*"
+                            [required]="step5.value.applicationType == 'driver'" type="number" />
+                        <span matSuffix>
+                            {{ step5Changes?.drivingExperience }}
+                        </span>
+                        <mat-error>
+                            <vmessage field="drivingExperience" [control]="step5.controls['drivingExperience']">
+                            </vmessage>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="form-group">
+                    <mat-label>How many motor vehicle accidents have you been involved in
+                        during the past seven years?*</mat-label>
+                    <mat-form-field class="w-100" appearance="outline"
+                        [class.field-changed]="step5Changes?.anyAccidents">
+                        <input matInput formControlName="anyAccidents" placeholder="Enter number of accidents*"
+                            [required]="step5.value.applicationType == 'driver'" type="text" />
+                        <span matSuffix>
+                            {{ step5Changes?.anyAccidents }}
+                        </span>
+                        <mat-error>
+                            <vmessage field="anyAccidents" [control]="step5.controls['anyAccidents']"> </vmessage>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="form-group">
+                    <mat-label>How many times has your driver’s licence been suspended or
+                        revoked in the past seven years?*</mat-label>
+                    <mat-form-field class="w-100" appearance="outline"
+                        [class.field-changed]="step5Changes?.licenseSuspended">
+                        <input matInput formControlName="licenseSuspended"
+                            [required]="step5.value.applicationType == 'driver'"
+                            placeholder="Enter number of times license suspended*" type="text" />
+                        <span matSuffix>
+                            {{ step5Changes?.licenseSuspended }}
+                        </span>
+                        <mat-error>
+                            <vmessage field="licenseSuspended" [control]="step5.controls['licenseSuspended']">
+                            </vmessage>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-6">
+                <p class="fs-6 text-primary fw-semibold">Health</p>
+                <p class="fs-12 text-muted">
+                    This information will be used only to ensure safe work practices
+                    and will not affect hiring decisions unless directly relevant.
+                </p>
+                <div class="form-group">
+                    <mat-label>Do you have any medical conditions and if so what?*</mat-label>
+                    <mat-form-field class="w-100" appearance="outline"
+                        [class.field-changed]="step5Changes?.medicationCondition">
+                        <input matInput formControlName="medicationCondition"
+                            placeholder="Describe any medical conditions if any*" type="text" />
+                        <span matSuffix>
+                            {{ step5Changes?.medicationCondition }}
+                        </span>
+                        <mat-error>
+                            <vmessage field="medicationCondition" [control]="step5.controls['medicationCondition']">
+                            </vmessage>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="form-group">
+                    <mat-label>Do you take any medication and if so what?*</mat-label>
+                    <mat-form-field class="w-100" appearance="outline" [class.field-changed]="step5Changes?.medication">
+                        <input matInput formControlName="medication" placeholder="Medication*" type="text" />
+                        <span matSuffix>
+                            {{ step5Changes?.medication }}
+                        </span>
+                        <mat-error>
+                            <vmessage field="medication" [control]="step5.controls['medication']"> </vmessage>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex align-items-center justify-content-end mt-5">
+            <button class="btn btn-transparent rounded-pill py-3 px-5 mx-2 border" type="button" (click)="goBack()">
+                Back
+            </button>
+            <button class="btn btn-primary rounded-pill py-3 px-5" type="submit"
+                [disabled]="stepStatus == 'changed' || isView">
+                Next
+            </button>
+        </div>
+    </form>
+</div>
